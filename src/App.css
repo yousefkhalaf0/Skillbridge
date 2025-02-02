@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,12 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+.lightApp {
+  background-color: #d0d0d0;
+}
+
+.darkApp {
+  background-color: #232323;
 }
