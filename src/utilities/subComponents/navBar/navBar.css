@@ -1,0 +1,44 @@
+.lightNavBarPanner {
+    background-color: black;
+    color: white;
+}
+
+.darkNavBarPanner {
+    background-color: #E8A710;
+    color: black;
+}
+
+.lightNavBar {
+    color: black;
+}
+
+.darkNavBar {
+    color: white;
+}
+
+.lightButton {
+    color: black;
+}
+
+.lightButton.active {
+    background-color: white;
+    color: black;
+}
+
+.lightButton:hover {
+    background-color: #f0f0f0;
+}
+
+.darkButton {
+    color: white;
+}
+
+.darkButton.active {
+    background-color: white;
+    color: black;
+}
+
+.darkButton:hover {
+    background-color: #f0f0f0;
+    color: black;
+}
