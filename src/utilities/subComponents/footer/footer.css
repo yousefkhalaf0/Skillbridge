@@ -1,0 +1,73 @@
+.lightFooter {
+    background-color: #191919;
+    padding: 60px;
+}
+
+.darkFooter {
+    background-color: #656567;
+    padding: 60px;
+}
+
+.footerRow {
+    border-bottom: 1px solid white;
+    padding-bottom: 30px;
+}
+
+.lightSubTitle {
+    color: white;
+    text-align: left;
+}
+
+.darkSubTitle {
+    color: black;
+    text-align: left;
+}
+
+.lightLinks {
+    color: silver !important;
+}
+
+.darkLinks {
+    color: #262626 !important;
+}
+
+.logo {
+    width: 2.5rem;
+    cursor: pointer;
+}
+
+.icons {
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.socialIconBox {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.socialIcons {
+    color: #191919;
+}
+
+.lightCopyRight {
+    color: gray;
+    margin-top: 35px !important;
+    text-align: center;
+}
+
+.darkCopyRight {
+    color: #151515;
+    margin-top: 35px !important;
+    text-align: center;
+}
+
+.disableSelecting {
+    user-select: none;
+}

@@ -1,8 +1,10 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
+import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
+import Footer from '../src/utilities/subComponents/footer/footer'
+
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -22,6 +24,7 @@ function App() {
           {/* <Route path="/" element={} /> */}
 
         </Routes>
+        <Footer />
       </BrowserRouter>
     </main>
   );
