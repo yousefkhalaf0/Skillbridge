@@ -1,0 +1,117 @@
+.disableSelecting {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.homePageContainer {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    text-align: center;
+}
+
+.headerBox {
+    background-color: white;
+    border-radius: 5px;
+    display: inline-block;
+    position: relative;
+    padding: 9px;
+    font-weight: bold !important;
+}
+
+.headerIconBox {
+    padding: 10px;
+    vertical-align: middle;
+    background-color: #FFF4E5;
+    border-radius: 6px;
+    margin-right: 12px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.headerIcon {
+    color: #262626;
+}
+
+.linesIcon {
+    position: absolute;
+    top: -28px;
+    left: -28px;
+    filter: brightness(0) invert(0);
+}
+
+.darkLinesIcon {
+    color: white !important;
+    filter: brightness(0) invert(1);
+}
+
+.headerBoxText {
+    vertical-align: middle;
+}
+
+.lightHeaderSubText {
+    font-size: 2rem !important;
+    color: #313131;
+}
+
+.darkHeaderSubText {
+    font-size: 2rem !important;
+    color: #FCFCFD;
+}
+
+.lightHeaderSubSubText {
+    color: #313131;
+}
+
+.darkHeaderSubSubText {
+    color: #656567;
+}
+
+.lightExploreCoursesBtn {
+    color: black !important;
+    margin-top: 60px !important;
+    background-color: #E8A710 !important;
+}
+
+.darkExploreCoursesBtn {
+    color: white !important;
+    margin-top: 60px !important;
+    background-color: #E8A710 !important;
+}
+
+.homeHeaderImg {
+    height: auto;
+    margin-top: 50px;
+}
+
+.sectionsContainer {
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lightSectionsTitle {
+    text-align: left;
+    font-weight: bold !important;
+    color: #262626;
+}
+
+.darkSectionsTitle {
+    text-align: left;
+    font-weight: bold !important;
+    color: white;
+}
+
+.lightSectionsSubTitle {
+    text-align: left;
+    color: #59595A;
+}
+
+.darkSectionsSubTitle {
+    text-align: left;
+    color: white;
+}
+
+.sectionBtn {
+    background-color: white !important;
+    color: black !important;
+}

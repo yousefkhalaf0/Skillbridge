@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
 import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
-import Footer from '../src/utilities/subComponents/footer/footer'
+import Footer from '../src/utilities/subComponents/footer/footer';
+import NotFound from './pages/notFoundPage/notFoundPage';
+import Home from '../src/pages/homePage/homePage';
 
 
 function App() {
@@ -21,8 +23,9 @@ function App() {
       <BrowserRouter>
         <ResponsiveAppBar />
         <Routes>
-          {/* <Route path="/" element={} /> */}
+          <Route path="/" element={<Home />} />
 
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -21,7 +21,7 @@ export default function Footer() {
                         component="img"
                         src={appIcon}
                         alt="appIcon"
-                        onClick={() => navigate('/home')} />
+                        onClick={() => navigate('/')} />
                     <p><EmailIcon className='icons' />
                         <Link className={`${theme}Links`} href="#" underline="hover" >
                             hello@skillbridge.com

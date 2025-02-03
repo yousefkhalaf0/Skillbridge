@@ -22,3 +22,4 @@ export { default as LocationOnIcon } from '@mui/icons-material/LocationOn';
 export { default as FacebookIcon } from '@mui/icons-material/Facebook';
 export { default as XIcon } from '@mui/icons-material/X';
 export { default as LinkedInIcon } from '@mui/icons-material/LinkedIn';
+export { default as ElectricBoltIcon } from '@mui/icons-material/ElectricBolt';
