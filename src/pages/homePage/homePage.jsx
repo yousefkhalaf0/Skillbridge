@@ -66,7 +66,7 @@ export default function HomePage() {
                                 <Button
                                     className="sectionBtn"
                                     variant="contained"
-                                    sx={{ textTransform: 'none', }}>
+                                    sx={{ textTransform: 'none' }}>
                                     View All
                                 </Button>
                             </Box>
