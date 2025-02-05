@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
 import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
-import Footer from '../src/utilities/subComponents/footer/footer'
+import CourseCard from "../src/utilities/subComponents/AdminPageComponents/CourseInAdminPage"
+import Footer from "../src/utilities/subComponents/footer/footer"
 
 
 function App() {
@@ -20,10 +21,11 @@ function App() {
     <main>
       <BrowserRouter>
         <ResponsiveAppBar />
-        <Routes>
-          {/* <Route path="/" element={} /> */}
+        {/* <Routes>
+           <Route path="/" element={CourseCard} />
 
-        </Routes>
+        </Routes> */}
+        <CourseCard/>
         <Footer />
       </BrowserRouter>
     </main>
