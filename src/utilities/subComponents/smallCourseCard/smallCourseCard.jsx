@@ -33,7 +33,7 @@ export default function SmallCourseCard() {
                             component="img"
                             src={course.img}
                             alt="courseImg" />
-                        <Grid className='cardRow' container spacing={2}>
+                        <Grid className='courseCardRow' container spacing={2} >
                             <Grid item xs={12} sm={6} sx={{ display: 'flex' }}>
                                 <Typography className={`${theme}WeeksLevelBox`} variant='caption' sx={{ marginRight: 1 }}>
                                     {course.weeks}

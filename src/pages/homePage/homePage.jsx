@@ -13,6 +13,7 @@ import homeHeaderImg from '../../assets/images/homeHeaderImg.svg'
 export default function HomePage() {
     const theme = useSelector((state) => state.themeReducer);
     const showAllBenefits = useSelector((state) => state.showAllBenefitsReducer);
+    const showAllTestimonials = useSelector((state) => state.showAllTestimonialsReducer);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const coursesRef = useRef(null);
@@ -120,12 +121,20 @@ export default function HomePage() {
                                     variant="contained"
                                     sx={{ textTransform: 'none' }}
                                     onClick={() => dispatch(toggleShowAllTestimonials())}>
-                                    {showAllBenefits ? 'Collapse' : 'View All'}
+                                    {showAllTestimonials ? 'Collapse' : 'View All'}
                                 </Button>
                             </Box>
                         </Grid>
                     </Grid>
-                    <TestimonialsCard />
+                    <TestimonialsCard showAll={showAllTestimonials} />
+                </Box>
+            </Box>
+
+            {/* FAQ's section */}
+            <Box className={`sectionsContainer`}
+                sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
+                <Box className={`disableSelecting`}>
+                    dfs
                 </Box>
             </Box>
         </main>
