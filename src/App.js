@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
 import CourseCard from "../src/utilities/subComponents/AdminPageComponents/CourseInAdminPage"
 import Footer from "../src/utilities/subComponents/footer/footer"
-
+import Dashboard from "./pages/DashboardPage"
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -21,11 +21,9 @@ function App() {
     <main>
       <BrowserRouter>
         <ResponsiveAppBar />
-        {/* <Routes>
-           <Route path="/" element={CourseCard} />
-
-        </Routes> */}
-        <CourseCard/>
+        <Routes>
+        <Route path="/" element={<Dashboard />} />
+        </Routes>
         <Footer />
       </BrowserRouter>
     </main>

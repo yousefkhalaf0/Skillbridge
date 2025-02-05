@@ -1,18 +1,19 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
 import courseImage from '../../../assets/dashboard_assets/images/course_image.png';
-import "./CourseInAdminPage.css";
+import "./components_style/CourseInAdminPage.css";
 import { useSelector } from 'react-redux';
 const CourseCard = () => {
   const theme = useSelector((state) => state.themeReducer);
   return (
     <Box
       p={2}
+      display="flex" justifyContent="center" alignItems="start" minHeight="100vh"
     >
       <Card
         className="Card"
         sx={{
-          maxWidth: { lg: "40%", xs: 300, sm: 400 },
+          maxWidth: { lg: "80%", xs: 300, sm: 400 },
           width: '100%',
           borderRadius: 2,
           boxShadow: 3,
@@ -54,7 +55,8 @@ const CourseCard = () => {
                 bgcolor: theme=="light"?"black":"#1E1E1E",
                 '&:hover': { bgcolor: "#333" },
                 fontSize: { lg: '0.75rem', xs: '0.65rem', sm: '0.65rem' },
-                fontFamily: "inherit",
+               
+                fontWeight:"normal",
                 textTransform: "none"
               }}
             >
@@ -62,13 +64,27 @@ const CourseCard = () => {
             </Button>
             <Button
               variant="contained"
+              color="black"
+              fullWidth
+              sx={{
+                bgcolor: theme=="light"?"#D0D0D0":"#fff",
+                '&:hover': { bgcolor: "#B8B8B8" },
+                fontSize: { lg: '0.75rem', xs: '0.65rem', sm: '0.65rem'  },
+            
+                textTransform: "none"
+              }}
+            >
+             edit the course
+            </Button>
+            <Button
+              variant="contained"
               color="error"
               fullWidth
               sx={{
                 bgcolor: theme=="light"?"#CA5541":"#922F1E",
-                '&:hover': { bgcolor: "#CA4941" },
+                '&:hover': { bgcolor: "#B9361F" },
                 fontSize: { lg: '0.75rem', xs: '0.65rem', sm: '0.65rem'  },
-                fontFamily: "inherit",
+           
                 textTransform: "none"
               }}
             >

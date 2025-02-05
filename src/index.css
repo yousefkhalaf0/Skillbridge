@@ -1,9 +1,11 @@
 @font-face {
   font-family: 'BeVietnam';
-  src: url('./assets/font/BeVietnamPro-Regular.ttf') format('truetype');
+  src: url('./assets/font/BeVietnamPro-Light.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
+
+
 body {
   margin: 0;
 
