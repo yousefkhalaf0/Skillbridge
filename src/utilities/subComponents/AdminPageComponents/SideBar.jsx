@@ -4,12 +4,12 @@ import { MenuBook, People, BarChart, ChatBubble, Settings, ExitToApp, Visibility
 
 const Sidebar = () => {
   return (
-    <Box sx={{ width: 160, borderRight: "1px solid white", p: 2, position:{lg:"absolute"} ,top:{lg:"20.4vh"}}}>
+    <Box sx={{ width: 160, borderRight: "1px solid white", p: 2, position: { lg: "absolute" }, top: { lg: "15.4vh" } }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <Box sx={{ width: 24, height: 24, bgcolor: "black", borderRadius: "50%", mr: 1 }} />
         <Typography variant="h6" fontWeight="bold">Omni.</Typography>
       </Box>
-      
+
       <Typography variant="subtitle1" gutterBottom>Menu</Typography>
       <List>
         <ListItem sx={{ bgcolor: "#fcb900", borderRadius: 1 }}>
@@ -25,7 +25,7 @@ const Sidebar = () => {
           <ListItemText primary="Statistics" />
         </ListItem>
       </List>
-      
+
       <Box sx={{ my: 2, borderBottom: "1px solid gray" }} />
       <Typography variant="subtitle1" gutterBottom>Account</Typography>
       <List>

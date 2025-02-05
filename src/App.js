@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
 import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
-import Footer from '../src/utilities/subComponents/footer/footer'
-
+import CourseCard from "../src/utilities/subComponents/AdminPageComponents/CourseInAdminPage"
+import Footer from "../src/utilities/subComponents/footer/footer"
+import Dashboard from "./pages/DashboardPage"
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -21,8 +22,7 @@ function App() {
       <BrowserRouter>
         <ResponsiveAppBar />
         <Routes>
-          {/* <Route path="/" element={} /> */}
-
+          <Route path="/" element={<Dashboard />} />
         </Routes>
         <Footer />
       </BrowserRouter>
