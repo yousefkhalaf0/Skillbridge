@@ -2,22 +2,23 @@ import React from "react";
 import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
 import courseImage from '../../../assets/dashboard_assets/images/course_image.png';
 import "./CourseInAdminPage.css";
+import { useSelector } from 'react-redux';
 const CourseCard = () => {
+  const theme = useSelector((state) => state.themeReducer);
   return (
-    <Box 
-      display="flex" 
-      justifyContent="center" 
-      alignItems="center" 
-      minHeight="100vh" 
+    <Box
       p={2}
     >
-      <Card 
-        sx={{ 
-          maxWidth: { xs: '100%', sm: 500 }, // Full width on extra small screens, max 500px on small and up
-          width: '100%', // Ensure the card takes up the full width on xs screens
-          borderRadius: 3, 
+      <Card
+        className="Card"
+        sx={{
+          maxWidth: { lg: "40%", xs: 300, sm: 400 },
+          width: '100%',
+          borderRadius: 2,
           boxShadow: 3,
-          p: { xs: 1, sm: 2 } // Adjust padding based on screen size
+          p: { lg: 3, xs: 1, sm: 2 },
+          overflow: "hidden",
+          bgcolor:theme=="light"?"#FFFFFF":"#D0D0D0",
         }}
       >
         <CardMedia
@@ -26,36 +27,49 @@ const CourseCard = () => {
           className="courseImage"
           image={courseImage}
           alt="Web Design Fundamentals"
-          
+
           sx={{
-            height: { lg:170, xs: 150, sm: 200 },
-            borderRadius:6
-          
+            height: { lg: 170, xs: 150, sm: 200 },
+            borderRadius: 1,
+
           }}
         />
-        <CardContent>
-          <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' }, fontFamily:"inherit"}}>
+        <CardContent 
+        sx={{
+          px:{lg:"0",sm:"3"},
+          py:2
+        }}
+        
+        
+        >
+          <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { lg: '0.85rem',md:'0.85rem', xs: '0.85rem', sm: '0.85rem' }, fontFamily: "inherit" }}>
             Web Design Fundamentals
           </Typography>
-          <Box mt={2} display="flex" flexDirection="column" gap={1}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              fullWidth 
-              sx={{ 
-                bgcolor: "black", 
+          <Box mt={4} display="flex" flexDirection="column" gap={1}>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{
+                bgcolor: theme=="light"?"black":"#1E1E1E",
                 '&:hover': { bgcolor: "#333" },
-                fontSize: { xs: '0.875rem', sm: '1rem' } // Adjust button font size based on screen size
+                fontSize: { lg: '0.75rem', xs: '0.65rem', sm: '0.65rem' },
+                fontFamily: "inherit",
+                textTransform: "none"
               }}
             >
               Go to the course
             </Button>
-            <Button 
-              variant="contained" 
-              color="error" 
+            <Button
+              variant="contained"
+              color="error"
               fullWidth
-              sx={{ 
-                fontSize: { xs: '0.875rem', sm: '1rem' } // Adjust button font size based on screen size
+              sx={{
+                bgcolor: theme=="light"?"#CA5541":"#922F1E",
+                '&:hover': { bgcolor: "#CA4941" },
+                fontSize: { lg: '0.75rem', xs: '0.65rem', sm: '0.65rem'  },
+                fontFamily: "inherit",
+                textTransform: "none"
               }}
             >
               Remove the course
