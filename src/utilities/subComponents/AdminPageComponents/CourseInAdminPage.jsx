@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
 import courseImage from '../../../assets/dashboard_assets/images/course_image.png';
-
+import "./CourseInAdminPage.css";
 const CourseCard = () => {
   return (
     <Box 
@@ -22,15 +22,19 @@ const CourseCard = () => {
       >
         <CardMedia
           component="img"
-          height="200"
+          height="20"
+          className="courseImage"
           image={courseImage}
           alt="Web Design Fundamentals"
+          
           sx={{
-            height: { xs: 150, sm: 200 } // Adjust image height based on screen size
+            height: { lg:170, xs: 150, sm: 200 },
+            borderRadius:6
+          
           }}
         />
         <CardContent>
-          <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
+          <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' }, fontFamily:"inherit"}}>
             Web Design Fundamentals
           </Typography>
           <Box mt={2} display="flex" flexDirection="column" gap={1}>
