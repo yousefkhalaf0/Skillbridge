@@ -39,11 +39,30 @@ const languageSlice = createSlice({
     },
 });
 
+// Slice for showing all benefits
+const showAllBenefitsSlice = createSlice({
+    name: "showAllBenefits",
+    initialState: false,
+    reducers: {
+        toggleShowAllBenefits: (state) => !state,
+    },
+});
+
+// Slice for showing all testimonials
+const showAllTestimonialsSlice = createSlice({
+    name: "showAllTestimonials",
+    initialState: false,
+    reducers: {
+        toggleShowAllTestimonials: (state) => !state,
+    },
+});
 
 // Exporting actions
 export const { toggleTheme } = themeSlice.actions;
 export const { setActiveButton, setAnchorEl } = navbarSlice.actions;
 export const { toggleLanguage } = languageSlice.actions;
+export const { toggleShowAllBenefits } = showAllBenefitsSlice.actions;
+export const { toggleShowAllTestimonials } = showAllTestimonialsSlice.actions;
 
 // Exporting reducers
 const store = configureStore({
@@ -51,6 +70,8 @@ const store = configureStore({
         themeReducer: themeSlice.reducer,
         navbarReducer: navbarSlice.reducer,
         languageReducer: languageSlice.reducer,
+        showAllBenefitsReducer: showAllBenefitsSlice.reducer,
+        showAllTestimonialsReducer: showAllTestimonialsSlice.reducer,
     },
 });
 

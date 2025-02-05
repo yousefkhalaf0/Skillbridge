@@ -1,17 +1,21 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toggleShowAllBenefits, toggleShowAllTestimonials } from '../../utilities/redux/store.jsx';
 import {
-    Box, Grid, Typography, ElectricBoltIcon, Button, Link
+    Box, Grid, Typography, ElectricBoltIcon, Button
 } from '../../utilities/muiComponents.js';
+import { ComercialBox, BenefitsCard, SmallCourseCard, TestimonialsCard } from '../../utilities/subComponentsLinks.js';
 import '../homePage/homePage.css';
 import linesIcon from '../../assets/icons/abstractLines.svg'
-import ComercialBox from '../../utilities/subComponents/comercialBox/comercialBox.jsx';
 import homeHeaderImg from '../../assets/images/homeHeaderImg.svg'
 
 export default function HomePage() {
     const theme = useSelector((state) => state.themeReducer);
+    const showAllBenefits = useSelector((state) => state.showAllBenefitsReducer);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const coursesRef = useRef(null);
 
     return (
         <main className='homePageContainer'>
@@ -38,7 +42,10 @@ export default function HomePage() {
             <Typography className={`${theme}HeaderSubSubText disableSelecting`} variant="subtitle1">
                 Learn from Industry Experts and Enhance Your Skills.
             </Typography>
-            <Button className={`${theme}ExploreCoursesBtn`} variant="contained" sx={{ textTransform: 'none' }}>
+            <Button className={`${theme}ExploreCoursesBtn`} variant="contained" sx={{ textTransform: 'none' }}
+                onClick={() => {
+                    coursesRef.current.scrollIntoView();
+                }}>
                 Explore Courses
             </Button>
             <ComercialBox />
@@ -51,13 +58,14 @@ export default function HomePage() {
                     width: { xs: '95%', md: '90%', lg: '85%' }
                 }} />
 
+            {/* Benefits section */}
             <Box className={`sectionsContainer`}
                 sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
                 <Box className={`disableSelecting`}>
                     <Typography className={`${theme}SectionsTitle`} variant='h4' gutterBottom>
                         Benefits
                     </Typography>
-                    <Grid mb={9} container spacing={2} >
+                    <Grid mb={6} container spacing={2} >
                         <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
                             Lorem ipsum dolor sit amet consectetur. Tempus tincidunt etiam eget elit id imperdiet et. Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse in velit fringilla feugiat senectus in.
                         </Grid>
@@ -66,13 +74,58 @@ export default function HomePage() {
                                 <Button
                                     className="sectionBtn"
                                     variant="contained"
-                                    sx={{ textTransform: 'none' }}>
-                                    View All
+                                    sx={{ textTransform: 'none' }}
+                                    onClick={() => dispatch(toggleShowAllBenefits())}>
+                                    {showAllBenefits ? 'Collapse' : 'View All'}
                                 </Button>
                             </Box>
                         </Grid>
                     </Grid>
-                    CardSubComponentHere
+                    <BenefitsCard showAll={showAllBenefits} />
+                </Box>
+            </Box>
+
+            {/* Course section */}
+            <Box ref={coursesRef} className={`sectionsContainer`}
+                sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
+                <Box className={`disableSelecting`}>
+                    <Typography className={`${theme}SectionsTitle`} variant='h4' gutterBottom>
+                        Our Courses
+                    </Typography>
+                    <Grid mb={6} container spacing={2} >
+                        <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
+                            Lorem ipsum dolor sit amet consectetur. Tempus tincidunt etiam eget elit id imperdiet et. Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse in velit fringilla feugiat senectus in.
+                        </Grid>
+                    </Grid>
+                    <SmallCourseCard />
+                    pagination here
+                </Box>
+            </Box>
+
+            {/* Testimonials section */}
+            <Box className={`sectionsContainer`}
+                sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
+                <Box className={`disableSelecting`}>
+                    <Typography className={`${theme}SectionsTitle`} variant='h4' gutterBottom>
+                        Our Testimonials
+                    </Typography>
+                    <Grid mb={6} container spacing={2} >
+                        <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
+                            Lorem ipsum dolor sit amet consectetur. Tempus tincidunt etiam eget elit id imperdiet et. Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse in velit fringilla feugiat senectus in.
+                        </Grid>
+                        <Grid item sm={3} xs={12}>
+                            <Box sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
+                                <Button
+                                    className="sectionBtn"
+                                    variant="contained"
+                                    sx={{ textTransform: 'none' }}
+                                    onClick={() => dispatch(toggleShowAllTestimonials())}>
+                                    {showAllBenefits ? 'Collapse' : 'View All'}
+                                </Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    <TestimonialsCard />
                 </Box>
             </Box>
         </main>
