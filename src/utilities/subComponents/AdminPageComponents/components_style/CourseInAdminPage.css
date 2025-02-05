@@ -1,0 +1,13 @@
+
+@font-face {
+    font-family: 'BeVietnam';
+    src: url('../../../../assets/font/BeVietnamPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+
+.Card{
+    font-family:'BeVietnam' !important;
+    font-weight: normal;
+}
