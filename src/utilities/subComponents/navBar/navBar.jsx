@@ -106,7 +106,7 @@ export default function NavBar() {
                                     onClick={() => handleButtonClick('Courses', '/courses')}>
                                     Courses
                                 </Button>
-                                <Button
+                                {/* <Button
                                     color="inherit"
                                     variant={activeButton === 'About Us' ? 'contained' : 'text'}
                                     className={`${theme}Button ${activeButton === 'About Us' ? 'active' : ''}`}
@@ -127,7 +127,7 @@ export default function NavBar() {
                                     }}
                                     onClick={() => handleButtonClick('Pricing', '/pricing')}>
                                     Pricing
-                                </Button>
+                                </Button> */}
                             </>
                         )}
                         <IconButton
