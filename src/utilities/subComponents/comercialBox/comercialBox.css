@@ -1,0 +1,26 @@
+.comercialBox {
+    margin-top: 150px;
+    border-radius: 12px;
+    padding: 30px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+}
+
+.lightComercialBox {
+    background-color: white;
+}
+
+.darkComercialBox {
+    background-color: #656567;
+}
+
+.lightComercialBoxLogos {
+    filter: brightness(0) invert(0);
+}
+
+.darkComercialBoxLogos {
+    filter: brightness(0) invert(1);
+}
