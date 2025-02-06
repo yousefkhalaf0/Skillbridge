@@ -4,3 +4,5 @@ export { default as ComercialBox } from '../utilities/subComponents/comercialBox
 export { default as BenefitsCard } from '../utilities/subComponents/benefitsCard/benefitsCard.jsx';
 export { default as SmallCourseCard } from '../utilities/subComponents/smallCourseCard/smallCourseCard.jsx';
 export { default as TestimonialsCard } from '../utilities/subComponents/testimonialsCard/testimonialsCard.jsx';
+export { default as HeroComponent } from '../utilities/subComponents/CoursePageComponents/heroComponent.jsx';
+export { default as LargeCourseCard } from '../utilities/subComponents/CoursePageComponents/largeCourseCard.jsx';

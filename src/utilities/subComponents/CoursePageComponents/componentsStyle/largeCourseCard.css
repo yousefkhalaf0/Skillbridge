@@ -1,0 +1,65 @@
+.lightLargeCourseCardContainer {
+    margin-top: 90px;
+    margin-bottom: 40;
+    background-color: white !important;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.darkLargeCourseCardContainer {
+    margin-top: 90px;
+    margin-bottom: 40;
+    background-color: #D0D0D0 !important;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.lightCourseTitle {
+    color: black !important;
+    font-weight: bold !important;
+}
+
+.darkCourseTitle {
+    color: #262626 !important;
+    font-weight: bold !important;
+}
+
+.courseDiscreption {
+    color: #59595A !important;
+}
+
+.viewCourseBtn {
+    background-color: #1E1E1E !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+
+.largeCourseCardRow {
+    margin-top: 1px !important;
+    margin-bottom: 20px !important;
+}
+
+.lightLargeWeeksLevelBox {
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #F1F1F3;
+    color: #5A5A5A;
+    padding: 5px;
+}
+
+.darkLargeWeeksLevelBox {
+    background-color: #656567;
+    border-radius: 8px;
+    border: 1px solid #656567;
+    color: #CACACA;
+    padding: 5px;
+}
+
+.lightLargeVendor {
+    color: black;
+}
+
+.darkLargeVendor {
+    color: #656567;
+}

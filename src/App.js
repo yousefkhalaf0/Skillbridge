@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { ResponsiveAppBar, Footer } from '../src/utilities/subComponentsLinks.js';
 import NotFound from './pages/notFoundPage/notFoundPage';
 import Home from '../src/pages/homePage/homePage';
+import CoursePage from '../src/pages/coursePage.jsx';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <ResponsiveAppBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/courses" element={<CoursePage />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
