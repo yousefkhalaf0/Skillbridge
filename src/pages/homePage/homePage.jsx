@@ -10,6 +10,7 @@ import '../homePage/homePage.css';
 import linesIcon from '../../assets/icons/abstractLines.svg'
 import homeHeaderImg from '../../assets/images/homeHeaderImg.svg'
 
+
 export default function HomePage() {
     const theme = useSelector((state) => state.themeReducer);
     const showScroll = useSelector((state) => state.scrollReducer.showScroll);
@@ -19,25 +20,24 @@ export default function HomePage() {
     const navigate = useNavigate();
     const coursesRef = useRef(null);
 
-
     const checkScrollTop = () => {
         const shouldShow = window.pageYOffset > 400;
         if (shouldShow !== showScroll) {
             dispatch(setShowScroll(shouldShow));
         }
     };
-
     useEffect(() => {
         window.addEventListener('scroll', checkScrollTop);
         return () => window.removeEventListener('scroll', checkScrollTop);
     }, [showScroll, dispatch]);
-
     const scrollTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
         <main className='homePageContainer'>
+
+            {/* hero section */}
             <Typography
                 gutterBottom
                 className='headerBox'
