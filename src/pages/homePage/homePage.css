@@ -116,3 +116,20 @@
     background-color: white !important;
     color: black !important;
 }
+
+.homePageScrollBtn {
+    position: fixed !important;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 50% !important;
+    min-width: 50px !important;
+    height: 50px;
+    background-color: #E8A710 !important;
+    color: white !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.homePageScrollBtn:hover {
+    background-color: #d18f0d !important;
+}

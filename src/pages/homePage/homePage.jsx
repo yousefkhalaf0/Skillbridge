@@ -1,9 +1,9 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toggleShowAllBenefits, toggleShowAllTestimonials } from '../../utilities/redux/store.jsx';
+import { setShowScroll, toggleShowAllBenefits, toggleShowAllTestimonials } from '../../utilities/redux/store.jsx';
 import {
-    Box, Grid, Typography, ElectricBoltIcon, Button
+    Box, Grid, Typography, ElectricBoltIcon, Button, KeyboardArrowUpIcon
 } from '../../utilities/muiComponents.js';
 import { ComercialBox, BenefitsCard, SmallCourseCard, TestimonialsCard } from '../../utilities/subComponentsLinks.js';
 import '../homePage/homePage.css';
@@ -12,11 +12,29 @@ import homeHeaderImg from '../../assets/images/homeHeaderImg.svg'
 
 export default function HomePage() {
     const theme = useSelector((state) => state.themeReducer);
+    const showScroll = useSelector((state) => state.scrollReducer.showScroll);
     const showAllBenefits = useSelector((state) => state.showAllBenefitsReducer);
     const showAllTestimonials = useSelector((state) => state.showAllTestimonialsReducer);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const coursesRef = useRef(null);
+
+
+    const checkScrollTop = () => {
+        const shouldShow = window.pageYOffset > 400;
+        if (shouldShow !== showScroll) {
+            dispatch(setShowScroll(shouldShow));
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', checkScrollTop);
+        return () => window.removeEventListener('scroll', checkScrollTop);
+    }, [showScroll, dispatch]);
+
+    const scrollTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return (
         <main className='homePageContainer'>
@@ -99,7 +117,6 @@ export default function HomePage() {
                         </Grid>
                     </Grid>
                     <SmallCourseCard />
-                    pagination here
                 </Box>
             </Box>
 
@@ -131,12 +148,21 @@ export default function HomePage() {
             </Box>
 
             {/* FAQ's section */}
-            <Box className={`sectionsContainer`}
+            {/* <Box className={`sectionsContainer`}
                 sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
                 <Box className={`disableSelecting`}>
-                    dfs
+                    FAQ's card here
                 </Box>
-            </Box>
+            </Box> */}
+
+
+            {showScroll && (
+                <Button
+                    onClick={scrollTop}
+                    className='homePageScrollBtn'>
+                    <KeyboardArrowUpIcon />
+                </Button>
+            )}
         </main>
     )
 }

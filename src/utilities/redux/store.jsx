@@ -11,6 +11,19 @@ const themeSlice = createSlice({
     },
 });
 
+// Slice for scroll visibility
+const scrollSlice = createSlice({
+    name: "scroll",
+    initialState: {
+        showScroll: false
+    },
+    reducers: {
+        setShowScroll: (state, action) => {
+            state.showScroll = action.payload;
+        }
+    }
+});
+
 // Slice for navbar management
 const navbarSlice = createSlice({
     name: "navbar",
@@ -59,6 +72,7 @@ const showAllTestimonialsSlice = createSlice({
 
 // Exporting actions
 export const { toggleTheme } = themeSlice.actions;
+export const { setShowScroll } = scrollSlice.actions;
 export const { setActiveButton, setAnchorEl } = navbarSlice.actions;
 export const { toggleLanguage } = languageSlice.actions;
 export const { toggleShowAllBenefits } = showAllBenefitsSlice.actions;
@@ -68,6 +82,7 @@ export const { toggleShowAllTestimonials } = showAllTestimonialsSlice.actions;
 const store = configureStore({
     reducer: {
         themeReducer: themeSlice.reducer,
+        scrollReducer: scrollSlice.reducer,
         navbarReducer: navbarSlice.reducer,
         languageReducer: languageSlice.reducer,
         showAllBenefitsReducer: showAllBenefitsSlice.reducer,

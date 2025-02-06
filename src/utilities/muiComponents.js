@@ -10,6 +10,8 @@ export { default as useTheme } from '@mui/material/styles/useTheme';
 export { default as Grid } from '@mui/material/Grid';
 export { default as Typography } from '@mui/material/Typography';
 export { default as Link } from '@mui/material/Link';
+export { default as Pagination } from '@mui/material/Pagination';
+export { default as PaginationItem } from '@mui/material/PaginationItem';
 
 // MUI Icons
 export { default as ArrowForwardIcon } from '@mui/icons-material/ArrowForward';
@@ -24,3 +26,4 @@ export { default as XIcon } from '@mui/icons-material/X';
 export { default as LinkedInIcon } from '@mui/icons-material/LinkedIn';
 export { default as ElectricBoltIcon } from '@mui/icons-material/ElectricBolt';
 export { default as ArrowOutwardIcon } from '@mui/icons-material/ArrowOutward';
+export { default as KeyboardArrowUpIcon } from '@mui/icons-material/KeyboardArrowUp';
