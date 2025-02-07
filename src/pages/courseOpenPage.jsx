@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setShowScroll } from '../utilities/redux/store.jsx';
 import { Box, Button, KeyboardArrowUpIcon } from '../utilities/muiComponents.js';
-import { HeroComponent, LargeCourseCard } from '../utilities/subComponentsLinks.js';
-import './pagesStyle/coursePage.css';
+import { } from '../utilities/subComponentsLinks.js';
+import './pagesStyle/courseOpenPage.css';
 
-export default function CoursePage() {
+export default function CourseOpenPage() {
     const showScroll = useSelector((state) => state.scrollReducer.showScroll);
     const dispatch = useDispatch();
 
@@ -24,14 +24,13 @@ export default function CoursePage() {
     };
 
     return (
-        <Box className='coursePageContainer' sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
-            <HeroComponent />
-            <LargeCourseCard />
+        <Box className='courseOpenPageContainer' sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
+
 
             {showScroll && (
                 <Button
                     onClick={scrollTop}
-                    className='coursePageScrollBtn'>
+                    className='courseOpenPageScrollBtn'>
                     <KeyboardArrowUpIcon />
                 </Button>
             )}
