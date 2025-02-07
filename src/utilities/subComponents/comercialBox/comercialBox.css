@@ -1,12 +1,31 @@
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-1 * var(--container-width)));
+    }
+}
+
+.logoContainer {
+    display: flex;
+    width: max-content;
+    animation: scroll 15s linear infinite !important;
+}
+
 .comercialBox {
     margin-top: 150px;
     border-radius: 12px;
     padding: 30px;
-    width: fit-content;
+    width: 75%;
     margin-left: auto;
     margin-right: auto;
     display: flex;
     align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
 }
 
 .lightComercialBox {

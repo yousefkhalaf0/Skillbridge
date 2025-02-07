@@ -12,6 +12,8 @@ export { default as Typography } from '@mui/material/Typography';
 export { default as Link } from '@mui/material/Link';
 export { default as Pagination } from '@mui/material/Pagination';
 export { default as PaginationItem } from '@mui/material/PaginationItem';
+export { default as CircularProgress } from '@mui/material/CircularProgress';
+export { default as Alert } from '@mui/material/Alert';
 
 // MUI Icons
 export { default as ArrowForwardIcon } from '@mui/icons-material/ArrowForward';

@@ -1,3 +1,21 @@
+.lightTestimonialsContainer {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lightTestimonialsContainer:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.darkTestimonialsContainer {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.darkTestimonialsContainer:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
 .lightTestimonialsCardDescription {
     color: #4E4E4E;
     background-color: white;

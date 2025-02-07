@@ -73,14 +73,14 @@ export default function Footer() {
                     <Typography className='disableSelecting' variant="subtitle1" sx={{ marginBottom: '1rem' }}>
                         Social Profiles
                     </Typography>
-                    <Box className='socialIconBox' >
-                        <FacebookIcon className='socialIcons' />
+                    <Box className={`${theme}SocialIconBox`} >
+                        <FacebookIcon className={`${theme}SocialIcons`} />
                     </Box>
-                    <Box className='socialIconBox' >
-                        <XIcon className='socialIcons' />
+                    <Box className={`${theme}SocialIconBox`} >
+                        <XIcon className={`${theme}SocialIcons`} />
                     </Box>
-                    <Box className='socialIconBox' >
-                        <LinkedInIcon className='socialIcons' />
+                    <Box className={`${theme}SocialIconBox`} >
+                        <LinkedInIcon className={`${theme}SocialIcons`} />
                     </Box>
                 </Grid>
             </Grid>

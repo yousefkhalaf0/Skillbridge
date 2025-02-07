@@ -23,7 +23,7 @@ export default function TestimonialsCard({ showAll }) {
         <Grid container spacing={2} sx={{ display: 'flex', flexWrap: 'wrap' }}>
             {testimonials.slice(0, showAll ? testimonials.length : 2).map((testimonial, index) => (
                 <Grid item xs={12} md={6} key={index} sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <Box className={`${theme}TestimonialsContainer`} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                         <Typography className={`${theme}TestimonialsCardDescription`} variant='body1' sx={{ flexGrow: 1 }}>
                             {testimonial.description}
                         </Typography>

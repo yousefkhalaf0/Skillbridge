@@ -41,7 +41,7 @@
     margin-right: 6px;
 }
 
-.socialIconBox {
+.lightSocialIconBox {
     padding: 10px;
     background-color: white;
     border-radius: 10px;
@@ -50,10 +50,37 @@
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.socialIcons {
+.lightSocialIconBox:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+.darkSocialIconBox {
+    padding: 10px;
+    background-color: #9a9a98;
+    border-radius: 10px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.darkSocialIconBox:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.lightSocialIcons {
     color: #191919;
+}
+
+.darkSocialIcons {
+    color: #444444;
 }
 
 .lightCopyRight {

@@ -73,7 +73,7 @@ export default function LargeCourseCard() {
                                 </Typography>
                             </Grid>
                         </Grid>
-                        
+
                     </Box>
                 </Grid>
             </Grid>

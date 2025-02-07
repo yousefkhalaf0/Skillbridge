@@ -3,6 +3,12 @@
     padding: 40px;
     text-align: left;
     border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lightBenefitsCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .darkBenefitsCard {
@@ -10,6 +16,12 @@
     padding: 40px;
     text-align: left;
     border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.darkBenefitsCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
 }
 
 .cardTitle {
