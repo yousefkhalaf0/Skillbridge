@@ -1,14 +1,10 @@
 .lightLargeCourseCardContainer {
-    margin-top: 90px;
-    margin-bottom: 40;
     background-color: white !important;
     padding: 30px;
     border-radius: 12px;
 }
 
 .darkLargeCourseCardContainer {
-    margin-top: 90px;
-    margin-bottom: 40;
     background-color: #D0D0D0 !important;
     padding: 30px;
     border-radius: 12px;

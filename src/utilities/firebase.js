@@ -15,14 +15,32 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-// Fetch data from Firestore
+// Fetch courses and their modules data from Firestore
 const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, "Courses"));
-    const courses = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-    }));
-    return courses;
+    try {
+        const coursesQuerySnapshot = await getDocs(collection(db, "Courses"));
+        const courses = [];
+
+        for (const courseDoc of coursesQuerySnapshot.docs) {
+            const courseData = { id: courseDoc.id, ...courseDoc.data() };
+
+            const modulesQuerySnapshot = await getDocs(
+                collection(db, "Courses", courseDoc.id, "modules")
+            );
+
+            const modules = modulesQuerySnapshot.docs.map((moduleDoc) => ({
+                id: moduleDoc.id,
+                ...moduleDoc.data(),
+            }));
+
+            courseData.modules = modules;
+            courses.push(courseData);
+        }
+
+        return courses;
+    } catch (error) {
+        throw error;
+    }
 };
 
 export { fetchData };
