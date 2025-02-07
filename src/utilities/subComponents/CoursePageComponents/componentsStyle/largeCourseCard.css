@@ -63,3 +63,61 @@
 .darkLargeVendor {
     color: #656567;
 }
+
+.curriculumContainer {
+    margin-top: 20px;
+}
+
+.lightHeader {
+    color: #262626;
+    background-color: #D0D0D0;
+    font-weight: bold !important;
+    padding: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.darkHeader {
+    color: #FAFAFA;
+    font-weight: bold !important;
+    background-color: #656567;
+    padding: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.lightModulesContainer {
+    border: 1px solid #F1F1F3;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.darkModulesContainer {
+    border: 1px solid #656567;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.modulesNumber {
+    color: #262626;
+    font-weight: bold !important;
+}
+
+.modulesName {
+    color: #333333;
+}
+
+.imgContainer {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imgContainer:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}

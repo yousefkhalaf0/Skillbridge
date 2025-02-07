@@ -47,5 +47,5 @@ export default function TestimonialsCard({ showAll }) {
                 </Grid>
             ))}
         </Grid>
-    )
+    );
 }

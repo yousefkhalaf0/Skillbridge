@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { setShowScroll } from '../utilities/redux/store.jsx';
 import {
     Box, Button, KeyboardArrowUpIcon
@@ -9,10 +8,8 @@ import { HeroComponent, LargeCourseCard } from '../utilities/subComponentsLinks.
 import './pagesStyle/coursePage.css';
 
 export default function CoursePage() {
-    const theme = useSelector((state) => state.themeReducer);
     const showScroll = useSelector((state) => state.scrollReducer.showScroll);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const checkScrollTop = () => {
         const shouldShow = window.pageYOffset > 400;

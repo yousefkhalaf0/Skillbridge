@@ -31,30 +31,34 @@ export default function LargeCourseCard() {
                     </Box>
                 </Grid>
             </Grid>
+
             <Grid container spacing={2} sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 <Grid item xs={12} sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                         <Grid container spacing={1.5} >
                             <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Box
+                                    className={`imgContainer`}
                                     component="img"
                                     src={courseImg}
                                     alt="courseImg"
-                                    sx={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+                                    sx={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
                             </Grid>
                             <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Box
+                                    className={`imgContainer`}
                                     component="img"
                                     src={courseImg}
                                     alt="courseImg"
-                                    sx={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+                                    sx={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
                             </Grid>
                             <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Box
+                                    className={`imgContainer`}
                                     component="img"
                                     src={courseImg}
                                     alt="courseImg"
-                                    sx={{ width: '100%', height: 'auto', objectFit: 'contain' }} />
+                                    sx={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
                             </Grid>
                         </Grid>
 
@@ -68,12 +72,57 @@ export default function LargeCourseCard() {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={6} sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
-                                <Typography className={`${theme}LargeVendor`} variant='subtitle1'>
+                                <Typography className={`${theme}LargeVendor`} variant='body2'>
                                     By John Smith
                                 </Typography>
                             </Grid>
                         </Grid>
 
+                        <Grid container spacing={2} sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                            <Grid item xs={12} sx={{ display: 'flex' }}>
+                                <Box className={`curriculumContainer`} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                                    <Typography className={`${theme}Header`} variant='subtitle1' sx={{ flexGrow: 1 }}>
+                                        Curriculum
+                                    </Typography>
+                                    <Grid className={`${theme}ModulesContainer`} container>
+                                        {[1, 2, 3, 4, 5].map((module, index) => (
+                                            <Grid item xs={12} md={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', position: 'relative', mx: 1 }}>
+                                                <Typography className={`modulesNumber`} variant='h3' >
+                                                    {String(module).padStart(2, '0')}
+                                                </Typography>
+                                                <Typography className={`modulesName`} variant='body1' gutterBottom>
+                                                    Introduction to HTML
+                                                </Typography>
+
+                                                {index !== 4 && (
+                                                    <Box
+                                                        sx={{
+                                                            display: { xs: 'none', md: 'block' },
+                                                            position: 'absolute',
+                                                            right: 0,
+                                                            top: '50%',
+                                                            transform: 'translateY(-50%)',
+                                                            height: '100%',
+                                                            width: '1px',
+                                                            bgcolor: theme === 'light' ? '#F1F1F3' : '#656567',
+                                                        }} />
+                                                )}
+                                                {index !== 4 && (
+                                                    <Box
+                                                        sx={{
+                                                            display: { xs: 'block', md: 'none' },
+                                                            width: '100%',
+                                                            height: '1px',
+                                                            bgcolor: theme === 'light' ? '#F1F1F3' : '#656567',
+                                                            my: 2,
+                                                        }} />
+                                                )}
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </Box>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Grid>
             </Grid>
