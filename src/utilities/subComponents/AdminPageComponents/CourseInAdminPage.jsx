@@ -3,6 +3,7 @@ import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/mate
 import courseImage from '../../../assets/dashboard_assets/images/course_image.png';
 import "./components_style/CourseInAdminPage.css";
 import { useSelector } from 'react-redux';
+
 const CourseCard = () => {
   const theme = useSelector((state) => state.themeReducer);
   return (

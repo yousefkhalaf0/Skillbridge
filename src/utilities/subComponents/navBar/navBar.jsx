@@ -57,7 +57,7 @@ export default function NavBar() {
                         alt="appIcon"
                         sx={{ width: '2.5rem', marginRight: '25px', cursor: 'pointer' }}
                         onClick={() => navigate('/home')} />
-                    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center'}}>
                         {isSmallScreen && (
                             <>
                                 <IconButton

@@ -1,55 +1,55 @@
 import React from "react";
-import { Box, Typography, Button, List, ListItem, ListItemIcon, ListItemText, Badge } from "@mui/material";
-import { MenuBook, People, BarChart, ChatBubble, Settings, ExitToApp, Visibility } from "@mui/icons-material";
+import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, Badge, ButtonBase } from "@mui/material";
+import { MenuBook, People, BarChart, ChatBubble, Settings, ExitToApp } from "@mui/icons-material";
 
 const Sidebar = () => {
+  const handleNavigation = (path) => {
+    console.log(`Navigating to ${path}`);
+    // Implement navigation logic (e.g., React Router or window.location)
+  };
+
   return (
-    <Box sx={{ width: 160, borderRight: "1px solid white", p: 2, position:{lg:"absolute"} ,top:{lg:"20.4vh"}}}>
+    <Box sx={{ display: "flex", width: 160, borderRight: { lg: "1px solid white", }, borderBottom: { md: "1px solid white", sm: "1px solid white", xs: "1px solid white", lg: "0px" }, p: 2, position: { lg: "absolute" }, top: { lg: "20.4vh" }, flexDirection: { lg: "column", md: "row" } }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <Box sx={{ width: 24, height: 24, bgcolor: "black", borderRadius: "50%", mr: 1 }} />
         <Typography variant="h6" fontWeight="bold">Omni.</Typography>
       </Box>
-      
-      <Typography variant="subtitle1" gutterBottom>Menu</Typography>
-      <List>
-        <ListItem sx={{ bgcolor: "#fcb900", borderRadius: 1 }}>
-          <ListItemIcon><MenuBook sx={{ color: "white" }} /></ListItemIcon>
-          <ListItemText primary="Courses" sx={{ color: "white" }} />
-        </ListItem>
-        <ListItem sx={{ color: "gray" }}>
-          <ListItemIcon><People /></ListItemIcon>
-          <ListItemText primary="Students" />
-        </ListItem>
-        <ListItem sx={{ color: "gray" }}>
-          <ListItemIcon><BarChart /></ListItemIcon>
-          <ListItemText primary="Statistics" />
-        </ListItem>
-      </List>
-      
+      <Box><Typography variant="subtitle1" gutterBottom>Menu</Typography>
+        <List >
+          {[
+            { text: "Courses", icon: <MenuBook sx={{ color: "white" }} />, path: "/courses", bg: "#fcb900", textColor: "white" },
+            { text: "Students", icon: <People />, path: "/students" },
+
+          ].map((item, index) => (
+            <ButtonBase key={index} sx={{ width: "100%", borderRadius: 1 }} onClick={() => handleNavigation(item.path)}>
+              <ListItem sx={{ bgcolor: item.bg || "transparent", color: item.textColor || "gray", borderRadius: 1 }}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            </ButtonBase>
+          ))}
+        </List></Box>
+
+
       <Box sx={{ my: 2, borderBottom: "1px solid gray" }} />
-      <Typography variant="subtitle1" gutterBottom>Account</Typography>
-      <List>
-        <ListItem sx={{ color: "gray" }}>
-          <ListItemIcon>
-            <Badge badgeContent={5} color="error">
-              <ChatBubble />
-            </Badge>
-          </ListItemIcon>
-          <ListItemText primary="Messages" />
-        </ListItem>
-        <ListItem sx={{ color: "gray" }}>
-          <ListItemIcon><Settings /></ListItemIcon>
-          <ListItemText primary="Settings" />
-        </ListItem>
-        <ListItem sx={{ color: "gray" }}>
-          <ListItemIcon><ExitToApp /></ListItemIcon>
-          <ListItemText primary="Log out" />
-        </ListItem>
-      </List>
+      <Box><Typography variant="subtitle1" gutterBottom>Account</Typography>
+        <List>
+          {[
+            { text: "Messages", icon: <Badge badgeContent={5} color="error"><ChatBubble /></Badge>, path: "/messages" },
+            { text: "Settings", icon: <Settings />, path: "/settings" },
+            { text: "Log out", icon: <ExitToApp />, path: "/logout" },
+          ].map((item, index) => (
+            <ButtonBase key={index} sx={{ width: "100%", borderRadius: 1 }} onClick={() => handleNavigation(item.path)}>
+              <ListItem sx={{ color: "gray", borderRadius: 1 }}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            </ButtonBase>
+          ))}
+        </List></Box>
+
     </Box>
   );
 };
 
 export default Sidebar;
-
-
