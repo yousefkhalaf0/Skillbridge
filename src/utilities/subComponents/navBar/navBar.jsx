@@ -8,6 +8,7 @@ import {
 } from '../../muiComponents.js';
 import '../../subComponents/navBar/navBar.css';
 import appIcon from '../../../assets/icons/siteLogo.svg';
+// import animatedIcon from '../../../assets/animations/wired-lineal-237-star-rating-hover-pinch.gif'
 
 
 export default function NavBar() {
@@ -56,7 +57,7 @@ export default function NavBar() {
                         src={appIcon}
                         alt="appIcon"
                         sx={{ width: '2.5rem', marginRight: '25px', cursor: 'pointer' }}
-                        onClick={() => navigate('/home')} />
+                        onClick={() => navigate('/')} />
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center'}}>
                         {isSmallScreen && (
                             <>
@@ -74,7 +75,7 @@ export default function NavBar() {
                                     anchorEl={anchorEl}
                                     open={Boolean(anchorEl)}
                                     onClose={handleMenuClose}>
-                                    <MenuItem onClick={() => handleButtonClick('Home', '/home')}>Home</MenuItem>
+                                    <MenuItem onClick={() => handleButtonClick('Home', '/')}>Home</MenuItem>
                                     <MenuItem onClick={() => handleButtonClick('Courses', '/courses')}>Courses</MenuItem>
                                     <MenuItem onClick={() => handleButtonClick('About Us', '/about')}>About Us</MenuItem>
                                     <MenuItem onClick={() => handleButtonClick('Pricing', '/pricing')}>Pricing</MenuItem>
@@ -91,7 +92,7 @@ export default function NavBar() {
                                         textTransform: 'none',
                                         mx: 1,
                                     }}
-                                    onClick={() => handleButtonClick('Home', '/home')}>
+                                    onClick={() => handleButtonClick('Home', '/')}>
                                     Home
                                 </Button>
                                 <Button

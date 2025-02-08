@@ -1,0 +1,74 @@
+/* .lightTestimonialsCardBox1 {
+    background-color: white;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid #D0D0D0;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.darkTestimonialsCardBox1 {
+    background-color: #D0D0D0;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid white;
+    border-radius: 10px;
+    text-align: left;
+} */
+
+/* .testimonialsCardBox2 {
+    background-color: #FCFCFD;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+} */
+
+.lightTestimonialsCardDescription {
+    color: #4E4E4E;
+    background-color: white;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-bottom: 1px solid #D0D0D0;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: left;
+}
+
+.darkTestimonialsCardDescription {
+    color: #4E4E4E;
+    background-color: #D0D0D0;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-bottom: 1px solid white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: left;
+}
+
+
+.testimonialsImgBox {
+    border-radius: 8px;
+}
+
+.testimonialsCardUserName {
+    color: #191919;
+}
+
+.lightTestimonialsCardBtn {
+    background-color: #D0D0D0 !important;
+    color: #2C2C2C !important;
+}
+
+.darkTestimonialsCardBtn {
+    background-color: #F7F7F8 !important;
+    color: #2C2C2C !important;
+}

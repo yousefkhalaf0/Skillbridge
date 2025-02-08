@@ -14,7 +14,7 @@ const Dashboard = () => {
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>
-
+      
         <Grid container spacing={2} mt={3}>
           <Grid item lg={2} xs={12} md={12}><Sidebar /></Grid>
           <Grid item lg={6} xs={12} md={8}>
