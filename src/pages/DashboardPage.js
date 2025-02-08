@@ -10,13 +10,13 @@ const stats = [
   { count: 11, label: "Courses completed" },
   { count: 5, label: "Courses in progress" },
 ];
-const Dashboard = () => {
+const Dashboard = ({ navHeight }) => {
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>
       
         <Grid container spacing={2} mt={3}>
-          <Grid item lg={2} xs={12} md={12}><Sidebar /></Grid>
+          <Grid item lg={2} xs={12} md={12}><Sidebar navHeight={navHeight}/></Grid>
           <Grid item lg={6} xs={12} md={8}>
             <Box mt={3} p={2} display="flex" justifyContent="space-between" alignItems="center" >
               <Typography variant="h5" >My Courses</Typography>
