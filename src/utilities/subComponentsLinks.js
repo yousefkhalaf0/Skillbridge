@@ -6,3 +6,5 @@ export { default as SmallCourseCard } from '../utilities/subComponents/smallCour
 export { default as TestimonialsCard } from '../utilities/subComponents/testimonialsCard/testimonialsCard.jsx';
 export { default as HeroComponent } from '../utilities/subComponents/CoursePageComponents/heroComponent.jsx';
 export { default as LargeCourseCard } from '../utilities/subComponents/CoursePageComponents/largeCourseCard.jsx';
+export { default as CourseHeroComponent } from '../utilities/subComponents/CourseOpenPageComponents/heroComponent.jsx';
+export { default as BodyComponent } from '../utilities/subComponents/CourseOpenPageComponents/bodyComponent.jsx';

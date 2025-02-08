@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setShowScroll } from '../utilities/redux/store.jsx';
 import { Box, Button, KeyboardArrowUpIcon } from '../utilities/muiComponents.js';
-import { } from '../utilities/subComponentsLinks.js';
+import { CourseHeroComponent, BodyComponent } from '../utilities/subComponentsLinks.js';
 import './pagesStyle/courseOpenPage.css';
 
 export default function CourseOpenPage() {
@@ -24,8 +24,9 @@ export default function CourseOpenPage() {
     };
 
     return (
-        <Box className='courseOpenPageContainer' sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
-
+        <Box className='courseOpenPageContainer disableSelecting' sx={{ width: { xs: '95%', md: '90%', lg: '85%' } }}>
+            <CourseHeroComponent />
+            <BodyComponent />
 
             {showScroll && (
                 <Button

@@ -123,7 +123,7 @@ export default function LargeCourseCard() {
                                                                 sx={{
                                                                     display: 'flex',
                                                                     flexDirection: 'column',
-                                                                    alignItems: 'left',
+                                                                    alignItems: 'start',
                                                                     position: 'relative',
                                                                     mx: 1,
                                                                     py: 2

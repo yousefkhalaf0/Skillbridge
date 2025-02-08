@@ -29,3 +29,4 @@ export { default as LinkedInIcon } from '@mui/icons-material/LinkedIn';
 export { default as ElectricBoltIcon } from '@mui/icons-material/ElectricBolt';
 export { default as ArrowOutwardIcon } from '@mui/icons-material/ArrowOutward';
 export { default as KeyboardArrowUpIcon } from '@mui/icons-material/KeyboardArrowUp';
+export { default as AccessTimeIcon } from '@mui/icons-material/AccessTime';
