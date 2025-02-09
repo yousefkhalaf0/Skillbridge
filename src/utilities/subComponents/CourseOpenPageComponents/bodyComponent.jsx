@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 export default function BodyComponent({ course }) {
   const theme = useSelector((state) => state.themeReducer);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [clickedLessons, setClickedLessons] = useState(new Set());
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,6 +28,18 @@ export default function BodyComponent({ course }) {
   const sortedModules = course.modules
     .slice()
     .sort((a, b) => a.number - b.number);
+
+  const handleLessonClick = (lessonId) => {
+    setClickedLessons((prevClickedLessons) => {
+      const newClickedLessons = new Set(prevClickedLessons);
+      if (newClickedLessons.has(lessonId)) {
+        newClickedLessons.delete(lessonId);
+      } else {
+        newClickedLessons.add(lessonId);
+      }
+      return newClickedLessons;
+    });
+  };
 
   return (
     <Box
@@ -67,7 +80,14 @@ export default function BodyComponent({ course }) {
                 </Typography>
 
                 {sortedLessons.map((lesson) => (
-                  <Box className={`lessonsContainer`} key={lesson.id}>
+                  <Box
+                    className={`${theme}LessonsContainer ${
+                      clickedLessons.has(lesson.id) ? "clicked" : ""
+                    }`}
+                    key={lesson.id}
+                    onClick={() => handleLessonClick(lesson.id)}
+                    sx={{ cursor: "pointer" }}
+                  >
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={8}>
                         <Typography
@@ -99,7 +119,11 @@ export default function BodyComponent({ course }) {
                           justifyContent: { xs: "flex-start", sm: "flex-end" },
                         }}
                       >
-                        <Box className={`lessonTime`}>
+                        <Box
+                          className={`${theme}LessonTime ${
+                            clickedLessons.has(lesson.id) ? "clicked" : ""
+                          }`}
+                        >
                           <AccessTimeIcon /> {lesson.duration}
                         </Box>
                       </Grid>

@@ -46,14 +46,29 @@
   text-align: right;
 }
 
-.lessonsContainer {
+.lightLessonsContainer {
   margin-bottom: 20px;
   padding: 15px;
   border-radius: 8px;
   border: 1px solid #e6e6e8 !important;
 }
 
-.lessonTime {
+.darkLessonsContainer {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e8 !important;
+}
+
+.lightLessonsContainer.clicked {
+  border: 2px solid #e8a710 !important;
+}
+
+.darkLessonsContainer.clicked {
+  border: 2px solid black !important;
+}
+
+.lightLessonTime {
   background-color: #f7f7f8 !important;
   color: #59595a !important;
   border-radius: 6px;
@@ -62,4 +77,25 @@
   gap: 10px;
   align-items: center;
   width: fit-content;
+}
+
+.darkLessonTime {
+  background-color: #f7f7f8 !important;
+  color: #59595a !important;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: fit-content;
+}
+
+.lightLessonTime.clicked {
+  background-color: #e8a710 !important;
+  color: #fff !important;
+}
+
+.darkLessonTime.clicked {
+  background-color: black !important;
+  color: #fff !important;
 }
