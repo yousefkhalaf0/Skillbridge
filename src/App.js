@@ -1,11 +1,11 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect,useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
-import CourseCard from "../src/utilities/subComponents/AdminPageComponents/CourseInAdminPage"
-import Footer from "../src/utilities/subComponents/footer/footer"
-import Dashboard from "./pages/DashboardPage"
+import CourseCard from "../src/utilities/subComponents/AdminPageComponents/CourseInAdminPage";
+import Footer from "../src/utilities/subComponents/footer/footer";
+import Dashboard from "./pages/DashboardPage";
 import NotFound from "./pages/notFoundPage/notFoundPage";
 import Home from "../src/pages/homePage/homePage";
 import CoursePage from "../src/pages/coursePage.jsx";
@@ -20,7 +20,6 @@ function App() {
     if (body) {
       body.className = `${theme}App`;
     }
-
   }, [theme]);
 
   useEffect(() => {
@@ -32,14 +31,17 @@ function App() {
   return (
     <main>
       <BrowserRouter>
-      <div ref={navRef}>
+        <div ref={navRef}>
           <ResponsiveAppBar />
         </div>
         <Routes>
-          {/* <Route path="/" element={<Dashboard navHeight={navHeight} />} /> */}
           <Route path="/" element={<Home />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
+          <Route
+            path="/adminDashboard"
+            element={<Dashboard navHeight={navHeight} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
