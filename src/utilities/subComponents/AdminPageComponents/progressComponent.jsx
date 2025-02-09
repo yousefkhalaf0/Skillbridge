@@ -10,7 +10,7 @@ const courses = [
 
 const CoursesProgress = () => {
   return (
-    <Box sx={{ maxWidth: 400, p: 2, borderRadius: 2 }} >
+    <Box sx={{ maxWidth: 500, p: 2, borderRadius: 2 }} >
       <Typography variant="h6" gutterBottom>
         Completed Course
       </Typography>
