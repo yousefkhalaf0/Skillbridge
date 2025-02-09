@@ -1,0 +1,17 @@
+.lightTitle {
+  font-weight: bold !important;
+  color: #262626;
+}
+.darkTitle {
+  font-weight: bold !important;
+  color: white;
+}
+
+.lightSubTitle {
+  color: #59595a;
+  margin-bottom: 50px !important;
+}
+.darkSubTitle {
+  color: white;
+  margin-bottom: 50px !important;
+}

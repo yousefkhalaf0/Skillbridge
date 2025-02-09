@@ -3,7 +3,7 @@
   user-select: none;
 }
 
-.coursePageScrollBtn {
+.signInPageScrollBtn {
   position: fixed !important;
   bottom: 20px;
   right: 20px;
@@ -16,11 +16,11 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.coursePageScrollBtn:hover {
+.signInPageScrollBtn:hover {
   background-color: rgb(81, 81, 81) !important;
 }
 
-.coursePageContainer {
+.signInPageContainer {
   margin-top: 100px;
   margin-bottom: 100px;
   margin-left: auto;

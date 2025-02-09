@@ -10,6 +10,7 @@ import NotFound from "./pages/notFoundPage/notFoundPage";
 import Home from "../src/pages/homePage/homePage";
 import CoursePage from "../src/pages/coursePage.jsx";
 import CourseOpenPage from "../src/pages/courseOpenPage.jsx";
+import SignInPage from "../src/pages/signInPage.jsx";
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -38,6 +39,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
+          <Route path="/signIn" element={<SignInPage />} />
           <Route
             path="/adminDashboard"
             element={<Dashboard navHeight={navHeight} />}

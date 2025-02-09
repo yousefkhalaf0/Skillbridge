@@ -1,51 +1,82 @@
-import React from 'react'
-import {
-    Box, Button, Grid, Typography
-} from '../../muiComponents.js';
-import { useSelector } from 'react-redux';
-import '../testimonialsCard/testimonialsCard.css';
-import usr1_img from '../../../assets/images/usr1_img.svg';
-import usr2_img from '../../../assets/images/usr2_img.svg';
-import usr3_img from '../../../assets/images/usr3_img.svg';
-import usr4_img from '../../../assets/images/usr4_img.svg';
+import React from "react";
+import { Box, Button, Grid, Typography } from "../../muiComponents.js";
+import { useSelector } from "react-redux";
+import "../testimonialsCard/testimonialsCard.css";
 
-const testimonials = [
-    { img: usr1_img, usrName: 'Sarah L', description: 'The web design course provided a solid foundation for me. The instructors were knowledgeable and supportive, and the interactive learning environment was engaging. I highly recommend it!' },
-    { img: usr2_img, usrName: 'Jason M', description: 'The UI/UX design course exceeded my expectations. The instructor\'s expertise and practical assignments helped me improve my design skills. I feel more confident in my career now. Thank you!' },
-    { img: usr3_img, usrName: 'Emily R', description: 'The mobile app development course was fantastic! The step-by-step tutorials and hands-on projects helped me grasp the concepts easily. I\'m now building my own app. Great course!' },
-    { img: usr4_img, usrName: 'Michael K', description: 'I enrolled in the graphic design course as a beginner, and it was the perfect starting point. The instructor\'s guidance and feedback improved my design abilities significantly. I\'m grateful for this course!' }
-];
+export default function TestimonialsCard({
+  showAll,
+  numOfCards,
+  xs,
+  md,
+  subXs,
+  currentIndex, // For single card navigation
+  testimonials = [],
+}) {
+  const theme = useSelector((state) => state.themeReducer);
 
-export default function TestimonialsCard({ showAll }) {
-    const theme = useSelector((state) => state.themeReducer);
-
+  // Handle empty testimonials
+  if (testimonials.length === 0) {
     return (
-        <Grid container spacing={2} sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            {testimonials.slice(0, showAll ? testimonials.length : 2).map((testimonial, index) => (
-                <Grid item xs={12} md={6} key={index} sx={{ display: 'flex' }}>
-                    <Box className={`${theme}TestimonialsContainer`} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                        <Typography className={`${theme}TestimonialsCardDescription`} variant='body1' sx={{ flexGrow: 1 }}>
-                            {testimonial.description}
-                        </Typography>
-                        <Grid className={`cardRow`} container >
-                            <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Box className='testimonialsImgBox'
-                                    component="img"
-                                    src={testimonial.img}
-                                    alt="testimonialsImg" />
-                                <Typography className={`testimonialsCardUserName`} variant='subtitle1' >
-                                    {testimonial.usrName}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6} className='cardRowBtnBox' >
-                                <Button className={`testimonialsCardBtn`} variant="contained" sx={{ textTransform: 'none' }}>
-                                    Read Full Story
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Grid>
-            ))}
-        </Grid>
+      <Typography variant="body1" sx={{ textAlign: "center", padding: "2rem" }}>
+        No testimonials available.
+      </Typography>
     );
+  }
+
+  // Determine displayed testimonials
+  const displayedTestimonials = showAll
+    ? testimonials
+    : currentIndex !== undefined // Prioritize single card navigation
+    ? [testimonials[currentIndex]]
+    : testimonials.slice(0, numOfCards);
+
+  return (
+    <Grid container spacing={2} sx={{ display: "flex", flexWrap: "wrap" }}>
+      {displayedTestimonials.map((testimonial, index) => (
+        <Grid item xs={xs} md={md} key={index} sx={{ display: "flex" }}>
+          <Box
+            className={`${theme}TestimonialsContainer`}
+            sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
+          >
+            <Typography
+              className={`${theme}TestimonialsCardDescription`}
+              variant="body1"
+              sx={{ flexGrow: 1 }}
+            >
+              {testimonial.description}
+            </Typography>
+            <Grid className={`cardRow`} container>
+              <Grid
+                item
+                xs={subXs}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <Box
+                  className="testimonialsImgBox"
+                  component="img"
+                  src={testimonial.img}
+                  alt="testimonialsImg"
+                />
+                <Typography
+                  className={`testimonialsCardUserName`}
+                  variant="subtitle1"
+                >
+                  {testimonial.usrName}
+                </Typography>
+              </Grid>
+              <Grid item xs={subXs} className="cardRowBtnBox">
+                <Button
+                  className={`testimonialsCardBtn`}
+                  variant="contained"
+                  sx={{ textTransform: "none" }}
+                >
+                  Read Full Story
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+      ))}
+    </Grid>
+  );
 }

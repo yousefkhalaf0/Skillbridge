@@ -19,6 +19,7 @@ import {
   SmallCourseCard,
   TestimonialsCard,
 } from "../../utilities/subComponentsLinks.js";
+import { testimonials } from "../../utilities/testimonialsData.js";
 import "../homePage/homePage.css";
 import linesIcon from "../../assets/icons/abstractLines.svg";
 import homeHeaderImg from "../../assets/images/homeHeaderImg.svg";
@@ -39,17 +40,19 @@ export default function HomePage() {
       dispatch(setShowScroll(shouldShow));
     }
   };
+
   useEffect(() => {
     window.addEventListener("scroll", checkScrollTop);
     return () => window.removeEventListener("scroll", checkScrollTop);
   }, [showScroll, dispatch]);
+
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <main className="homePageContainer">
-      {/* hero section */}
+      {/* Hero section */}
       <Typography
         gutterBottom
         className="headerBox"
@@ -133,13 +136,13 @@ export default function HomePage() {
           </Typography>
           <Grid mb={6} container spacing={2}>
             <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
-              Teachoo is an innovative e-learning platform that provides
+              Skillbridge is an innovative e-learning platform that provides
               flexible, interactive, and expert-designed courses, allowing
               learners to study at their own pace anytime, anywhere. With a
               diverse course library, personalized learning paths, and
-              industry-recognized certifications, Teachoo empowers students and
-              professionals to enhance their skills, advance their careers, and
-              enjoy a seamless, engaging learning experience.
+              industry-recognized certifications, Skillbridge empowers students
+              and professionals to enhance their skills, advance their careers,
+              and enjoy a seamless, engaging learning experience.
             </Grid>
             <Grid item sm={3} xs={12}>
               <Box sx={{ textAlign: { xs: "left", sm: "right" } }}>
@@ -174,8 +177,8 @@ export default function HomePage() {
           </Typography>
           <Grid mb={6} container spacing={2}>
             <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
-              Our courses at Teachoo are designed to provide a comprehensive and
-              engaging learning experience across various subjects. Whether
+              Our courses at Skillbridge are designed to provide a comprehensive
+              and engaging learning experience across various subjects. Whether
               you're looking to build new skills, advance your career, or
               explore a new field, our expert-led courses feature interactive
               content, real-world applications, and certifications to help you
@@ -202,11 +205,12 @@ export default function HomePage() {
           </Typography>
           <Grid mb={6} container spacing={2}>
             <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
-              Hear from our learners! At Teachoo, we take pride in delivering a
-              top-notch learning experience that truly makes a difference. Read
-              testimonials from students and professionals who have gained
-              valuable skills, advanced their careers, and achieved their goals
-              with our expert-led courses. Your success story could be next!
+              Hear from our learners! At Skillbridge, we take pride in
+              delivering a top-notch learning experience that truly makes a
+              difference. Read testimonials from students and professionals who
+              have gained valuable skills, advanced their careers, and achieved
+              their goals with our expert-led courses. Your success story could
+              be next!
             </Grid>
             <Grid item sm={3} xs={12}>
               <Box sx={{ textAlign: { xs: "left", sm: "right" } }}>
@@ -221,7 +225,14 @@ export default function HomePage() {
               </Box>
             </Grid>
           </Grid>
-          <TestimonialsCard showAll={showAllTestimonials} />
+          <TestimonialsCard
+            showAll={showAllTestimonials}
+            numOfCards={2}
+            xs={12}
+            md={6}
+            subXs={6}
+            testimonials={testimonials}
+          />
         </Box>
       </Box>
 

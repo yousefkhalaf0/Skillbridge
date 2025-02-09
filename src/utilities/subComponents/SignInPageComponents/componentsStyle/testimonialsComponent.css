@@ -1,0 +1,14 @@
+.testimonialsBtns {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lightBtn {
+  background-color: #191919 !important;
+  color: white !important;
+}
+.darkBtn {
+  background-color: #e8a710 !important;
+  color: black !important;
+}
