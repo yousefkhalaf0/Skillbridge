@@ -1,24 +1,36 @@
-import React from 'react'
+import React from 'react';
 import { useSelector } from 'react-redux';
 import {
     Button, Grid, Typography
 } from '../../muiComponents.js';
 import './componentsStyle/heroComponent.css';
 
-
-export default function HeroComponent() {
+export default function HeroComponent({ course }) {
     const theme = useSelector((state) => state.themeReducer);
 
+    if (!course) {
+        return (
+            <Grid className={`largeHeroComponentContainer`} container spacing={2}>
+                <Grid item md={12}>
+                    <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                        No course data available.
+                    </Typography>
+                </Grid>
+            </Grid>
+        );
+    }
+
     return (
-        <Grid className={`largeHeroComponentContainer`} container spacing={2} >
+        <Grid className={`largeHeroComponentContainer`} container spacing={2}>
             <Grid item md={5}>
                 <Typography variant='h4'
                     sx={{
                         color: theme === 'dark' ? 'white' : '#262626',
                         fontWeight: 'bold'
                     }}>
-                    UI/UX Design Course
+                    {course.course_name}
                 </Typography>
+
                 <Button
                     className={`${theme}EnrollBtn`}
                     variant="contained"
@@ -26,12 +38,14 @@ export default function HeroComponent() {
                     Enroll the course
                 </Button>
             </Grid>
+
             <Grid item md={7}>
                 <Typography variant='body2'
                     sx={{
                         color: theme === 'dark' ? '#CFCFD0 ' : '#5B5B5C',
                     }} >
-                    Welcome to our UI/UX Design course! This comprehensive program will equip you with the knowledge and skills to create exceptional user interfaces (UI) and enhance user experiences (UX). Dive into the world of design thinking, wireframing, prototyping, and usability testing. Below is an overview of the curriculum                </Typography>
+                    {course.course_description}
+                </Typography>
             </Grid>
         </Grid>
     );
