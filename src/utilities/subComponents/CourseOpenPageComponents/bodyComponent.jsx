@@ -46,7 +46,7 @@ export default function BodyComponent({ course }) {
             .sort((a, b) => a.number - b.number);
 
           return (
-            <Grid item xs={12} md={6} key={module.id}>
+            <Grid item xs={12} md={6} key={module.id} sx={{ display: "flex" }}>
               <Box
                 className={`${theme}LesonsCard`}
                 sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}

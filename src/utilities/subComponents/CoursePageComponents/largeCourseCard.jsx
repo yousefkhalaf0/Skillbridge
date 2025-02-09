@@ -208,7 +208,6 @@ export default function LargeCourseCard() {
                                 <Typography
                                   className={`modulesName`}
                                   variant="body1"
-                                  gutterBottom
                                 >
                                   {module.title || "Untitled Module"}
                                 </Typography>
