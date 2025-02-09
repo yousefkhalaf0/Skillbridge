@@ -3,18 +3,19 @@ import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/mate
 import courseImage from '../../../assets/dashboard_assets/images/course_image.png';
 import "./components_style/CourseInAdminPage.css";
 import { useSelector } from 'react-redux';
-
-const CourseCard = () => {
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+const CourseCard = ({ course }) => {
   const theme = useSelector((state) => state.themeReducer);
   return (
     <Box
       p={2}
-      display="flex" justifyContent="center" alignItems="start" minHeight="100vh"
+      display="flex" justifyContent="center" alignItems="start" minHeight="30vh"
     >
       <Card
         className="Card"
         sx={{
-          maxWidth: { lg: "80%", xs: 300, sm: 400 },
+          maxWidth: { lg: "100%", xs: 300, sm: 400 },
           width: '100%',
           borderRadius: 2,
           boxShadow: 3,
@@ -27,7 +28,7 @@ const CourseCard = () => {
           component="img"
           height="20"
           className="courseImage"
-          image={courseImage}
+          image={ course.course_images[0]}
           alt="Web Design Fundamentals"
 
           sx={{
@@ -45,7 +46,7 @@ const CourseCard = () => {
         
         >
           <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { lg: '0.85rem',md:'0.85rem', xs: '0.85rem', sm: '0.85rem' }, fontFamily: "inherit" }}>
-            Web Design Fundamentals
+          {course.course_name}
           </Typography>
           <Box mt={4} display="flex" flexDirection="column" gap={1}>
             <Button

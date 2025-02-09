@@ -100,6 +100,30 @@ const courseSlice = createSlice({
   },
 });
 
+const userCourseSlice = createSlice({
+  name: "userCourses",
+  initialState: {
+    userCourses: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    setUserCourses: (state, action) => {
+      state.userCourses = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setUserCoursesLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setUserCoursesError: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+  },
+});
+
+
 // Exporting actions
 export const { toggleTheme } = themeSlice.actions;
 export const { setShowScroll } = scrollSlice.actions;
@@ -109,6 +133,8 @@ export const { toggleShowAllBenefits } = showAllBenefitsSlice.actions;
 export const { toggleShowAllTestimonials } = showAllTestimonialsSlice.actions;
 export const { setCourses, setSelectedCourse, setLoading, setError } =
   courseSlice.actions;
+  export const { setUserCourses, setUserCoursesLoading, setUserCoursesError } =
+  userCourseSlice.actions;
 
 // Exporting reducers
 const store = configureStore({
@@ -120,6 +146,7 @@ const store = configureStore({
     showAllBenefitsReducer: showAllBenefitsSlice.reducer,
     showAllTestimonialsReducer: showAllTestimonialsSlice.reducer,
     courseReducer: courseSlice.reducer,
+    userCourseReducer: userCourseSlice.reducer,
   },
 });
 

@@ -1,21 +1,46 @@
 
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import "./pages style/DashboardPageStyle.css"
 import { Box, Grid, Typography, Select, MenuItem, Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../utilities/subComponents/AdminPageComponents/SideBarComponent";
 import CourseCard from "../utilities/subComponents/AdminPageComponents/CourseInAdminPage";
 import Students from "../utilities/subComponents/AdminPageComponents/StudentComponent";
 import Settings from "../utilities/subComponents/AdminPageComponents/settingComponent";
-
+import { fetchUserCourses,checkIfAdmin } from "../../src/utilities/firebase";
 import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxComponent";
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
 import AddIcon from '@mui/icons-material/Add';
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 const stats = [
   { count: 11, label: "Courses completed" },
   { count: 5, label: "Courses in progress" },
 ];
 const Dashboard = ({ navHeight }) => {
+  const dispatch = useDispatch();
+  const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
+  // Accessing courses from Redux store
+ const auth = getAuth();
+
+//  useEffect(() => {
+//   const unsubscribe = auth.onAuthStateChanged(async (user) => {
+//     if (!user) {
+//       const isAdmin = await checkIfAdmin(user.uid);
+//       dispatch(fetchUserCourses(user.uid, true));
+//     }
+//   });
+
+//   return () => unsubscribe();
+// }, [dispatch]);
+
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
+  });
+  return () => unsubscribe();
+}, [dispatch]);
+
 
   const [selectedSection, setSelectedSection] = useState("Courses");
   return (
@@ -35,7 +60,21 @@ const Dashboard = ({ navHeight }) => {
                 </Button>
               )}
             </Box>
-            {selectedSection === "Courses" ? <CourseCard /> : selectedSection === "Messages" ? <InboxMessages /> :  selectedSection === "Settings" ?<Settings/>:<Students />}
+            {selectedSection === "Courses" ? (
+              <Box>
+                {courses.length > 0 ? (
+                  courses.map((course) => <CourseCard key={course.id} course={course} />)
+                ) : (
+                  <Typography>No courses available.</Typography>
+                )}
+              </Box>
+            ) : selectedSection === "Messages" ? (
+              <InboxMessages />
+            ) : selectedSection === "Settings" ? (
+              <Settings />
+            ) : (
+              <Students />
+            )}
 
           </Grid>
           <Grid item xs={12} md={4}>

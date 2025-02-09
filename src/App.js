@@ -37,7 +37,8 @@ function App() {
           <ResponsiveAppBar />
         </div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Dashboard navHeight={navHeight} />} />
+          {/* <Route path="/" element={<Home />} /> */}
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
           <Route path="/signIn" element={<SignInPage />} />
