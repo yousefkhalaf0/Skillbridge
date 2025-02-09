@@ -6,6 +6,10 @@ import ResponsiveAppBar from "./utilities/subComponents/navBar/navBar";
 import CourseCard from "../src/utilities/subComponents/AdminPageComponents/CourseInAdminPage"
 import Footer from "../src/utilities/subComponents/footer/footer"
 import Dashboard from "./pages/DashboardPage"
+import NotFound from "./pages/notFoundPage/notFoundPage";
+import Home from "../src/pages/homePage/homePage";
+import CoursePage from "../src/pages/coursePage.jsx";
+import CourseOpenPage from "../src/pages/courseOpenPage.jsx";
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -32,11 +36,11 @@ function App() {
           <ResponsiveAppBar />
         </div>
         <Routes>
-          <Route path="/" element={<Dashboard navHeight={navHeight} />} />
-          {/* <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Dashboard navHeight={navHeight} />} /> */}
+          <Route path="/" element={<Home />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
-          <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>
