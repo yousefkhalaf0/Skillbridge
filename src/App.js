@@ -18,6 +18,7 @@ function App() {
     }
 
   }, [theme]);
+
   useEffect(() => {
     if (navRef.current) {
       setNavHeight(navRef.current.getBoundingClientRect().height);
@@ -42,3 +43,4 @@ function App() {
     </main>
   );
 }
+export default App;
