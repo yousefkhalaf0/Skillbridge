@@ -73,7 +73,7 @@ export default function BodyComponent({ course }) {
                         <Typography
                           variant="subtitle1"
                           sx={{
-                            color: theme === "dark" ? "white" : "#262626",
+                            color: "#262626",
                             fontWeight: "bold",
                           }}
                         >
@@ -83,7 +83,7 @@ export default function BodyComponent({ course }) {
                         <Typography
                           variant="body2"
                           sx={{
-                            color: theme === "dark" ? "white" : "#262626",
+                            color: "#262626",
                           }}
                         >
                           Lesson {String(lesson.number).padStart(2, "0")}
