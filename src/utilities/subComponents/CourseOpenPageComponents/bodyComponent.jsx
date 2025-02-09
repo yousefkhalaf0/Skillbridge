@@ -81,7 +81,7 @@ export default function BodyComponent({ course }) {
 
                 {sortedLessons.map((lesson) => (
                   <Box
-                    className={`${theme}LessonsContainer ${
+                    className={`${theme}LessonsContainer lessonsContainer ${
                       clickedLessons.has(lesson.id) ? "clicked" : ""
                     }`}
                     key={lesson.id}
@@ -120,7 +120,7 @@ export default function BodyComponent({ course }) {
                         }}
                       >
                         <Box
-                          className={`${theme}LessonTime ${
+                          className={`${theme}LessonTime lessonTime ${
                             clickedLessons.has(lesson.id) ? "clicked" : ""
                           }`}
                         >
