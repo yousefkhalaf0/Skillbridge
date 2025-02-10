@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./pages style/DashboardPageStyle.css";
 import { Box, Grid, Typography, Select, MenuItem, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,26 @@ const Dashboard = ({ navHeight, adminData }) => {
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState('');
+  // Accessing courses from Redux store
 
+
+  //  useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged(async (user) => {
+  //     if (!user) {
+  //       const isAdmin = await checkIfAdmin(user.uid);
+  //       dispatch(fetchUserCourses(user.uid, true));
+  //     }
+  //   });
+  
+  //   return () => unsubscribe();
+  // }, [dispatch]);
+  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>

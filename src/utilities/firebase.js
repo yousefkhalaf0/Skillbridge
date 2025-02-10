@@ -22,7 +22,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
+export const auth = getAuth();
 
 
 export const loginAdmin = async (email, password) => {
