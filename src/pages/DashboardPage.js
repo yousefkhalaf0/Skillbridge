@@ -22,9 +22,10 @@ const stats = [
 const Dashboard = ({ navHeight, adminData }) => {
   const dispatch = useDispatch();
   const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
+  console.log("the courses----->"+courses);
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
-  const [selectedCourse, setSelectedCourse] = useState(''); // This will store the course ID
+  const [selectedCourse, setSelectedCourse] = useState('');
 
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
@@ -55,7 +56,7 @@ const Dashboard = ({ navHeight, adminData }) => {
                       </Box>
                     </MenuItem>
                     {courses.map((course) => (
-                      <MenuItem key={course.course_id} value={course.course_id} sx={{ pr: 0 }}> {/* Use course_id as value */}
+                      <MenuItem key={course.id} value={course.id} sx={{ pr: 0 }}> {/* Use course.id as value */}
                         <Box display="flex" alignItems="center">
                           {course.course_name} <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
                         </Box>
