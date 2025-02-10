@@ -26,6 +26,8 @@ const Dashboard = ({ navHeight, userId }) => {
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState("");
+  const [showCourseForm, setShowCourseForm] = useState(false);
+
   // Accessing courses from Redux store
 
   //  useEffect(() => {
