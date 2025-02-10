@@ -11,6 +11,7 @@ import Home from "../src/pages/homePage/homePage";
 import CoursePage from "../src/pages/coursePage.jsx";
 import CourseOpenPage from "../src/pages/courseOpenPage.jsx";
 import SignInPage from "../src/pages/signInPage.jsx";
+import SignUpPage from "../src/pages/signUpPage.jsx";
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -40,6 +41,7 @@ function App() {
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
           <Route path="/signIn" element={<SignInPage />} />
+          <Route path="/signUp" element={<SignUpPage />} />
           <Route
             path="/adminDashboard"
             element={<Dashboard navHeight={navHeight} />}

@@ -1,0 +1,37 @@
+.lightSignUpFormContainer {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 50px;
+}
+
+.darkSignUpFormContainer {
+  background-color: #d0d0d0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 50px;
+}
+
+.signUpFormTitle {
+  color: #262626;
+  font-weight: bold !important;
+  text-align: center;
+}
+
+.signUpFormSubTitle {
+  color: #4e4e4e;
+  margin-bottom: 50px !important;
+  text-align: center;
+}
+
+.fieldText {
+  color: #262626;
+  font-weight: bold !important;
+}
+
+.signUpFormButton {
+  background-color: #e8a710 !important;
+  color: white !important;
+  width: 100%;
+  padding: 10px !important;
+}

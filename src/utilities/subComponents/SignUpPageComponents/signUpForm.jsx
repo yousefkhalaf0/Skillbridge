@@ -16,21 +16,29 @@ import {
   ArrowOutwardIcon,
 } from "../../muiComponents.js";
 import { useSelector } from "react-redux";
-import "./componentsStyle/signInForm.css";
 import { useNavigate } from "react-router-dom";
+import "./componentsStyle/signUpForm.css";
 
-export default function SignInForm() {
+export default function SignUpForm() {
   const theme = useSelector((state) => state.themeReducer);
   const [showPassword, setShowPassword] = useState(false);
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [fullNameError, setFullNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
   // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  // Validate full name using regex
+  const validateFullName = (fullName) => {
+    const regex = /^[a-z0-9_-]{3,15}$/;
+    return regex.test(fullName);
+  };
 
   // Validate email using regex
   const validateEmail = (email) => {
@@ -46,8 +54,18 @@ export default function SignInForm() {
   };
 
   // Handle form submission
-  const handleLogin = (e) => {
+  const handleSignUp = (e) => {
     e.preventDefault(); // Prevent default form submission
+
+    // Validate full name
+    if (!validateFullName(fullName)) {
+      setFullNameError(
+        "Full Name must be 3-15 characters long and can only contain lowercase letters, numbers, underscores, or hyphens."
+      );
+      return;
+    } else {
+      setFullNameError("");
+    }
 
     // Validate email
     if (!validateEmail(email)) {
@@ -67,7 +85,8 @@ export default function SignInForm() {
       setPasswordError("");
     }
 
-    // If validation passes, proceed with login
+    // If validation passes, proceed with sign-up
+    console.log("Full Name:", fullName);
     console.log("Email:", email);
     console.log("Password:", password);
     console.log("Remember Me:", rememberMe);
@@ -78,14 +97,14 @@ export default function SignInForm() {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const handleSignUpClick = () => {
-    console.log("Redirect to sign-up page or open sign-up modal");
-    navigate("/signUp");
+  const handleSignInClick = () => {
+    console.log("Redirect to sign-in page or open sign-in modal");
+    navigate("/signIn");
   };
 
   return (
     <Box
-      className={`${theme}SignInFormContainer`}
+      className={`${theme}SignUpFormContainer`}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -93,12 +112,30 @@ export default function SignInForm() {
         padding: "30px",
       }}
     >
-      <Typography variant="h4" className="signInFormTitle" gutterBottom>
-        Login
+      <Typography variant="h4" className="signUpFormTitle" gutterBottom>
+        Sign Up
       </Typography>
-      <Typography variant="body1" className="signInFormSubTitle" gutterBottom>
-        Welcome back! Please log in to access your account.
+      <Typography variant="body1" className="signUpFormSubTitle" gutterBottom>
+        Create an account to unlock exclusive features.
       </Typography>
+
+      {/* Full Name Field */}
+      <Typography variant="body1" className="fieldText" gutterBottom>
+        Full Name
+      </Typography>
+      <TextField
+        fullWidth
+        label="Enter your Name"
+        variant="outlined"
+        value={fullName}
+        onChange={(e) => setFullName(e.target.value)}
+        error={!!fullNameError}
+        helperText={fullNameError}
+        sx={{
+          mb: 3,
+          borderRadius: "8px",
+        }}
+      />
 
       {/* Email Field */}
       <Typography variant="body1" className="fieldText" gutterBottom>
@@ -106,7 +143,7 @@ export default function SignInForm() {
       </Typography>
       <TextField
         fullWidth
-        label="Enter Your Email"
+        label="Enter your Email"
         variant="outlined"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -153,7 +190,7 @@ export default function SignInForm() {
         )}
       </FormControl>
 
-      {/* Remember Me Checkbox */}
+      {/* Terms and Conditions Checkbox */}
       <FormControlLabel
         control={
           <Checkbox
@@ -166,33 +203,33 @@ export default function SignInForm() {
             }}
           />
         }
-        label="Remember me"
+        label="I agree with Terms of Use and Privacy Policy"
         sx={{ mb: 3, alignSelf: "flex-start", color: "#656567" }}
       />
 
-      {/* Login Button */}
+      {/* Sign Up Button */}
       <Button
-        className="signInFormButton"
+        className="signUpFormButton"
         variant="contained"
-        onClick={handleLogin}
+        onClick={handleSignUp}
         sx={{ mb: 2 }}
       >
-        Login
+        Sign Up
       </Button>
 
-      {/* "Don’t have an account? Sign Up" Section */}
+      {/* "Already have an account? Login" Section */}
       <Typography align="center" variant="body2" sx={{ mt: 2 }}>
-        Don’t have an account?{" "}
+        Already have an account?{" "}
         <Typography
           component="span"
-          onClick={handleSignUpClick}
+          onClick={handleSignInClick}
           sx={{
             color: "black",
             cursor: "pointer",
             textDecoration: "underline",
           }}
         >
-          Sign Up <ArrowOutwardIcon fontSize="small" />
+          Login <ArrowOutwardIcon fontSize="small" />
         </Typography>
       </Typography>
     </Box>
