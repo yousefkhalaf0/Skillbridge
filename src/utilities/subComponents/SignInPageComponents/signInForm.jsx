@@ -157,6 +157,7 @@ export default function SignInForm() {
       <FormControlLabel
         control={
           <Checkbox
+            required
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
             sx={{

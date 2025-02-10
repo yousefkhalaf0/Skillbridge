@@ -194,6 +194,7 @@ export default function SignUpForm() {
       <FormControlLabel
         control={
           <Checkbox
+            required
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
             sx={{
