@@ -28,8 +28,8 @@ const CourseCard = ({ course }) => {
           component="img"
           height="20"
           className="courseImage"
-          image={ course.course_images[0]}
-          alt="Web Design Fundamentals"
+          image={ course.course_images[1]}
+          alt="Course image"
 
           sx={{
             height: { lg: 170, xs: 150, sm: 200 },

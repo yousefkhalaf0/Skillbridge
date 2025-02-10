@@ -1,50 +1,90 @@
-import React from "react";
-import { Box, Grid, Card, CardContent, CardMedia, Typography, Button, MenuItem, Select } from "@mui/material";
-
-const students = [
-  { name: "Maureen Nvidia", image: "https://i.pinimg.com/736x/1c/a0/84/1ca0849910f7ecc5bed6ff8546af2176.jpg" },
-  { name: "Joan Gitari", image: "https://i.pinimg.com/736x/12/49/51/1249511d06c783b0c29b7785c3fa970c.jpg" },
-];
+import React, { useState, useEffect } from "react";
+import { Box, Grid, Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 const StudentCard = ({ student }) => (
   <Card sx={{ borderRadius: 3, p: 2, textAlign: "center", bgcolor: "#F5F5F5" }}>
     <CardMedia
       component="img"
       sx={{ width: 100, height: 100, borderRadius: "50%", margin: "0 auto" }}
-      image={student.image}
-      alt={student.name}
+      image={student.user_image_URL}
+      alt={student.username}
     />
     <CardContent>
-      <Typography variant="h6">{student.name}</Typography>
+      <Typography variant="h6">{student.username}</Typography>
       <Button
         variant="contained"
         sx={{ bgcolor: "black", color: "white", mt: 2, textTransform: "none" }}
       >
-        Message {student.name.split(" ")[0]}
+        Message {student.username.split(" ")[0]}
       </Button>
     </CardContent>
   </Card>
 );
 
-const Students = () => {
-  const [selectedCourse, setSelectedCourse] = React.useState("");
+const Students = ({ selectedCourse }) => {
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      if (!selectedCourse) return;
+
+      const db = getFirestore();
+
+      try {
+        // Step 1: Fetch the selected course document
+        const courseRef = doc(db, "Courses", selectedCourse);
+        const courseSnap = await getDoc(courseRef);
+
+        if (!courseSnap.exists()) {
+          console.error("Course not found");
+          return;
+        }
+
+        const courseData = courseSnap.data();
+        const courseCreatorId = courseData.course_creator_id;
+
+        // Step 2: Fetch the admin document using the course_creator_id
+        const adminRef = doc(db, "admins", courseCreatorId);
+        const adminSnap = await getDoc(adminRef);
+
+        if (!adminSnap.exists()) {
+          console.error("Admin not found");
+          return;
+        }
+
+        const adminData = adminSnap.data();
+        const studentIds = adminData.Students || [];
+
+        // Step 3: Fetch student details for each student ID
+        const studentsData = [];
+        for (const studentId of studentIds) {
+          const studentRef = doc(db, "users", studentId);
+          const studentSnap = await getDoc(studentRef);
+
+          if (studentSnap.exists()) {
+            const studentData = studentSnap.data();
+
+            // Step 4: Check if the student is enrolled in the selected course
+            if (studentData.Courses && studentData.Courses.includes(selectedCourse)) {
+              studentsData.push({ id: studentSnap.id, ...studentData });
+            }
+          }
+        }
+
+        setStudents(studentsData);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      }
+    };
+
+    fetchStudents();
+  }, [selectedCourse]);
+
   return (
     <Box sx={{ p: 3, minHeight: "100vh" }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h5">Students</Typography>
-        <Select
-          value={selectedCourse}
-          onChange={(e) => setSelectedCourse(e.target.value)}
-          displayEmpty
-          sx={{ bgcolor: "black", color: "white", borderRadius: 2, p: 1 }}
-        >
-          <MenuItem value="" disabled>Choose the course</MenuItem>
-          <MenuItem value="course1">Course 1</MenuItem>
-          <MenuItem value="course2">Course 2</MenuItem>
-        </Select>
-      </Box>
       <Grid container spacing={3}>
-        {Array(4).fill(students).flat().map((student, index) => (
+        {students.map((student, index) => (
           <Grid item xs={12} sm={6} md={4} lg={6} key={index}>
             <StudentCard student={student} />
           </Grid>

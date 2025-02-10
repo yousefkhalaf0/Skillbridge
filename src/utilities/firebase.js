@@ -3,9 +3,9 @@ import {
   getFirestore,
   collection,
   getDocs,
-  doc, setDoc, getDoc
+  doc, setDoc, getDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-import { setCourses, setError, setLoading,setUserCourses,setUserCoursesLoading,setUserCoursesError } from "./redux/store";
+import { setCourses, setError, setLoading, setUserCourses, setUserCoursesLoading, setUserCoursesError, setAdminWatchLaterCourses, setAdminWatchLaterError, setAdminWatchLaterLoading } from "./redux/store";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -130,7 +130,72 @@ export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
     dispatch(setUserCoursesError(error.message));
   }
 };
-export const fetchAdminWatchlaterCourses = () => async (dispatch) => {
 
 
+export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
+  dispatch(setAdminWatchLaterLoading(true));
+
+  try {
+    const watchLaterRef = collection(db, "admins", adminId, "whatchLaterList");
+    const snapshot = await getDocs(watchLaterRef);
+
+    if (snapshot.empty) {
+      console.error("No watch later courses found for admin:", adminId);
+      dispatch(setAdminWatchLaterError("No courses found."));
+      return;
+    }
+
+    // Extract course IDs and adding time
+    const watchLaterData = snapshot.docs.map(doc => ({
+      courseId: doc.data().courseId,
+      addingTime: doc.data().addingTime?.toDate?.() || new Date()
+    }));
+
+    // Fetch actual course details
+    const courses = await Promise.all(
+      watchLaterData.map(async ({ courseId, addingTime }) => {
+        const courseRef = doc(db, "Courses", courseId);
+        const courseSnap = await getDoc(courseRef);
+
+        if (!courseSnap.exists()) return null; // Explicitly return null if course doesn't exist
+
+        return {
+          id: courseId,
+          addingTime,
+          ...courseSnap.data()
+        };
+      })
+    );
+
+    // Remove null values (courses that no longer exist)
+    const validCourses = courses.filter(course => course !== null);
+
+    dispatch(setAdminWatchLaterCourses(validCourses));
+  } catch (error) {
+    dispatch(setAdminWatchLaterError(error.message));
+  } finally {
+    dispatch(setAdminWatchLaterLoading(false));
+  }
 };
+
+// Remove a course from the Watch Later list
+export const removeWatchLaterCourse = (adminId, courseId) => async (dispatch) => {
+  try {
+    await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
+    dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
+  } catch (error) {
+    console.error("Error removing course:", error);
+  }
+};
+
+export const fetchTheUserData = (userID, userType) => async (dispatch) => {
+  let type = "admin";
+  if (userType === "admin") {
+    type = "admins"
+  } else {
+    type = "users"
+  }
+  const DataRef = collection(db, type, userID);
+  // const snapshot = await getDocs(watchLaterRef);
+
+}
