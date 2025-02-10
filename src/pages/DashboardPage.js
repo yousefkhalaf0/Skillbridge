@@ -22,6 +22,7 @@ const stats = [
 const Dashboard = ({ navHeight, adminData }) => {
   const dispatch = useDispatch();
   const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
+  console.log("the courses----->"+courses);
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState('');
