@@ -6,7 +6,7 @@ import {
   doc, setDoc, getDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { setCourses, setError, setLoading, setUserCourses, setUserCoursesLoading, setUserCoursesError, setAdminWatchLaterCourses, setAdminWatchLaterError, setAdminWatchLaterLoading } from "./redux/store";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,getAuth,
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,
   createUserWithEmailAndPassword,
   updateProfile, } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
@@ -72,6 +72,8 @@ const createUserDocument = async (userId, userData, isAdmin = false) => {
     // Initialize sub-collections
     await setDoc(doc(db, userCollection, userId, "watchLaterList", "init"), {});
     await setDoc(doc(db, userCollection, userId, "coursesProgress", "init"), {});
+  } else {
+    console.log("User already exists:", userRef.path);
   }
 };
 /**
@@ -90,12 +92,13 @@ export const registerUser = async (email, password, fullName, isAdmin = false) =
       user_auth_id: userAuthId,
       username: fullName,
       email: email,
-      user_image_URL: "https://example.com/default-avatar.jpg", // Default profile image
-      students: isAdmin ? [] : undefined, // Only admins have students array
-      courses: isAdmin ? undefined : [], // Only users have courses array
+      user_image_URL: "https://example.com/default-avatar.jpg",
     };
-
-    // Create user/admin document in Firestore
+    if (isAdmin) {
+      userData.students = [];
+    } else {
+      userData.courses = [];
+    }
     await createUserDocument(userAuthId, userData, isAdmin);
 
     return { success: true, userAuthId };

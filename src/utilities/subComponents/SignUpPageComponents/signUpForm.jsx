@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { registerUser } from "../../firebase.js";
 import {
   Box,
   TextField,
@@ -15,6 +16,8 @@ import {
   Visibility,
   ArrowOutwardIcon,
 } from "../../muiComponents.js";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./componentsStyle/signUpForm.css";
@@ -29,10 +32,66 @@ export default function SignUpForm() {
   const [fullNameError, setFullNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  // Validate form inputs
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!validateFullName(fullName)) {
+      setFullNameError("Invalid full name. Use 3-15 characters (a-z, 0-9, _, -).");
+      isValid = false;
+    } else {
+      setFullNameError("");
+    }
+
+    if (!validateEmail(email)) {
+      setEmailError("Invalid email address.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError(
+        "Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one number, and one special character."
+      );
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
+  const handleSignUp = async () => {
+    if (!validateForm()) return; // Stop if validation fails
+
+    const result = await registerUser(email, password, fullName, false); // Normal user
+    if (result.success) {
+      setSuccess(true);
+      setTimeout(() => navigate("/home"), 1500); // Redirect after 1.5s
+    } else {
+      setError(result.error);
+    }
+  };
+
+  const handleAdminSignUp = async () => {
+    if (!validateForm()) return; // Stop if validation fails
+
+    const result = await registerUser(email, password, fullName, true); // Admin
+    if (result.success) {
+      setSuccess(true);
+      setTimeout(() => navigate("/admin-dashboard"), 1500); // Redirect after 1.5s
+    } else {
+      setError(result.error);
+    }
+  };
 
   // Validate full name using regex
   const validateFullName = (fullName) => {
@@ -51,53 +110,6 @@ export default function SignUpForm() {
     const regex =
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
     return regex.test(password);
-  };
-
-  // Handle form submission
-  const handleSignUp = (e) => {
-    e.preventDefault(); // Prevent default form submission
-
-    // Validate full name
-    if (!validateFullName(fullName)) {
-      setFullNameError(
-        "Full Name must be 3-15 characters long and can only contain lowercase letters, numbers, underscores, or hyphens."
-      );
-      return;
-    } else {
-      setFullNameError("");
-    }
-
-    // Validate email
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address.");
-      return;
-    } else {
-      setEmailError("");
-    }
-
-    // Validate password
-    if (!validatePassword(password)) {
-      setPasswordError(
-        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-      );
-      return;
-    } else {
-      setPasswordError("");
-    }
-
-    // If validation passes, proceed with sign-up
-    console.log("Full Name:", fullName);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
-
-    // Add your Firebase authentication logic here
-  };
-
-  // Handle "Sign up as an admin" button click
-  const handleAdminSignUp = () => {
-    console.log("Redirect to admin sign-up page or open admin sign-up modal");
-    // Add your logic for navigating to the admin sign-up page or opening a modal
   };
 
   React.useEffect(() => {
@@ -266,6 +278,24 @@ export default function SignUpForm() {
           Login <ArrowOutwardIcon fontSize="small" />
         </Typography>
       </Typography>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={success}
+        autoHideDuration={2000}
+        onClose={() => setSuccess(false)}
+      >
+        <Alert severity="success">Registration successful! Redirecting...</Alert>
+      </Snackbar>
+
+      {/* Error Snackbar */}
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setError("")}
+      >
+        <Alert severity="error">{error}</Alert>
+      </Snackbar>
     </Box>
   );
 }
