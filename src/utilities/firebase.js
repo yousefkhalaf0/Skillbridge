@@ -241,14 +241,15 @@ export const removeWatchLaterCourse = (adminId, courseId) => async (dispatch) =>
   }
 };
 
-// export const fetchTheUserData = (userID, userType) => async (dispatch) => {
-//   let type = "admin";
-//   if (userType === "admin") {
-//     type = "admins"
-//   } else {
-//     type = "users"
-//   }
-//   const DataRef = collection(db, type, userID);
-//   // const snapshot = await getDocs(watchLaterRef);
-
-// }
+export const checkUserAuthorization = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      unsubscribe(); // Unsubscribe after getting the user
+      if (user) {
+        resolve(user.uid); // Return UID if user is authenticated
+      } else {
+        reject("User is not authorized");
+      }
+    });
+  });
+};
