@@ -113,7 +113,7 @@ export default function NavBar() {
                   >
                     Courses
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     onClick={() => handleButtonClick("About Us", "/about")}
                   >
                     About Us
@@ -122,7 +122,7 @@ export default function NavBar() {
                     onClick={() => handleButtonClick("Pricing", "/pricing")}
                   >
                     Pricing
-                  </MenuItem>
+                  </MenuItem> */}
                 </Menu>
               </>
             )}
