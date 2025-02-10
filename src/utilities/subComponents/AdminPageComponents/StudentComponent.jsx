@@ -9,11 +9,8 @@ const StudentCard = ({ student }) => (
       sx={{ width: 100, height: 100, borderRadius: "50%", margin: "0 auto" }}
       image={student.user_image_URL}
       alt={student.username}
-      image={student.user_image_URL}
-      alt={student.username}
     />
     <CardContent>
-      <Typography variant="h6">{student.username}</Typography>
       <Typography variant="h6">{student.username}</Typography>
       <Button
         variant="contained"
