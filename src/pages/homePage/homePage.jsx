@@ -34,18 +34,20 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const coursesRef = useRef(null);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const checkScrollTop = () => {
     const shouldShow = window.pageYOffset > 400;
     if (shouldShow !== showScroll) {
       dispatch(setShowScroll(shouldShow));
     }
   };
-
   useEffect(() => {
     window.addEventListener("scroll", checkScrollTop);
     return () => window.removeEventListener("scroll", checkScrollTop);
   }, [showScroll, dispatch]);
-
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

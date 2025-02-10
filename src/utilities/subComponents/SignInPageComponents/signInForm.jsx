@@ -20,12 +20,13 @@ import "./componentsStyle/signInForm.css";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-import { getAuth,signInWithEmailAndPassword,} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { auth } from "../../firebase.js";
 
-
 export default function SignInForm() {
-
   const theme = useSelector((state) => state.themeReducer);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -38,29 +39,29 @@ export default function SignInForm() {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const navigate = useNavigate();
 
-  // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-    // If validation passes, proceed with login
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
+  console.log("Email:", email);
+  console.log("Password:", password);
+  console.log("Remember Me:", rememberMe);
 
-    // Add your Firebase authentication logic here
-    const handleLogin = async (e) => {
-      e.preventDefault();
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        setSnackbarMessage("Login successful!");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
-        setTimeout(() => navigate("/dashboard"), 1500); 
-      } catch (error) {
-        setSnackbarMessage("Invalid email or password.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-      }
-    };
-    
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setSnackbarMessage("Login successful!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      setTimeout(() => navigate("/adminDashboard"), 1500);
+    } catch (error) {
+      setSnackbarMessage("Invalid email or password.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,7 +70,7 @@ export default function SignInForm() {
     console.log("Redirect to sign-up page or open sign-up modal");
     navigate("/signUp");
   };
- 
+
   return (
     <Box
       className={`${theme}SignInFormContainer`}
@@ -183,8 +184,16 @@ export default function SignInForm() {
           Sign Up <ArrowOutwardIcon fontSize="small" />
         </Typography>
       </Typography>
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: "100%" }}>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

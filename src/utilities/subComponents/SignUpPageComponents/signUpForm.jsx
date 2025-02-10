@@ -44,7 +44,9 @@ export default function SignUpForm() {
     let isValid = true;
 
     if (!validateFullName(fullName)) {
-      setFullNameError("Invalid full name. Use 3-15 characters (a-z, 0-9, _, -).");
+      setFullNameError(
+        "Invalid full name. Use 3-15 characters (a-z, 0-9, _, -)."
+      );
       isValid = false;
     } else {
       setFullNameError("");
@@ -70,42 +72,37 @@ export default function SignUpForm() {
   };
 
   const handleSignUp = async () => {
-    if (!validateForm()) return; // Stop if validation fails
+    if (!validateForm()) return;
 
-    const result = await registerUser(email, password, fullName, false); // Normal user
+    const result = await registerUser(email, password, fullName, false);
     if (result.success) {
       setSuccess(true);
-      setTimeout(() => navigate("/home"), 1500); // Redirect after 1.5s
+      setTimeout(() => navigate("/"), 1500);
     } else {
       setError(result.error);
     }
   };
 
   const handleAdminSignUp = async () => {
-    if (!validateForm()) return; // Stop if validation fails
+    if (!validateForm()) return;
 
-    const result = await registerUser(email, password, fullName, true); // Admin
+    const result = await registerUser(email, password, fullName, true);
     if (result.success) {
       setSuccess(true);
-      setTimeout(() => navigate("/admin-dashboard"), 1500); // Redirect after 1.5s
+      setTimeout(() => navigate("/adminDashboard"), 1500);
     } else {
       setError(result.error);
     }
   };
 
-  // Validate full name using regex
   const validateFullName = (fullName) => {
     const regex = /^[a-z0-9_-]{3,15}$/;
     return regex.test(fullName);
   };
-
-  // Validate email using regex
   const validateEmail = (email) => {
     const regex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
     return regex.test(email);
   };
-
-  // Validate password using regex
   const validatePassword = (password) => {
     const regex =
       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
@@ -285,7 +282,9 @@ export default function SignUpForm() {
         autoHideDuration={2000}
         onClose={() => setSuccess(false)}
       >
-        <Alert severity="success">Registration successful! Redirecting...</Alert>
+        <Alert severity="success">
+          Registration successful! Redirecting...
+        </Alert>
       </Snackbar>
 
       {/* Error Snackbar */}
