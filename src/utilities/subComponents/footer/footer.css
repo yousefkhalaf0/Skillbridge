@@ -1,100 +1,101 @@
 .lightFooter {
-    background-color: #191919;
-    padding: 60px;
+  background-color: #191919;
+  padding: 60px;
 }
 
 .darkFooter {
-    background-color: #656567;
-    padding: 60px;
+  background-color: #656567;
+  padding: 60px;
 }
 
 .footerRow {
-    border-bottom: 1px solid white;
-    padding-bottom: 30px;
+  border-bottom: 1px solid white;
+  padding-bottom: 30px;
 }
 
-.lightSubTitle {
-    color: white;
-    text-align: left;
+.lightSubTitlee {
+  color: white;
+  text-align: left;
 }
 
-.darkSubTitle {
-    color: black;
-    text-align: left;
+.darkSubTitlee {
+  color: black;
+  text-align: left;
 }
 
 .lightLinks {
-    color: silver !important;
+  color: silver !important;
 }
 
 .darkLinks {
-    color: #262626 !important;
+  color: #262626 !important;
 }
 
 .logo {
-    width: 2.5rem;
-    cursor: pointer;
+  width: 2.5rem;
+  cursor: pointer;
 }
 
 .icons {
-    vertical-align: middle;
-    margin-right: 6px;
+  vertical-align: middle;
+  margin-right: 6px;
 }
 
 .lightSocialIconBox {
-    padding: 10px;
-    background-color: white;
-    border-radius: 10px;
-    margin-right: 12px;
-    margin-bottom: 12px;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .lightSocialIconBox:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
 }
 
 .darkSocialIconBox {
-    padding: 10px;
-    background-color: #9a9a98;
-    border-radius: 10px;
-    margin-right: 12px;
-    margin-bottom: 12px;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 10px;
+  background-color: #9a9a98;
+  border-radius: 10px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .darkSocialIconBox:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .lightSocialIcons {
-    color: #191919;
+  color: #191919;
 }
 
 .darkSocialIcons {
-    color: #444444;
+  color: #444444;
 }
 
 .lightCopyRight {
-    color: gray;
-    margin-top: 35px !important;
-    text-align: center;
+  color: gray;
+  margin-top: 35px !important;
+  text-align: center;
 }
 
 .darkCopyRight {
-    color: #151515;
-    margin-top: 35px !important;
-    text-align: center;
+  color: #151515;
+  margin-top: 35px !important;
+  text-align: center;
 }
 
 .disableSelecting {
-    user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
