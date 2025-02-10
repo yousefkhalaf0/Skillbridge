@@ -12,6 +12,7 @@ import CoursePage from "../src/pages/coursePage.jsx";
 import CourseOpenPage from "../src/pages/courseOpenPage.jsx";
 import SignInPage from "../src/pages/signInPage.jsx";
 import SignUpPage from "../src/pages/signUpPage.jsx";
+import CourseForm from "./utilities/subComponents/AdminPageComponents/AddingCourseComponent";
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -37,7 +38,8 @@ function App() {
           <ResponsiveAppBar />
         </div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Dashboard navHeight={navHeight} />} /> */}
+          <Route path="/" element={<CourseForm />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
           <Route path="/signIn" element={<SignInPage />} />

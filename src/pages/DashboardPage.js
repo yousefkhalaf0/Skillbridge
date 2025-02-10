@@ -19,12 +19,10 @@ const stats = [
   { count: 5, label: "Courses in progress" },
 ];
 
-const Dashboard = ({ navHeight, adminData }) => {
+const Dashboard = ({ navHeight, userId }) => {
   const dispatch = useDispatch();
-  const courses = useSelector(
-    (state) => state.userCourseReducer?.userCourses || []
-  );
-  console.log("the courses----->" + courses);
+  const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
+  console.log(courses);
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState("");
