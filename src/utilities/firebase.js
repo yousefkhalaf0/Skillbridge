@@ -6,7 +6,9 @@ import {
   doc, setDoc, getDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { setCourses, setError, setLoading, setUserCourses, setUserCoursesLoading, setUserCoursesError, setAdminWatchLaterCourses, setAdminWatchLaterError, setAdminWatchLaterLoading } from "./redux/store";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile, } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDS4UtLzEMaMZezI1rzYlgK1zXBPSgkXhk",
@@ -56,6 +58,54 @@ export const loginUser = async (email, password) => {
     console.error("Login error:", error);
   }
 };
+
+// Function to create a user document in Firestore
+const createUserDocument = async (userId, userData, isAdmin = false) => {
+  const userCollection = isAdmin ? "admins" : "users";
+  const userRef = doc(db, userCollection, userId);
+
+  // Check if user already exists to prevent overwriting
+  const userSnapshot = await getDoc(userRef);
+  if (!userSnapshot.exists()) {
+    await setDoc(userRef, userData);
+
+    // Initialize sub-collections
+    await setDoc(doc(db, userCollection, userId, "watchLaterList", "init"), {});
+    await setDoc(doc(db, userCollection, userId, "coursesProgress", "init"), {});
+  }
+};
+/**
+ * Registers a user in Firebase Authentication and Firestore
+ * @param {string} email
+ * @param {string} password
+ * @param {string} fullName
+ * @param {boolean} isAdmin
+ */
+export const registerUser = async (email, password, fullName, isAdmin = false) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userAuthId = userCredential.user.uid;
+
+    const userData = {
+      user_auth_id: userAuthId,
+      username: fullName,
+      email: email,
+      user_image_URL: "https://example.com/default-avatar.jpg", // Default profile image
+      students: isAdmin ? [] : undefined, // Only admins have students array
+      courses: isAdmin ? undefined : [], // Only users have courses array
+    };
+
+    // Create user/admin document in Firestore
+    await createUserDocument(userAuthId, userData, isAdmin);
+
+    return { success: true, userAuthId };
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+
 export const fetchData = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
