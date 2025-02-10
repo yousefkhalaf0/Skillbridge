@@ -170,7 +170,7 @@ export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
     // Remove null values (courses that no longer exist)
     const validCourses = courses.filter(course => course !== null);
 
-    dispatch(setAdminWatchLaterCourses(validCourses));
+   // dispatch(setAdminWatchLaterCourses(validCourses));
   } catch (error) {
     dispatch(setAdminWatchLaterError(error.message));
   } finally {
@@ -188,14 +188,14 @@ export const removeWatchLaterCourse = (adminId, courseId) => async (dispatch) =>
   }
 };
 
-export const fetchTheUserData = (userID, userType) => async (dispatch) => {
-  let type = "admin";
-  if (userType === "admin") {
-    type = "admins"
-  } else {
-    type = "users"
-  }
-  const DataRef = collection(db, type, userID);
-  // const snapshot = await getDocs(watchLaterRef);
+// export const fetchTheUserData = (userID, userType) => async (dispatch) => {
+//   let type = "admin";
+//   if (userType === "admin") {
+//     type = "admins"
+//   } else {
+//     type = "users"
+//   }
+//   const DataRef = collection(db, type, userID);
+//   // const snapshot = await getDocs(watchLaterRef);
 
-}
+// }
