@@ -26,6 +26,8 @@ const Dashboard = ({ navHeight, userId }) => {
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState('');
+  const [showCourseForm, setShowCourseForm] = useState(false);
+
   // Accessing courses from Redux store
 
 
@@ -57,9 +59,14 @@ const Dashboard = ({ navHeight, userId }) => {
             <Box mt={3} p={2} display="flex" justifyContent="space-between" alignItems="center">
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>{selectedSection === "Courses" ? "My Courses" : "Students"}</Typography>
               {selectedSection === "Courses" ? (
-                <Button variant="body2" sx={{ backgroundColor: "#E8A710", textTransform: "none", borderRadius: 2 }}>
-                  Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
-                </Button>
+              <Button 
+              variant="body2" 
+              sx={{ backgroundColor: "#E8A710", textTransform: "none", borderRadius: 2 }} 
+              onClick={() => setShowCourseForm(true)}
+            >
+              Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
+            </Button>
+            
               ) : selectedSection === "Students" && (
                 courses.length > 0 ? (
                   <Select
