@@ -253,3 +253,12 @@ export const checkUserAuthorization = () => {
     });
   });
 };
+
+//to check the user :
+// checkUserAuthorization()
+//   .then((uid) => {
+//     console.log("User is authorized. UID:", uid);
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
