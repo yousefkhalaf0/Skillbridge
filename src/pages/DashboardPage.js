@@ -41,6 +41,10 @@ const Dashboard = ({ navHeight, adminData }) => {
   //   return () => unsubscribe();
   // }, [dispatch]);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
