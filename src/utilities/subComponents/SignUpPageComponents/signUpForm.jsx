@@ -94,9 +94,16 @@ export default function SignUpForm() {
     // Add your Firebase authentication logic here
   };
 
+  // Handle "Sign up as an admin" button click
+  const handleAdminSignUp = () => {
+    console.log("Redirect to admin sign-up page or open admin sign-up modal");
+    // Add your logic for navigating to the admin sign-up page or opening a modal
+  };
+
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   const handleSignInClick = () => {
     console.log("Redirect to sign-in page or open sign-in modal");
     navigate("/signIn");
@@ -213,9 +220,35 @@ export default function SignUpForm() {
         className="signUpFormButton"
         variant="contained"
         onClick={handleSignUp}
-        sx={{ mb: 2 }}
+        sx={{ textTransform: "none" }}
       >
         Sign Up
+      </Button>
+
+      {/* Separator with "OR" */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          my: 2,
+        }}
+      >
+        <Box sx={{ flexGrow: 1, height: "1px", backgroundColor: "gray" }} />
+        <Typography variant="body2" sx={{ mx: 2, color: "#656567" }}>
+          OR
+        </Typography>
+        <Box sx={{ flexGrow: 1, height: "1px", backgroundColor: "gray" }} />
+      </Box>
+
+      {/* Sign Up as Admin Button */}
+      <Button
+        className="signUpFormAdminButton"
+        variant="outlined"
+        onClick={handleAdminSignUp}
+        sx={{ mb: 2, textTransform: "none" }}
+      >
+        Sign Up as an Admin
       </Button>
 
       {/* "Already have an account? Login" Section */}

@@ -35,3 +35,10 @@
   width: 100%;
   padding: 10px !important;
 }
+
+.signUpFormAdminButton {
+  background-color: rgb(40, 40, 40) !important;
+  color: white !important;
+  width: 100%;
+  padding: 10px !important;
+}
