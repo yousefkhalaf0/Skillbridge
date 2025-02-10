@@ -10,3 +10,4 @@ export { default as CourseHeroComponent } from "../utilities/subComponents/Cours
 export { default as BodyComponent } from "../utilities/subComponents/CourseOpenPageComponents/bodyComponent.jsx";
 export { default as TestimonialsComponent } from "../utilities/subComponents/SignInPageComponents/testimonialsComponent.jsx";
 export { default as TestimonialsTitleComponent } from "../utilities/subComponents/SignInPageComponents/testimonialsTitleComponent.jsx";
+export { default as SignInForm } from "../utilities/subComponents/SignInPageComponents//signInForm.jsx";

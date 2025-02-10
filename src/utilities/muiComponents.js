@@ -16,6 +16,13 @@ export { default as CircularProgress } from "@mui/material/CircularProgress";
 export { default as Alert } from "@mui/material/Alert";
 export { default as TextField } from "@mui/material/TextField";
 export { default as Stack } from "@mui/material/Stack";
+export { default as FormControl } from "@mui/material/FormControl";
+export { default as OutlinedInput } from "@mui/material/OutlinedInput";
+export { default as InputLabel } from "@mui/material/InputLabel";
+export { default as InputAdornment } from "@mui/material/InputAdornment";
+export { default as Checkbox } from "@mui/material/Checkbox";
+export { default as FormControlLabel } from "@mui/material/FormControlLabel";
+export { default as FormGroup } from "@mui/material/FormGroup";
 
 // MUI Icons
 export { default as LightModeIcon } from "@mui/icons-material/LightMode";
@@ -33,3 +40,5 @@ export { default as KeyboardArrowUpIcon } from "@mui/icons-material/KeyboardArro
 export { default as AccessTimeIcon } from "@mui/icons-material/AccessTime";
 export { default as ArrowBackIcon } from "@mui/icons-material/ArrowBack";
 export { default as ArrowForwardIcon } from "@mui/icons-material/ArrowForward";
+export { default as Visibility } from "@mui/icons-material/Visibility";
+export { default as VisibilityOff } from "@mui/icons-material/VisibilityOff";

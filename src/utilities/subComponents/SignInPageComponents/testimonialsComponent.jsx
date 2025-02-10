@@ -28,7 +28,7 @@ export default function TestimonialsComponent() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", padding: "1rem" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", padding: "2rem" }}>
       <TestimonialsTitleComponent />
       <TestimonialsCard
         showAll={false}

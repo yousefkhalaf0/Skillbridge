@@ -32,7 +32,7 @@ export default function CoursePage() {
 
   return (
     <Box
-      className="coursePageContainer"
+      className="coursePageContainer disableSelecting"
       sx={{ width: { xs: "95%", md: "90%", lg: "85%" } }}
     >
       <HeroComponent />

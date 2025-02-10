@@ -9,12 +9,11 @@ export default function TestimonialsCard({
   xs,
   md,
   subXs,
-  currentIndex, // For single card navigation
+  currentIndex,
   testimonials = [],
 }) {
   const theme = useSelector((state) => state.themeReducer);
 
-  // Handle empty testimonials
   if (testimonials.length === 0) {
     return (
       <Typography variant="body1" sx={{ textAlign: "center", padding: "2rem" }}>
@@ -23,10 +22,9 @@ export default function TestimonialsCard({
     );
   }
 
-  // Determine displayed testimonials
   const displayedTestimonials = showAll
     ? testimonials
-    : currentIndex !== undefined // Prioritize single card navigation
+    : currentIndex !== undefined
     ? [testimonials[currentIndex]]
     : testimonials.slice(0, numOfCards);
 

@@ -7,7 +7,10 @@ import {
   Grid,
   KeyboardArrowUpIcon,
 } from "../utilities/muiComponents.js";
-import { TestimonialsComponent } from "../utilities/subComponentsLinks.js";
+import {
+  TestimonialsComponent,
+  SignInForm,
+} from "../utilities/subComponentsLinks.js";
 import "./pagesStyle/signInPage.css";
 
 export default function SignInPage() {
@@ -25,7 +28,7 @@ export default function SignInPage() {
     return () => window.removeEventListener("scroll", checkScrollTop);
   }, [showScroll, dispatch]);
   const scrollTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   };
 
   return (
@@ -33,12 +36,29 @@ export default function SignInPage() {
       className="signInPageContainer disableSelecting"
       sx={{ width: { xs: "95%", md: "90%", lg: "85%" } }}
     >
-      <Grid container spacing={2}>
-        <Grid lg={6}>
+      <Grid container>
+        <Grid
+          xs={12}
+          md={6}
+          lg={7}
+          sx={{
+            order: { xs: 2, md: 1 },
+          }}
+        >
           <TestimonialsComponent />
         </Grid>
-        <Grid lg={6}></Grid>
+        <Grid
+          xs={12}
+          md={6}
+          lg={5}
+          sx={{
+            order: { xs: 1, md: 2 },
+          }}
+        >
+          <SignInForm />
+        </Grid>
       </Grid>
+
       {showScroll && (
         <Button onClick={scrollTop} className="signInPageScrollBtn">
           <KeyboardArrowUpIcon />
