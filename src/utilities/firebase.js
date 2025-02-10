@@ -3,12 +3,29 @@ import {
   getFirestore,
   collection,
   getDocs,
-  doc, setDoc, getDoc, deleteDoc
+  doc,
+  setDoc,
+  getDoc,
+  deleteDoc,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-import { setCourses, setError, setLoading, setUserCourses, setUserCoursesLoading, setUserCoursesError, setAdminWatchLaterCourses, setAdminWatchLaterError, setAdminWatchLaterLoading } from "./redux/store";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged,
+import {
+  setCourses,
+  setError,
+  setLoading,
+  setUserCourses,
+  setUserCoursesLoading,
+  setUserCoursesError,
+  setAdminWatchLaterCourses,
+  setAdminWatchLaterError,
+  setAdminWatchLaterLoading,
+} from "./redux/store";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
-  updateProfile, } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  updateProfile,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDS4UtLzEMaMZezI1rzYlgK1zXBPSgkXhk",
@@ -24,10 +41,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 export const auth = getAuth();
 
-
 export const loginAdmin = async (email, password) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
     const token = await user.getIdToken(); // Get token
 
@@ -44,7 +64,11 @@ export const loginAdmin = async (email, password) => {
 
 export const loginUser = async (email, password) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
     const token = await user.getIdToken(); // Get token
 
@@ -59,19 +83,19 @@ export const loginUser = async (email, password) => {
   }
 };
 
-// Function to create a user document in Firestore
 const createUserDocument = async (userId, userData, isAdmin = false) => {
   const userCollection = isAdmin ? "admins" : "users";
   const userRef = doc(db, userCollection, userId);
 
-  // Check if user already exists to prevent overwriting
   const userSnapshot = await getDoc(userRef);
   if (!userSnapshot.exists()) {
     await setDoc(userRef, userData);
 
-    // Initialize sub-collections
     await setDoc(doc(db, userCollection, userId, "watchLaterList", "init"), {});
-    await setDoc(doc(db, userCollection, userId, "coursesProgress", "init"), {});
+    await setDoc(
+      doc(db, userCollection, userId, "coursesProgress", "init"),
+      {}
+    );
   } else {
     console.log("User already exists:", userRef.path);
   }
@@ -83,9 +107,18 @@ const createUserDocument = async (userId, userData, isAdmin = false) => {
  * @param {string} fullName
  * @param {boolean} isAdmin
  */
-export const registerUser = async (email, password, fullName, isAdmin = false) => {
+export const registerUser = async (
+  email,
+  password,
+  fullName,
+  isAdmin = false
+) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const userAuthId = userCredential.user.uid;
 
     const userData = {
@@ -107,7 +140,6 @@ export const registerUser = async (email, password, fullName, isAdmin = false) =
     return { success: false, error: error.message };
   }
 };
-
 
 export const fetchData = () => async (dispatch) => {
   dispatch(setLoading(true));
@@ -148,12 +180,11 @@ export const fetchData = () => async (dispatch) => {
   }
 };
 
-//admin cycle API'S
 export const checkIfAdmin = async (userId) => {
   const adminRef = doc(db, "admins", userId);
   const adminSnap = await getDoc(adminRef);
 
-  return adminSnap.exists(); // Returns true if the user is an admin
+  return adminSnap.exists();
 };
 
 export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
@@ -166,12 +197,10 @@ export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
       const courseData = { id: courseDoc.id, ...courseDoc.data() };
 
       if (isAdmin) {
-        // Admin: Fetch only their created courses
         if (courseData.course_creator_id === userId) {
           userCourses.push(courseData);
         }
       } else {
-        // Regular User: Fetch all enrolled courses
         if (courseData.enrolled_users?.includes(userId)) {
           userCourses.push(courseData);
         }
@@ -183,7 +212,6 @@ export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
     dispatch(setUserCoursesError(error.message));
   }
 };
-
 
 export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
   dispatch(setAdminWatchLaterLoading(true));
@@ -198,32 +226,27 @@ export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
       return;
     }
 
-    // Extract course IDs and adding time
-    const watchLaterData = snapshot.docs.map(doc => ({
+    const watchLaterData = snapshot.docs.map((doc) => ({
       courseId: doc.data().courseId,
-      addingTime: doc.data().addingTime?.toDate?.() || new Date()
+      addingTime: doc.data().addingTime?.toDate?.() || new Date(),
     }));
 
-    // Fetch actual course details
     const courses = await Promise.all(
       watchLaterData.map(async ({ courseId, addingTime }) => {
         const courseRef = doc(db, "Courses", courseId);
         const courseSnap = await getDoc(courseRef);
 
-        if (!courseSnap.exists()) return null; // Explicitly return null if course doesn't exist
+        if (!courseSnap.exists()) return null;
 
         return {
           id: courseId,
           addingTime,
-          ...courseSnap.data()
+          ...courseSnap.data(),
         };
       })
     );
 
-    // Remove null values (courses that no longer exist)
-    const validCourses = courses.filter(course => course !== null);
-
-   // dispatch(setAdminWatchLaterCourses(validCourses));
+    const validCourses = courses.filter((course) => course !== null);
   } catch (error) {
     dispatch(setAdminWatchLaterError(error.message));
   } finally {
@@ -231,22 +254,22 @@ export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
   }
 };
 
-// Remove a course from the Watch Later list
-export const removeWatchLaterCourse = (adminId, courseId) => async (dispatch) => {
-  try {
-    await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
-    dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
-  } catch (error) {
-    console.error("Error removing course:", error);
-  }
-};
+export const removeWatchLaterCourse =
+  (adminId, courseId) => async (dispatch) => {
+    try {
+      await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
+      dispatch(fetchAdminWatchLaterCourses(adminId));
+    } catch (error) {
+      console.error("Error removing course:", error);
+    }
+  };
 
 export const checkUserAuthorization = () => {
   return new Promise((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      unsubscribe(); // Unsubscribe after getting the user
+      unsubscribe();
       if (user) {
-        resolve(user.uid); // Return UID if user is authenticated
+        resolve(user.uid);
       } else {
         reject("User is not authorized");
       }

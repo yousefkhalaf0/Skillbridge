@@ -146,7 +146,6 @@ const adminWatchLaterSlice = createSlice({
   },
 });
 
-
 // Exporting actions
 export const { toggleTheme } = themeSlice.actions;
 export const { setShowScroll } = scrollSlice.actions;
@@ -158,8 +157,11 @@ export const { setCourses, setSelectedCourse, setLoading, setError } =
   courseSlice.actions;
 export const { setUserCourses, setUserCoursesLoading, setUserCoursesError } =
   userCourseSlice.actions;
-export const { setAdminWatchLaterCourses, setAdminWatchLaterLoading, setAdminWatchLaterError } =
- adminWatchLaterSlice.actions;
+export const {
+  setAdminWatchLaterCourses,
+  setAdminWatchLaterLoading,
+  setAdminWatchLaterError,
+} = adminWatchLaterSlice.actions;
 
 // Exporting reducers
 const store = configureStore({

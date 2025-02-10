@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./pages style/DashboardPageStyle.css";
 import { Box, Grid, Typography, Select, MenuItem, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,9 +10,9 @@ import { fetchUserCourses, checkIfAdmin } from "../../src/utilities/firebase";
 import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxComponent";
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const stats = [
   { count: 11, label: "Courses completed" },
@@ -21,13 +21,14 @@ const stats = [
 
 const Dashboard = ({ navHeight, adminData }) => {
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
-  console.log("the courses----->"+courses);
+  const courses = useSelector(
+    (state) => state.userCourseReducer?.userCourses || []
+  );
+  console.log("the courses----->" + courses);
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState("");
   // Accessing courses from Redux store
-
 
   //  useEffect(() => {
   //   const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -36,13 +37,13 @@ const Dashboard = ({ navHeight, adminData }) => {
   //       dispatch(fetchUserCourses(user.uid, true));
   //     }
   //   });
-  
+
   //   return () => unsubscribe();
   // }, [dispatch]);
-  
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-        dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
+      dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
     });
     return () => unsubscribe();
   }, [dispatch]);
@@ -51,46 +52,90 @@ const Dashboard = ({ navHeight, adminData }) => {
       <Box sx={{ flexGrow: 1, p: 3 }}>
         <Grid container spacing={2} mt={3}>
           <Grid item lg={2} xs={12} md={12}>
-            <Sidebar navHeight={navHeight} setSelectedSection={setSelectedSection} selectedSection={selectedSection} />
+            <Sidebar
+              navHeight={navHeight}
+              setSelectedSection={setSelectedSection}
+              selectedSection={selectedSection}
+            />
           </Grid>
           <Grid item lg={6} xs={12} md={8}>
-            <Box mt={3} p={2} display="flex" justifyContent="space-between" alignItems="center">
-              <Typography variant="h5" sx={{ fontWeight: "bold" }}>{selectedSection === "Courses" ? "My Courses" : "Students"}</Typography>
+            <Box
+              mt={3}
+              p={2}
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                {selectedSection === "Courses" ? "My Courses" : "Students"}
+              </Typography>
               {selectedSection === "Courses" ? (
-                <Button variant="body2" sx={{ backgroundColor: "#E8A710", textTransform: "none", borderRadius: 2 }}>
+                <Button
+                  variant="body2"
+                  sx={{
+                    backgroundColor: "#E8A710",
+                    textTransform: "none",
+                    borderRadius: 2,
+                  }}
+                >
                   Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
                 </Button>
-              ) : selectedSection === "Students" && (
-                courses.length > 0 ? (
+              ) : (
+                selectedSection === "Students" &&
+                (courses.length > 0 ? (
                   <Select
                     value={selectedCourse}
                     onChange={(e) => setSelectedCourse(e.target.value)} // Store course ID
                     displayEmpty
                     size="small"
-                    sx={{ bgcolor: "black", color: "white", borderRadius: 3, textAlign: "center", paddingRight: "0px" }}
+                    sx={{
+                      bgcolor: "black",
+                      color: "white",
+                      borderRadius: 3,
+                      textAlign: "center",
+                      paddingRight: "0px",
+                    }}
                   >
                     <MenuItem value="" disabled sx={{ pr: 0 }}>
                       <Box display="flex" alignItems="center">
-                        Choose the course <ExpandMoreIcon sx={{ color: "white", ml: 1, paddingRight: "0px", width: "20px", marginRight: "0px" }} />
+                        Choose the course{" "}
+                        <ExpandMoreIcon
+                          sx={{
+                            color: "white",
+                            ml: 1,
+                            paddingRight: "0px",
+                            width: "20px",
+                            marginRight: "0px",
+                          }}
+                        />
                       </Box>
                     </MenuItem>
                     {courses.map((course) => (
-                      <MenuItem key={course.id} value={course.id} sx={{ pr: 0 }}> {/* Use course.id as value */}
+                      <MenuItem
+                        key={course.id}
+                        value={course.id}
+                        sx={{ pr: 0 }}
+                      >
+                        {" "}
+                        {/* Use course.id as value */}
                         <Box display="flex" alignItems="center">
-                          {course.course_name} <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
+                          {course.course_name}{" "}
+                          <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
                         </Box>
                       </MenuItem>
                     ))}
                   </Select>
                 ) : (
                   <Typography>No courses available.</Typography>
-                )
+                ))
               )}
             </Box>
             {selectedSection === "Courses" ? (
               <Box>
                 {courses.length > 0 ? (
-                  courses.map((course) => <CourseCard key={course.id} course={course} />)
+                  courses.map((course) => (
+                    <CourseCard key={course.id} course={course} />
+                  ))
                 ) : (
                   <Typography>No courses available.</Typography>
                 )}
@@ -104,13 +149,45 @@ const Dashboard = ({ navHeight, adminData }) => {
             )}
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box sx={{ display: "flex", gap: 2, p: 2, borderRadius: 2, flexDirection: { lg: "row", md: "column" } }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                p: 2,
+                borderRadius: 2,
+                flexDirection: { lg: "row", md: "column" },
+              }}
+            >
               {stats.map((stat, index) => (
-                <Box key={index} sx={{ display: "flex", bgcolor: "#e0e0e0", p: 3, borderRadius: 2, textAlign: "center", minWidth: 120, flexDirection: "row" }}>
-                  <Typography variant="h4" sx={{ width: { lg: "1.9rem" }, paddingRight: 1, fontFamily: "BeVietnam", fontWeight: "bolder" }}>
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    bgcolor: "#e0e0e0",
+                    p: 3,
+                    borderRadius: 2,
+                    textAlign: "center",
+                    minWidth: 120,
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      width: { lg: "1.9rem" },
+                      paddingRight: 1,
+                      fontFamily: "BeVietnam",
+                      fontWeight: "bolder",
+                    }}
+                  >
                     {stat.count}
                   </Typography>
-                  <Typography variant="body1" sx={{ textAlign: "start", fontWeight: "normal" }}>{stat.label}</Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ textAlign: "start", fontWeight: "normal" }}
+                  >
+                    {stat.label}
+                  </Typography>
                 </Box>
               ))}
             </Box>

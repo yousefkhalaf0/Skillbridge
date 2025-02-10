@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Box, Grid, Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import {
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+} from "@mui/material";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 const StudentCard = ({ student }) => (
   <Card sx={{ borderRadius: 3, p: 2, textAlign: "center", bgcolor: "#F5F5F5" }}>
@@ -64,35 +76,49 @@ const Students = ({ selectedCourse }) => {
           studentIds.map(async (studentId) => {
             const studentRef = doc(db, "users", studentId);
             const studentSnap = await getDoc(studentRef);
-        
+
             if (studentSnap.exists()) {
               const studentData = studentSnap.data();
               console.log("Fetched Student Data:", studentData); // Debugging log
-        
-              if (studentData.Courses.map((id) => id.trim()).includes(selectedCourse.trim())) {
-                console.log("Student Courses:", studentData.Courses, "Selected Course:", selectedCourse);
-        
+
+              if (
+                studentData.Courses.map((id) => id.trim()).includes(
+                  selectedCourse.trim()
+                )
+              ) {
+                console.log(
+                  "Student Courses:",
+                  studentData.Courses,
+                  "Selected Course:",
+                  selectedCourse
+                );
+
                 if (studentData.Courses.includes(selectedCourse)) {
                   return { id: studentSnap.id, ...studentData };
                 } else {
-                  console.warn(`Course ID not found in student's courses: ${studentData.Courses}`);
+                  console.warn(
+                    `Course ID not found in student's courses: ${studentData.Courses}`
+                  );
                 }
               } else {
-                console.warn("Student does not have a Courses array:", studentData);
+                console.warn(
+                  "Student does not have a Courses array:",
+                  studentData
+                );
               }
             }
             return null;
           })
         );
-        
 
         // Filter out null values and update state
-        const validStudents = studentsData.filter((student) => student !== null);
+        const validStudents = studentsData.filter(
+          (student) => student !== null
+        );
         console.log("Valid Students List:", validStudents);
         setStudents(validStudents);
-        
-        console.log("Students Data:", studentsData);
 
+        console.log("Students Data:", studentsData);
       } catch (error) {
         console.error("Error fetching students:", error);
       } finally {
