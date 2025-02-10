@@ -9,8 +9,11 @@ const StudentCard = ({ student }) => (
       sx={{ width: 100, height: 100, borderRadius: "50%", margin: "0 auto" }}
       image={student.user_image_URL}
       alt={student.username}
+      image={student.user_image_URL}
+      alt={student.username}
     />
     <CardContent>
+      <Typography variant="h6">{student.username}</Typography>
       <Typography variant="h6">{student.username}</Typography>
       <Button
         variant="contained"
@@ -24,79 +27,57 @@ const StudentCard = ({ student }) => (
 
 const Students = ({ selectedCourse }) => {
   const [students, setStudents] = useState([]);
-  const [isFetching, setIsFetching] = useState(false); // State to prevent infinite fetching
 
   useEffect(() => {
-    if (!selectedCourse || isFetching) return; // Prevent multiple fetches
-    setIsFetching(true);
-
     const fetchStudents = async () => {
-      try {
-        const db = getFirestore();
+      if (!selectedCourse) return;
 
-        // Step 1: Fetch the course document
+      const db = getFirestore();
+
+      try {
+        // Step 1: Fetch the selected course document
         const courseRef = doc(db, "Courses", selectedCourse);
         const courseSnap = await getDoc(courseRef);
+
         if (!courseSnap.exists()) {
           console.error("Course not found");
-          setIsFetching(false);
           return;
         }
 
         const courseData = courseSnap.data();
-        console.log("Course Data:", courseData);
+        const courseCreatorId = courseData.course_creator_id;
 
         // Step 2: Fetch the admin document using the course_creator_id
-        const adminRef = doc(db, "admins", courseData.course_creator_id);
+        const adminRef = doc(db, "admins", courseCreatorId);
         const adminSnap = await getDoc(adminRef);
+
         if (!adminSnap.exists()) {
           console.error("Admin not found");
-          setIsFetching(false);
           return;
         }
 
         const adminData = adminSnap.data();
-        console.log("Admin Data:", adminData);
-
-        // Step 3: Fetch student details
         const studentIds = adminData.Students || [];
-        const studentsData = await Promise.all(
-          studentIds.map(async (studentId) => {
-            const studentRef = doc(db, "users", studentId);
-            const studentSnap = await getDoc(studentRef);
-        
-            if (studentSnap.exists()) {
-              const studentData = studentSnap.data();
-              console.log("Fetched Student Data:", studentData); // Debugging log
-        
-              if (studentData.Courses.map((id) => id.trim()).includes(selectedCourse.trim())) {
-                console.log("Student Courses:", studentData.Courses, "Selected Course:", selectedCourse);
-        
-                if (studentData.Courses.includes(selectedCourse)) {
-                  return { id: studentSnap.id, ...studentData };
-                } else {
-                  console.warn(`Course ID not found in student's courses: ${studentData.Courses}`);
-                }
-              } else {
-                console.warn("Student does not have a Courses array:", studentData);
-              }
+
+        // Step 3: Fetch student details for each student ID
+        const studentsData = [];
+        for (const studentId of studentIds) {
+          const studentRef = doc(db, "users", studentId);
+          const studentSnap = await getDoc(studentRef);
+
+          if (studentSnap.exists()) {
+            const studentData = studentSnap.data();
+
+            // Step 4: Check if the student is enrolled in the selected course
+            if (studentData.Courses && studentData.Courses.includes(selectedCourse)) {
+              studentsData.push({ id: studentSnap.id, ...studentData });
             }
-            return null;
-          })
-        );
-        
+          }
+        }
 
-        // Filter out null values and update state
-        const validStudents = studentsData.filter((student) => student !== null);
-        console.log("Valid Students List:", validStudents);
-        setStudents(validStudents);
-        
-        console.log("Students Data:", studentsData);
-
+        setStudents(studentsData);
       } catch (error) {
         console.error("Error fetching students:", error);
-      } finally {
-        setIsFetching(false); // Reset fetching state
       }
     };
 
