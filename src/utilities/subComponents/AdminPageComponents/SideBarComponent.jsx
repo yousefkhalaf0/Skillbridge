@@ -14,7 +14,7 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const navHeightWithmargin = navHeight + 16;
   console.log(`${navHeightWithmargin}px`);
   return (
-    <Box sx={{ display: "flex", width: 160, borderRight: { lg: "1px solid white", }, borderBottom: { md: "1px solid white",  xs: "1px solid white", lg: "0px" }, p: 2, position: { lg: "absolute" }, top: { lg: `${navHeightWithmargin}px` }, flexDirection: { lg: "column", sm: "column" } }}>
+    <Box sx={{ display: "flex", width: 160, borderRight: { lg: "1px solid white", }, borderBottom: { md: "1px solid white",  xs: "1px solid white", lg: "0px" }, p: 2, position: { lg: "absolute" }, top: { lg: `${navHeightWithmargin}px` }, flexDirection: { lg: "column", xs: "column" } }}>
 
       <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <Box

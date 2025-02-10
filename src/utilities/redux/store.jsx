@@ -123,6 +123,29 @@ const userCourseSlice = createSlice({
   },
 });
 
+const adminWatchLaterSlice = createSlice({
+  name: "adminWatchLater",
+  initialState: {
+    watchLaterCourses: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    setAdminWatchLaterCourses: (state, action) => {
+      state.watchLaterCourses = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setAdminWatchLaterLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setAdminWatchLaterError: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+  },
+});
+
 
 // Exporting actions
 export const { toggleTheme } = themeSlice.actions;
@@ -133,8 +156,10 @@ export const { toggleShowAllBenefits } = showAllBenefitsSlice.actions;
 export const { toggleShowAllTestimonials } = showAllTestimonialsSlice.actions;
 export const { setCourses, setSelectedCourse, setLoading, setError } =
   courseSlice.actions;
-  export const { setUserCourses, setUserCoursesLoading, setUserCoursesError } =
+export const { setUserCourses, setUserCoursesLoading, setUserCoursesError } =
   userCourseSlice.actions;
+export const { setAdminWatchLaterCourses, setAdminWatchLaterLoading, setAdminWatchLaterError } =
+ adminWatchLaterSlice.actions;
 
 // Exporting reducers
 const store = configureStore({
@@ -147,6 +172,7 @@ const store = configureStore({
     showAllTestimonialsReducer: showAllTestimonialsSlice.reducer,
     courseReducer: courseSlice.reducer,
     userCourseReducer: userCourseSlice.reducer,
+    adminWatchLaterReducer: adminWatchLaterSlice.reducer,
   },
 });
 
