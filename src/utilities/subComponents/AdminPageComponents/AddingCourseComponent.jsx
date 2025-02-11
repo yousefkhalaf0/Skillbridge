@@ -9,6 +9,8 @@ import {
   Grid,
 } from "@mui/material";
 import CourseModule from "./AddingModule";
+import ImageUploader from "./courseImageUpload";
+
 
 const CourseForm = ({ navHeight, userId }) => {
   const [courseTitle, setCourseTitle] = useState("");
@@ -48,9 +50,9 @@ const CourseForm = ({ navHeight, userId }) => {
     }
   };
   return (
-    <Box display="flex" sx={{ fontFamily: "inherit" }}>
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        <Grid container spacing={2} mt={3}>
+ 
+      <Box  sx={{ flexGrow: 1, p: 3 }}>
+        <Grid container  mt={3}>
           <Grid item lg={8} xs={12} md={12}>
             <Box sx={{ maxWidth: "70%", width: "100%", margin: "auto", padding: 3 }}>
               <Typography variant="p" gutterBottom>Course Title</Typography>
@@ -96,16 +98,20 @@ const CourseForm = ({ navHeight, userId }) => {
                 sx={{ mb: 2, bgcolor: "#F0F0F0", borderRadius: 3, border: "none" }}
               />
 
-              <CourseModule modules={modules} setModules={setModules} />
+              <CourseModule modules={modules || []} setModules={setModules} />
 
               <Button variant="contained" onClick={handleSubmit} sx={{ mt: 2, bgcolor: "#000000", color: "#ffffff" }}>
                 Submit Course
               </Button>
             </Box>
           </Grid>
+ <Grid ><ImageUploader/></Grid>
+
+
+         
         </Grid>
       </Box>
-    </Box>
+ 
   );
 };
 
