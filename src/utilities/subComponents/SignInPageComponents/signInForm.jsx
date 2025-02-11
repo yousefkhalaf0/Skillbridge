@@ -55,7 +55,7 @@ export default function SignInForm() {
       setSnackbarMessage("Login successful!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
-      setTimeout(() => navigate("/adminDashboard"), 1500);
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       setSnackbarMessage("Invalid email or password.");
       setSnackbarSeverity("error");
