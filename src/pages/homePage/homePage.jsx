@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom"; // Ensure this is imported
 import {
   setShowScroll,
   toggleShowAllBenefits,
   toggleShowAllTestimonials,
+  setActiveButton,
 } from "../../utilities/redux/store.jsx";
 import {
   Box,
@@ -32,6 +34,7 @@ export default function HomePage() {
     (state) => state.showAllTestimonialsReducer
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Define navigate here
   const coursesRef = useRef(null);
 
   React.useEffect(() => {
@@ -44,10 +47,12 @@ export default function HomePage() {
       dispatch(setShowScroll(shouldShow));
     }
   };
+
   useEffect(() => {
     window.addEventListener("scroll", checkScrollTop);
     return () => window.removeEventListener("scroll", checkScrollTop);
   }, [showScroll, dispatch]);
+
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -107,7 +112,8 @@ export default function HomePage() {
         variant="contained"
         sx={{ textTransform: "none" }}
         onClick={() => {
-          coursesRef.current.scrollIntoView();
+          dispatch(setActiveButton("Courses")); // Update activeButton
+          navigate("/courses"); // Use navigate to redirect
         }}
       >
         Explore Courses

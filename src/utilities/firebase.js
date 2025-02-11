@@ -84,7 +84,7 @@ export const loginUser = async (email, password) => {
 };
 
 const createUserDocument = async (userId, userData, isAdmin = false) => {
-  const userCollection = isAdmin ? "admins" : "users";
+  const userCollection = isAdmin ? "admins" : "users ";
   const userRef = doc(db, userCollection, userId);
 
   const userSnapshot = await getDoc(userRef);

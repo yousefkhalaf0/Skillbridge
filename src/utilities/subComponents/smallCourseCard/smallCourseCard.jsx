@@ -74,7 +74,7 @@ export default function SmallCourseCard() {
               <Box
                 className="courseImgBox"
                 component="img"
-                src={course.course_images[0]}
+                src={course.course_images[1]}
                 alt="courseImg"
               />
               <Grid className="courseCardRow" container spacing={2}>
@@ -112,7 +112,7 @@ export default function SmallCourseCard() {
                 variant="body1"
                 sx={{ flexGrow: 1 }}
               >
-                {course.course_description}
+                {course.course_description.slice(0,170)} ...
               </Typography>
               <Button
                 className={`${theme}ExploreCourseBtn`}

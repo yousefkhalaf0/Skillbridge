@@ -100,6 +100,35 @@ const courseSlice = createSlice({
   },
 });
 
+
+const userSlice = createSlice({
+  name: "user",
+  initialState: {
+    userInfo: null, // Stores user data
+    loading: false,
+    error: null,
+    isAuthenticated: false,
+  },
+  reducers: {
+    setUser: (state, action) => {
+      state.userInfo = action.payload;
+      state.isAuthenticated = true;
+      state.loading = false;
+      state.error = null;
+    },
+    logoutUser: (state) => {
+      state.userInfo = null;
+      state.isAuthenticated = false;
+    },
+    setUserLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setUserError: (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
+  },
+});
 const userCourseSlice = createSlice({
   name: "userCourses",
   initialState: {
@@ -162,7 +191,8 @@ export const {
   setAdminWatchLaterLoading,
   setAdminWatchLaterError,
 } = adminWatchLaterSlice.actions;
-
+export const { setUser, logoutUser, setUserLoading, setUserError } =
+  userSlice.actions;
 // Exporting reducers
 const store = configureStore({
   reducer: {
@@ -175,6 +205,7 @@ const store = configureStore({
     courseReducer: courseSlice.reducer,
     userCourseReducer: userCourseSlice.reducer,
     adminWatchLaterReducer: adminWatchLaterSlice.reducer,
+    userReducer: userSlice.reducer, 
   },
 });
 
