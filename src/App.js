@@ -43,10 +43,7 @@ function App() {
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
           <Route path="/signIn" element={<SignInPage />} />
           <Route path="/signUp" element={<SignUpPage />} />
-          <Route
-            path="/addCourse"
-            element={<CourseForm navHeight={navHeight} />}
-          />
+          <Route path="/addCourse" element={<CourseForm />} />
           <Route
             path="/dashboard"
             element={<Dashboard navHeight={navHeight} />}
