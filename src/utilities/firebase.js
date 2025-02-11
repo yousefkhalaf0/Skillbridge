@@ -215,54 +215,50 @@ export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
 
 export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
   dispatch(setAdminWatchLaterLoading(true));
-
   try {
     const watchLaterRef = collection(db, "admins", adminId, "whatchLaterList");
     const snapshot = await getDocs(watchLaterRef);
-
     if (snapshot.empty) {
       console.error("No watch later courses found for admin:", adminId);
       dispatch(setAdminWatchLaterError("No courses found."));
       return;
     }
-
-    const watchLaterData = snapshot.docs.map((doc) => ({
+    // Extract course IDs and adding time
+    const watchLaterData = snapshot.docs.map(doc => ({
       courseId: doc.data().courseId,
-      addingTime: doc.data().addingTime?.toDate?.() || new Date(),
+      addingTime: doc.data().addingTime?.toDate?.() || new Date()
     }));
-
+    // Fetch actual course details
     const courses = await Promise.all(
       watchLaterData.map(async ({ courseId, addingTime }) => {
         const courseRef = doc(db, "Courses", courseId);
         const courseSnap = await getDoc(courseRef);
-
-        if (!courseSnap.exists()) return null;
-
+        if (!courseSnap.exists()) return null; // Explicitly return null if course doesn't exist
         return {
           id: courseId,
           addingTime,
-          ...courseSnap.data(),
+          ...courseSnap.data()
         };
       })
     );
-
-    const validCourses = courses.filter((course) => course !== null);
+    // Remove null values (courses that no longer exist)
+    const validCourses = courses.filter(course => course !== null);
+    dispatch(setAdminWatchLaterCourses(validCourses));
   } catch (error) {
     dispatch(setAdminWatchLaterError(error.message));
   } finally {
     dispatch(setAdminWatchLaterLoading(false));
   }
 };
-
-export const removeWatchLaterCourse =
-  (adminId, courseId) => async (dispatch) => {
-    try {
-      await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
-      dispatch(fetchAdminWatchLaterCourses(adminId));
-    } catch (error) {
-      console.error("Error removing course:", error);
-    }
-  };
+// Remove a course from the Watch Later list
+export const removeWatchLaterCourse = (adminId, courseId) => async (dispatch) => {
+  try {
+    await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
+    dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
+  } catch (error) {
+    console.error("Error removing course:", error);
+  }
+};
 
 export const checkUserAuthorization = () => {
   return new Promise((resolve, reject) => {
