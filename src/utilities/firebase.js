@@ -49,14 +49,13 @@ export const loginAdmin = async (email, password) => {
       password
     );
     const user = userCredential.user;
-    const token = await user.getIdToken(); // Get token
+    const token = await user.getIdToken();
 
-    // Store the token in Firestore under the admin's document
     const adminRef = doc(db, "admins", user.uid);
     await setDoc(adminRef, { email: user.email, token }, { merge: true });
 
     console.log("Admin logged in and token stored.");
-    return token; // Return token for further use
+    return token;
   } catch (error) {
     console.error("Login error:", error);
   }
@@ -70,14 +69,13 @@ export const loginUser = async (email, password) => {
       password
     );
     const user = userCredential.user;
-    const token = await user.getIdToken(); // Get token
+    const token = await user.getIdToken();
 
-    // Store the token in Firestore under the admin's document
     const adminRef = doc(db, "users", user.uid);
     await setDoc(adminRef, { email: user.email, token }, { merge: true });
 
     console.log("Admin logged in and token stored.");
-    return token; // Return token for further use
+    return token;
   } catch (error) {
     console.error("Login error:", error);
   }
@@ -145,15 +143,21 @@ export const fetchData = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const coursesQuerySnapshot = await getDocs(collection(db, "Courses"));
+    console.log("Fetched courses:", coursesQuerySnapshot.docs.length);
+
     const courses = [];
     for (const courseDoc of coursesQuerySnapshot.docs) {
       const courseData = { id: courseDoc.id, ...courseDoc.data() };
+      console.log("Course data:", courseData);
+
       const modulesQuerySnapshot = await getDocs(
         collection(db, "Courses", courseDoc.id, "modules")
       );
       const modules = [];
       for (const moduleDoc of modulesQuerySnapshot.docs) {
         const moduleData = { id: moduleDoc.id, ...moduleDoc.data() };
+        console.log("Module data:", moduleData);
+
         const lessonsQuerySnapshot = await getDocs(
           collection(
             db,
@@ -176,6 +180,7 @@ export const fetchData = () => async (dispatch) => {
     }
     dispatch(setCourses(courses));
   } catch (error) {
+    console.error("Error fetching data:", error);
     dispatch(setError(error.message));
   }
 };

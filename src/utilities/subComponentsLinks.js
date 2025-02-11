@@ -12,3 +12,4 @@ export { default as TestimonialsComponent } from "../utilities/subComponents/Sig
 export { default as TestimonialsTitleComponent } from "../utilities/subComponents/SignInPageComponents/testimonialsTitleComponent.jsx";
 export { default as SignInForm } from "../utilities/subComponents/SignInPageComponents/signInForm.jsx";
 export { default as SignUpForm } from "../utilities/subComponents/SignUpPageComponents/signUpForm.jsx";
+export { default as SearchComponent } from "../utilities/subComponents/CoursePageComponents/searchComponent.jsx";

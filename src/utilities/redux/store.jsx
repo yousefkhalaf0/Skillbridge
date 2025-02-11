@@ -81,6 +81,7 @@ const courseSlice = createSlice({
   },
   reducers: {
     setCourses: (state, action) => {
+      console.log("Setting courses:", action.payload);
       state.courses = action.payload;
       state.loading = false;
       state.error = null;

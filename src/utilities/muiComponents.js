@@ -23,6 +23,7 @@ export { default as InputAdornment } from "@mui/material/InputAdornment";
 export { default as Checkbox } from "@mui/material/Checkbox";
 export { default as FormControlLabel } from "@mui/material/FormControlLabel";
 export { default as FormGroup } from "@mui/material/FormGroup";
+export { default as Select } from "@mui/material/Select";
 
 // MUI Icons
 export { default as LightModeIcon } from "@mui/icons-material/LightMode";

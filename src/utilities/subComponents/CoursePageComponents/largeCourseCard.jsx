@@ -1,58 +1,20 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  Box,
-  Grid,
-  Typography,
-  Button,
-  CircularProgress,
-  Alert,
-} from "../../muiComponents.js";
-import { fetchData } from "../../firebase.js";
+import React from "react";
+import { Box, Grid, Typography, Button, Alert } from "../../muiComponents.js";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./componentsStyle/largeCourseCard.css";
 
-export default function LargeCourseCard() {
+export default function LargeCourseCard({ courses }) {
   const theme = useSelector((state) => state.themeReducer);
-  const { courses, loading, error } = useSelector(
-    (state) => state.courseReducer
-  );
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
 
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: 30,
-          marginBottom: 30,
-        }}
-      >
-        <CircularProgress sx={{ color: "#E8A710" }} />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-        <Alert severity="error">{error}</Alert>
-      </Box>
-    );
-  }
   if (!Array.isArray(courses) || courses.length === 0) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 20, mb: 40 }}>
         <Alert severity="info">No courses available.</Alert>
       </Box>
     );
