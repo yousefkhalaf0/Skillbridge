@@ -6,7 +6,7 @@ import Sidebar from "../utilities/subComponents/AdminPageComponents/SideBarCompo
 import CourseCard from "../utilities/subComponents/AdminPageComponents/CourseInAdminPage";
 import Students from "../utilities/subComponents/AdminPageComponents/StudentComponent";
 import Settings from "../utilities/subComponents/AdminPageComponents/settingComponent";
-import { fetchAdminWatchLaterCourses, checkIfAdmin } from "../../src/utilities/firebase";
+import { fetchUserCourses, checkIfAdmin } from "../../src/utilities/firebase";
 import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxComponent";
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
@@ -41,7 +41,7 @@ const Dashboard = ({ navHeight, userId }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        dispatch(fetchAdminWatchLaterCourses("XiXJ0oesnkwweeAUscnq", true));
+        dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
       }
     });
     return () => unsubscribe();

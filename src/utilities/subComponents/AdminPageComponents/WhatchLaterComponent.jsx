@@ -15,26 +15,24 @@ const WatchLater = () => {
   const watchLaterCourses = useSelector(state => state.adminWatchLaterReducer.watchLaterCourses);
   const loading = useSelector(state => state.adminWatchLaterReducer.loading);
   console.log(watchLaterCourses);
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
     });
     return () => unsubscribe();
   }, [dispatch]);
-
   useEffect(() => {
     if (!user) {
       dispatch(fetchAdminWatchLaterCourses("XiXJ0oesnkwweeAUscnq"));
     }
   }, [dispatch, user]);
-
   // Remove course from Firestore
   const handleRemove = async (courseId) => {
     if (user) {
       await dispatch(removeWatchLaterCourse(user.uid, courseId));
     }
   };
+
   return (
     <Box p={2} sx={{ borderRadius: 2, fontFamily: "inherit" }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -56,7 +54,7 @@ const WatchLater = () => {
           </MenuItem>
         </Select>
       </Box>
-  
+
       {loading ? (
         <Typography>Loading...</Typography>
       ) : watchLaterCourses.length > 0 ? (
