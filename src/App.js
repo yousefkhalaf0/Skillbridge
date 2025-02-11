@@ -38,13 +38,15 @@ function App() {
           <ResponsiveAppBar />
         </div>
         <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/addCourse" element={<CourseForm />} />
+          <Route path="/" element={<Home />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/course/:courseId" element={<CourseOpenPage />} />
           <Route path="/signIn" element={<SignInPage />} />
           <Route path="/signUp" element={<SignUpPage />} />
-          <Route path="/addCourse" element={<CourseForm navHeight={navHeight}/>} />
+          <Route
+            path="/addCourse"
+            element={<CourseForm navHeight={navHeight} />}
+          />
           <Route
             path="/dashboard"
             element={<Dashboard navHeight={navHeight} />}
