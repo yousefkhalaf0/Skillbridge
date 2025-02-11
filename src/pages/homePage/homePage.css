@@ -105,11 +105,12 @@
 .lightSectionsSubTitle {
   text-align: left;
   color: #59595a;
+  font-weight: 100;
 }
 
 .darkSectionsSubTitle {
   text-align: left;
-  color: white;
+  color: rgba(255, 255, 255, 0.425);
 }
 
 .sectionBtn {

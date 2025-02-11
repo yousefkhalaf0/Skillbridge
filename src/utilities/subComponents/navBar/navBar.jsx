@@ -1,6 +1,8 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React ,{useState,useEffect} from "react";
+import { useNavigate,useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import NotificationBar from "./NotificationBarComponent"
+
 import {
   setActiveButton,
   setAnchorEl,
@@ -23,6 +25,9 @@ import {
 } from "../../muiComponents.js";
 import "../../subComponents/navBar/navBar.css";
 import appIcon from "../../../assets/icons/siteLogo.svg";
+import languageIconlight from "../../../assets/icons/language-svgrepo-comlight.png";
+import languageIcondark from "../../../assets/icons/language-svgrepo-comdark.png"
+import { auth } from "../../firebase.js";
 // import animatedIcon from '../../../assets/animations/wired-lineal-237-star-rating-hover-pinch.gif'
 
 export default function NavBar() {
@@ -33,11 +38,41 @@ export default function NavBar() {
   const lang = useSelector((state) => state.languageReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const responsivness = useTheme();
   const isSmallScreen = useMediaQuery(responsivness.breakpoints.down("sm"));
 
+  const [user, setUser] = useState(null);
+
+   // Listen for authentication state changes
+   useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user); // User is logged in
+      } else {
+        setUser(null); // User is logged out
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, [setUser]);
+  useEffect(() => {
+    const path = location.pathname;
+    switch (path) {
+      case "/":
+        dispatch(setActiveButton("Home"));
+        break;
+      case "/courses":
+        dispatch(setActiveButton("Courses"));
+        break;
+      // Add more cases for other routes if needed
+      default:
+        dispatch(setActiveButton("")); // Reset if no match
+    }
+  }, [location, dispatch]);
   const handleButtonClick = (buttonName, path) => {
+  
     dispatch(setActiveButton(buttonName));
     dispatch(setAnchorEl(null));
     navigate(path);
@@ -53,7 +88,7 @@ export default function NavBar() {
   return (
     <Box align="center" sx={{ mt: 2 }}>
       <Box
-        onClick={() => navigate("/pricing")}
+         onClick={() => navigate("/courses")}
         className={`${theme}NavBarPanner`}
         sx={{
           width: "95%",
@@ -128,6 +163,7 @@ export default function NavBar() {
             )}
             {!isSmallScreen && (
               <>
+              
                 <Button
                   color="inherit"
                   variant={activeButton === "Home" ? "contained" : "text"}
@@ -207,39 +243,51 @@ export default function NavBar() {
                 },
               }}
             >
-              {lang === "en" ? "EN" : "AR"}
+          <Box
+            component="img"
+            src= { theme === "dark"?languageIcondark:languageIconlight}
+            alt="appIcon"
+            sx={{ width: "2rem", cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
             </IconButton>
           </Box>
 
-          <Button
-            onClick={() => navigate("/signUp")}
-            color="inherit"
-            variant="text"
-            sx={{
-              textTransform: "none",
-              mx: 1,
-              "&:hover": {
-                backgroundColor:
-                  theme === "dark"
-                    ? "rgba(255, 255, 255, 0.1)"
-                    : "rgba(0, 0, 0, 0.1)",
-              },
-            }}
-          >
-            Sign Up
-          </Button>
-          <Button
-            onClick={() => navigate("/signIn")}
-            variant="contained"
-            sx={{
-              color: "black",
-              textTransform: "none",
-              mx: 1,
-              backgroundColor: "#E8A710",
-            }}
-          >
-            Login
-          </Button>
+          {user ? (
+            <NotificationBar />
+          ) : (
+            <>
+              <Button
+                onClick={() => navigate("/signUp")}
+                color="inherit"
+                variant="text"
+                sx={{
+                  textTransform: "none",
+                  mx: 1,
+                  "&:hover": {
+                    backgroundColor:
+                      theme === "dark"
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : "rgba(0, 0, 0, 0.1)",
+                  },
+                }}
+              >
+                Sign Up
+              </Button>
+              <Button
+                onClick={() => navigate("/signIn")}
+                variant="contained"
+                sx={{
+                  color: "black",
+                  textTransform: "none",
+                  mx: 1,
+                  backgroundColor: "#E8A710",
+                }}
+              >
+                Login
+              </Button>
+            </>
+          )}
         </Toolbar>
       </Box>
     </Box>
