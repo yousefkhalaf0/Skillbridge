@@ -248,7 +248,7 @@ export default function NavBar() {
             src= { theme === "dark"?languageIcondark:languageIconlight}
             alt="appIcon"
             sx={{ width: "2rem", cursor: "pointer" }}
-            onClick={() => navigate("/")}
+          
           />
             </IconButton>
           </Box>

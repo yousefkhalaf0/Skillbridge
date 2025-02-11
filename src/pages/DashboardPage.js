@@ -6,13 +6,14 @@ import Sidebar from "../utilities/subComponents/AdminPageComponents/SideBarCompo
 import CourseCard from "../utilities/subComponents/AdminPageComponents/CourseInAdminPage";
 import Students from "../utilities/subComponents/AdminPageComponents/StudentComponent";
 import Settings from "../utilities/subComponents/AdminPageComponents/settingComponent";
-import { fetchUserCourses, checkIfAdmin } from "../../src/utilities/firebase";
+import { fetchAdminWatchLaterCourses, checkIfAdmin } from "../../src/utilities/firebase";
 import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxComponent";
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
 import AddIcon from "@mui/icons-material/Add";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useNavigate } from "react-router-dom";
 
 const stats = [
   { count: 11, label: "Courses completed" },
@@ -22,35 +23,30 @@ const stats = [
 const Dashboard = ({ navHeight, userId }) => {
   const dispatch = useDispatch();
   const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
-  console.log(courses);
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [showCourseForm, setShowCourseForm] = useState(false);
+  const navigate = useNavigate();
 
-  // Accessing courses from Redux store
-
-  //  useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged(async (user) => {
-  //     if (!user) {
-  //       const isAdmin = await checkIfAdmin(user.uid);
-  //       dispatch(fetchUserCourses(user.uid, true));
-  //     }
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [dispatch]);
-
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      navigate("/signIn");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
+      if (user) {
+        dispatch(fetchAdminWatchLaterCourses("XiXJ0oesnkwweeAUscnq", true));
+      }
     });
     return () => unsubscribe();
-  }, [dispatch]);
+  }, [dispatch, auth]);
+
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -89,7 +85,7 @@ const Dashboard = ({ navHeight, userId }) => {
                 (courses.length > 0 ? (
                   <Select
                     value={selectedCourse}
-                    onChange={(e) => setSelectedCourse(e.target.value)} // Store course ID
+                    onChange={(e) => setSelectedCourse(e.target.value)}
                     displayEmpty
                     size="small"
                     sx={{
@@ -115,13 +111,7 @@ const Dashboard = ({ navHeight, userId }) => {
                       </Box>
                     </MenuItem>
                     {courses.map((course) => (
-                      <MenuItem
-                        key={course.id}
-                        value={course.id}
-                        sx={{ pr: 0 }}
-                      >
-                        {" "}
-                        {/* Use course.id as value */}
+                      <MenuItem key={course.id} value={course.id} sx={{ pr: 0 }}>
                         <Box display="flex" alignItems="center">
                           {course.course_name}{" "}
                           <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
@@ -149,7 +139,7 @@ const Dashboard = ({ navHeight, userId }) => {
             ) : selectedSection === "Settings" ? (
               <Settings />
             ) : (
-              <Students selectedCourse={selectedCourse} />
+              <Students selectedCourse={selectedCourse} adminId="XiXJ0oesnkwweeAUscnq" />
             )}
           </Grid>
           <Grid item xs={12} md={4}>
@@ -195,7 +185,7 @@ const Dashboard = ({ navHeight, userId }) => {
                 </Box>
               ))}
             </Box>
-            <WatchLater />
+            <WatchLater courses={courses} />
             <CoursesProgress />
           </Grid>
         </Grid>
