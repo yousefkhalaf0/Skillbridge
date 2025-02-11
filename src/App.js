@@ -18,6 +18,7 @@ function App() {
   const theme = useSelector((state) => state.themeReducer);
   const navRef = useRef(null);
   const [navHeight, setNavHeight] = useState(0);
+
   useEffect(() => {
     const body = document.getElementById("root-body");
     if (body) {
