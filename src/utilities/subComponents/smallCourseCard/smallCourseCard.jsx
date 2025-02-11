@@ -112,7 +112,7 @@ export default function SmallCourseCard() {
                 variant="body1"
                 sx={{ flexGrow: 1 }}
               >
-                {course.course_description.slice(0,170)} ...
+                {course.course_description.slice(0, 170)} ...
               </Typography>
               <Button
                 className={`${theme}ExploreCourseBtn`}

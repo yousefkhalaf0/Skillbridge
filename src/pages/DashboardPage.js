@@ -11,7 +11,10 @@ import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxC
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
 import AddIcon from "@mui/icons-material/Add";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import {
+  getAuth,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 
@@ -22,14 +25,15 @@ const stats = [
 
 const Dashboard = ({ navHeight, userId }) => {
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
+  const courses = useSelector(
+    (state) => state.userCourseReducer?.userCourses || []
+  );
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [showCourseForm, setShowCourseForm] = useState(false);
   const navigate = useNavigate();
 
- 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -68,7 +72,7 @@ const Dashboard = ({ navHeight, userId }) => {
                     textTransform: "none",
                     borderRadius: 2,
                   }}
-                  onClick={() =>navigate("/addCourse")}
+                  onClick={() => navigate("/addCourse")}
                 >
                   Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
                 </Button>
@@ -103,7 +107,11 @@ const Dashboard = ({ navHeight, userId }) => {
                       </Box>
                     </MenuItem>
                     {courses.map((course) => (
-                      <MenuItem key={course.id} value={course.id} sx={{ pr: 0 }}>
+                      <MenuItem
+                        key={course.id}
+                        value={course.id}
+                        sx={{ pr: 0 }}
+                      >
                         <Box display="flex" alignItems="center">
                           {course.course_name}{" "}
                           <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
@@ -131,7 +139,10 @@ const Dashboard = ({ navHeight, userId }) => {
             ) : selectedSection === "Settings" ? (
               <Settings />
             ) : (
-              <Students selectedCourse={selectedCourse} adminId="XiXJ0oesnkwweeAUscnq" />
+              <Students
+                selectedCourse={selectedCourse}
+                adminId="XiXJ0oesnkwweeAUscnq"
+              />
             )}
           </Grid>
           <Grid item xs={12} md={4}>

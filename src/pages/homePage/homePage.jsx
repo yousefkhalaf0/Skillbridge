@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Ensure this is imported
+import { useNavigate } from "react-router-dom";
 import {
   setShowScroll,
   toggleShowAllBenefits,
@@ -34,27 +34,24 @@ export default function HomePage() {
     (state) => state.showAllTestimonialsReducer
   );
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Define navigate here
+  const navigate = useNavigate();
   const coursesRef = useRef(null);
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   const checkScrollTop = () => {
     const shouldShow = window.pageYOffset > 400;
     if (shouldShow !== showScroll) {
       dispatch(setShowScroll(shouldShow));
     }
   };
-
   useEffect(() => {
     window.addEventListener("scroll", checkScrollTop);
     return () => window.removeEventListener("scroll", checkScrollTop);
   }, [showScroll, dispatch]);
-
   const scrollTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   };
 
   return (
@@ -112,8 +109,8 @@ export default function HomePage() {
         variant="contained"
         sx={{ textTransform: "none" }}
         onClick={() => {
-          dispatch(setActiveButton("Courses")); // Update activeButton
-          navigate("/courses"); // Use navigate to redirect
+          dispatch(setActiveButton("Courses"));
+          navigate("/courses");
         }}
       >
         Explore Courses
