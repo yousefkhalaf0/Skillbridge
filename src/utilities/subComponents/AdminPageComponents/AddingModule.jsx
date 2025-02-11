@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { Add, AccessTime } from "@mui/icons-material";
 
-const CourseModule = ({ modules, setModules }) => {
+const CourseModule = ({ modules = [], setModules }) => {
   const addLesson = (moduleIndex) => {
     const updatedModules = [...modules];
     updatedModules[moduleIndex].lessons.push({

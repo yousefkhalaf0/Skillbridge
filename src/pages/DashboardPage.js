@@ -29,15 +29,7 @@ const Dashboard = ({ navHeight, userId }) => {
   const [showCourseForm, setShowCourseForm] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      navigate("/signIn");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-
+ 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -46,7 +38,6 @@ const Dashboard = ({ navHeight, userId }) => {
     });
     return () => unsubscribe();
   }, [dispatch, auth]);
-
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -77,6 +68,7 @@ const Dashboard = ({ navHeight, userId }) => {
                     textTransform: "none",
                     borderRadius: 2,
                   }}
+                  onClick={() =>navigate("/addCourse")}
                 >
                   Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
                 </Button>
