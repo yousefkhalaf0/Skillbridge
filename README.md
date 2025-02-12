@@ -1,70 +1,135 @@
-# Getting Started with Create React App
+# Skillbridge - E-Learning Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Skillbridge is an e-learning platform designed to help users unlock their creative potential by providing access to online design and development courses. This project was developed as the final project for the React.js course at ITI (Information Technology Institute). It was a collaborative effort between me and my contributor, **Malak Haitham**.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation and Setup](#installation-and-setup)
+- [Project Structure](#project-structure)
+- [Contributors](#contributors)
+- [Acknowledgements](#acknowledgements)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Overview
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Skillbridge is a fully functional e-learning website that allows users to:
+- Browse and enroll in courses.
+- Search and filter courses by level (e.g., Beginner, Intermediate, Advanced).
+- View course details, including modules and lessons.
+- Sign up and log in as a user or admin.
+- Admins can add new courses and manage content.
+- Users can track their progress and save courses to a "Watch Later" list.
 
-### `npm test`
+The project was built using **React.js** for the frontend and **Firebase** for backend services like authentication and database management. We used **Material-UI (MUI)** for styling and **Redux** for state management.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **User Authentication**: Sign up, log in, and manage user profiles using Firebase Authentication.
+- **Course Management**: Admins can add, update, and delete courses.
+- **Course Enrollment**: Users can enroll in courses and track their progress.
+- **Search and Filter**: Users can search for courses and filter them by level (Beginner, Intermediate, Advanced).
+- **Watch Later List**: Users can save courses to a "Watch Later" list for future reference.
+- **Responsive Design**: The website is fully responsive and works seamlessly on all devices.
+- **Localization**: Supports both English and Arabic languages.
+- **Dark/Light Mode**: Users can switch between dark and light themes.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Technologies Used
 
-### `npm run eject`
+### Frontend
+- **React.js**: JavaScript library for building the user interface.
+- **Material-UI (MUI)**: Component library for styling and theming.
+- **Redux**: State management library.
+- **React Router**: For handling client-side routing.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend
+- **Firebase**: Used for authentication, Firestore database, and hosting.
+  - **Firestore**: NoSQL database for storing course and user data.
+  - **Firebase Auth**: For user authentication.
+- **Firebase Hosting**: For deploying the application.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Tools
+- **VS Code**: Primary code editor.
+- **Figma**: For designing wireframes and UI/UX.
+- **Trello**: For project management and task tracking.
+- **Slack & Google Meet**: For communication and collaboration.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Installation and Setup
 
-## Learn More
+Follow these steps to set up the project locally:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/skillbridge.git
+   cd skillbridge
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-### Code Splitting
+3. **Set Up Firebase**
+   - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/).
+   - Add your Firebase configuration in `src/utilities/firebase.js`.
+   - Enable Firestore and Authentication in the Firebase Console.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. **Run the Project**
+   ```bash
+   npm start
+   ```
+   The application will be running at `http://localhost:3000`.
 
-### Analyzing the Bundle Size
+5. **Build for Production**
+   ```bash
+   npm run build
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```
+skillbridge/
+├── public/                  # Static assets
+├── src/
+│   ├── assets/              # Images, icons, and other static files
+│   ├── components/          # Reusable components
+│   ├── pages/               # Page components
+│   ├── utilities/           # Utility functions, Firebase config, and Redux store
+│   ├── App.js               # Main application component
+│   ├── index.js             # Entry point
+│   └── firebase.js          # Firebase configuration
+├── package.json             # Project dependencies
+└── README.md                # Project documentation
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Contributors
 
-### Deployment
+- **[Yousef Khalaf](https://github.com/yousefkhalaf0)**
+- **[Malak Haitham](https://github.com/MalakHaitham206)** - Contributor
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Acknowledgements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project was developed as part of the React.js course at **ITI (Information Technology Institute)**. Special thanks to our instructors and mentors for their guidance and support throughout the course.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+```
