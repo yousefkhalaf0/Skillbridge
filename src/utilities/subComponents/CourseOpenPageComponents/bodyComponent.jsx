@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 export default function BodyComponent({ course }) {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [clickedLessons, setClickedLessons] = useState(new Set());
 
@@ -76,7 +77,7 @@ export default function BodyComponent({ course }) {
                   className={`modulesCardText moduleTitle`}
                   variant="h6"
                 >
-                  {module.title}
+                  {lang == "en" ? module.title : module.titleAR}
                 </Typography>
 
                 {sortedLessons.map((lesson) => (
@@ -97,7 +98,7 @@ export default function BodyComponent({ course }) {
                             fontWeight: "bold",
                           }}
                         >
-                          {lesson.title}
+                          {lang == "en" ? lesson.title : lesson.titleAR}
                         </Typography>
 
                         <Typography
@@ -106,7 +107,8 @@ export default function BodyComponent({ course }) {
                             color: "#262626",
                           }}
                         >
-                          Lesson {String(lesson.number).padStart(2, "0")}
+                          {lang == "en" ? "Lesson" : "الدرس"}{" "}
+                          {String(lesson.number).padStart(2, "0")}
                         </Typography>
                       </Grid>
 
@@ -124,7 +126,8 @@ export default function BodyComponent({ course }) {
                             clickedLessons.has(lesson.id) ? "clicked" : ""
                           }`}
                         >
-                          <AccessTimeIcon /> {lesson.duration}
+                          <AccessTimeIcon />{" "}
+                          {lang == "en" ? lesson.duration : lesson.durationAR}
                         </Box>
                       </Grid>
                     </Grid>

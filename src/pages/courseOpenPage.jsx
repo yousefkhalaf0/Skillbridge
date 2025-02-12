@@ -20,6 +20,7 @@ import "./pagesStyle/courseOpenPage.css";
 export default function CourseOpenPage() {
   const { courseId } = useParams();
   const dispatch = useDispatch();
+  const lang = useSelector((state) => state.languageReducer);
   const showScroll = useSelector((state) => state.scrollReducer.showScroll);
   const { courses, selectedCourse, loading, error } = useSelector(
     (state) => state.courseReducer
@@ -76,7 +77,9 @@ export default function CourseOpenPage() {
   if (!selectedCourse) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-        <Alert severity="info">Course not found.</Alert>
+        <Alert severity="info">
+          {lang == "en" ? "Course not found." : "لم يتم العثور على الدورة."}
+        </Alert>
       </Box>
     );
   }

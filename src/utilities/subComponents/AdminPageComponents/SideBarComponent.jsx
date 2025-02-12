@@ -29,15 +29,17 @@ import { useDispatch, useSelector } from "react-redux";
 const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const lang = useSelector((state) => state.languageReducer);
   const navHeightWithmargin = navHeight + 16;
   const navigate = useNavigate(); // Initialize navigation
   const auth = getAuth(); // Firebase Authentication
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState(null);
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      navigate("/signin"); // Redirect to sign-in page after sign-out
+      navigate("/signin");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -91,15 +93,21 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
       </Box>
       <Box>
         <Typography variant="subtitle1" gutterBottom>
-          Menu
+          {lang == "en" ? "Menu" : "القائمة"}
         </Typography>
         <Box>
           <List
             sx={{ display: "flex", flexDirection: { lg: "column", xs: "row" } }}
           >
             {[
-              { text: "Courses", icon: <MenuBook />, section: "Courses" },
-              isAdmin && {
+              {
+                textAR: "الدورات",
+                text: "Courses",
+                icon: <MenuBook />,
+                section: "Courses",
+              },
+              {
+                textAR: "الطلاب",
                 text: "Students",
                 icon: <People />,
                 section: "Students",
@@ -129,7 +137,9 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
                   >
                     {item.icon}
                   </ListItemIcon>
-                  <ListItemText primary={item.text} />
+                  <ListItemText
+                    primary={lang == "en" ? item.text : item.textAR}
+                  />
                 </ListItem>
               </ButtonBase>
             ))}
@@ -140,13 +150,14 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
       <Box />
       <Box>
         <Typography variant="subtitle1" gutterBottom>
-          Account
+          {lang == "en" ? "Account" : "الحساب"}
         </Typography>
         <List
           sx={{ display: "flex", flexDirection: { lg: "column", xs: "row" } }}
         >
           {[
             {
+              textAR: "الرسائل",
               text: "Messages",
               icon: (
                 <Badge badgeContent={5} color="error" bgcolor="#E8A710">
@@ -155,17 +166,27 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
               ),
               section: "Messages",
             },
-            { text: "Settings", icon: <Settings />, section: "Settings" },
-            { text: "Log out", icon: <ExitToApp />, section: "/logout" },
+            {
+              textAR: "الإعدادات",
+              text: "Settings",
+              icon: <Settings />,
+              section: "Settings",
+            },
+            {
+              textAR: "تسجيل خروج",
+              text: "Log out",
+              icon: <ExitToApp />,
+              section: "/logout",
+            },
           ].map((item, index) => (
             <ButtonBase
               key={index}
               sx={{ width: "100%", borderRadius: 2 }}
               onClick={() => {
                 if (item.section === "/logout") {
-                  handleSignOut(); // Call handleSignOut for logout
+                  handleSignOut();
                 } else {
-                  setSelectedSection(item.section); // Set selected section for other items
+                  setSelectedSection(item.section);
                 }
               }}
             >
@@ -187,7 +208,9 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
                 >
                   {item.icon}
                 </ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemText
+                  primary={lang == "en" ? item.text : item.textAR}
+                />
               </ListItem>
             </ButtonBase>
           ))}

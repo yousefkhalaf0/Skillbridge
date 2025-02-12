@@ -6,7 +6,11 @@ import Sidebar from "../utilities/subComponents/AdminPageComponents/SideBarCompo
 import CourseCard from "../utilities/subComponents/AdminPageComponents/CourseInAdminPage";
 import Students from "../utilities/subComponents/AdminPageComponents/StudentComponent";
 import Settings from "../utilities/subComponents/AdminPageComponents/settingComponent";
-import { fetchUserCourses, checkIfAdmin, checkUserAuthorization } from "../../src/utilities/firebase";
+import {
+  fetchUserCourses,
+  checkIfAdmin,
+  checkUserAuthorization,
+} from "../../src/utilities/firebase";
 import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxComponent";
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
@@ -14,10 +18,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
+import en from "../utilities/localization/en.js";
+import ar from "../utilities/localization/ar.js";
 
 const stats = [
-  { count: 11, label: "Courses completed" },
-  { count: 5, label: "Courses in progress" },
+  { count: 11, label: "Courses completed", labelAR: "الدورات المكتملة" },
+  { count: 5, label: "Courses in progress", labelAR: "الدورات قيد التنفيذ" },
 ];
 
 const Dashboard = ({ navHeight }) => {
@@ -36,22 +42,22 @@ const Dashboard = ({ navHeight }) => {
       try {
         const uid = await checkUserAuthorization();
         setUserId(uid);
-  
+
         const adminStatus = await checkIfAdmin(uid);
         console.log("User ID:", uid, "Is Admin:", adminStatus);
         setIsAdmin(adminStatus);
-  
+
         dispatch(fetchUserCourses(uid, adminStatus));
       } catch (error) {
         console.error("Authorization error:", error);
         navigate("/signIn");
       }
     };
-  
+
     initializeDashboard();
   }, [dispatch, navigate]);
-  
-console.log(courses)
+
+  console.log(courses);
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -72,7 +78,13 @@ console.log(courses)
               alignItems="center"
             >
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {selectedSection === "Courses" ? "My Courses" : "Students"}
+                {selectedSection === "Courses"
+                  ? lang == "en"
+                    ? en.adminDashboard.myCourses
+                    : ar.adminDashboard.myCourses
+                  : lang == "en"
+                  ? en.adminDashboard.students
+                  : ar.adminDashboard.students}
               </Typography>
               {selectedSection === "Courses" ? (
                 <Button
@@ -84,7 +96,10 @@ console.log(courses)
                   }}
                   onClick={() => navigate("/addCourse")}
                 >
-                  Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
+                  {lang == "en"
+                    ? en.adminDashboard.addCourse
+                    : ar.adminDashboard.addCourse}{" "}
+                  <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
                 </Button>
               ) : (
                 selectedSection === "Students" &&
@@ -104,7 +119,9 @@ console.log(courses)
                   >
                     <MenuItem value="" disabled sx={{ pr: 0 }}>
                       <Box display="flex" alignItems="center">
-                        Choose the course{" "}
+                        {lang == "en"
+                          ? en.adminDashboard.chooseCourse
+                          : ar.adminDashboard.chooseCourse}{" "}
                         <ExpandMoreIcon
                           sx={{
                             color: "white",
@@ -117,7 +134,11 @@ console.log(courses)
                       </Box>
                     </MenuItem>
                     {courses.map((course) => (
-                      <MenuItem key={course.id} value={course.id} sx={{ pr: 0 }}>
+                      <MenuItem
+                        key={course.id}
+                        value={course.id}
+                        sx={{ pr: 0 }}
+                      >
                         <Box display="flex" alignItems="center">
                           {course.course_name}{" "}
                           <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
@@ -126,9 +147,11 @@ console.log(courses)
                     ))}
                   </Select>
                 ) : (
-                  <Box display={"flex"} sx={{ justifyContent: "center", justifyItems: "center" }}>
-                    <Typography>No courses available.</Typography>
-                  </Box>
+                  <Typography>
+                    {lang == "en"
+                      ? en.adminDashboard.noCoursesAvailable
+                      : ar.adminDashboard.noCoursesAvailable}
+                  </Typography>
                 ))
               )}
             </Box>
@@ -139,7 +162,11 @@ console.log(courses)
                     <CourseCard key={course.id} course={course} />
                   ))
                 ) : (
-                  <Typography>No courses available.</Typography>
+                  <Typography>
+                    {lang == "en"
+                      ? en.adminDashboard.noCoursesAvailable
+                      : ar.adminDashboard.noCoursesAvailable}
+                  </Typography>
                 )}
               </Box>
             ) : selectedSection === "Messages" ? (
@@ -188,7 +215,7 @@ console.log(courses)
                     variant="body1"
                     sx={{ textAlign: "start", fontWeight: "normal" }}
                   >
-                    {stat.label}
+                    {lang == "en" ? stat.label : stat.labelAR}
                   </Typography>
                 </Box>
               ))}

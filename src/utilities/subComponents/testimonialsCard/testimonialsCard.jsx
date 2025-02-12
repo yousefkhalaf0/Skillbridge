@@ -13,6 +13,7 @@ export default function TestimonialsCard({
   testimonials = [],
 }) {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
 
   if (testimonials.length === 0) {
     return (
@@ -41,7 +42,9 @@ export default function TestimonialsCard({
               variant="body1"
               sx={{ flexGrow: 1 }}
             >
-              {testimonial.description}
+              {lang == "en"
+                ? testimonial.description
+                : testimonial.descriptionAR}
             </Typography>
             <Grid className={`cardRow`} container>
               <Grid
@@ -68,7 +71,7 @@ export default function TestimonialsCard({
                   variant="contained"
                   sx={{ textTransform: "none" }}
                 >
-                  Read Full Story
+                  {lang === "en" ? "Read Full Story" : "قراءة القصة كاملة"}
                 </Button>
               </Grid>
             </Grid>

@@ -15,8 +15,9 @@ import {
   getDocs,
   collection,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import { useSelector } from "react-redux";
 
-const StudentCard = ({ student }) => (
+const StudentCard = ({ student, lang }) => (
   <Card sx={{ borderRadius: 3, p: 2, textAlign: "center", bgcolor: "#F5F5F5" }}>
     <CardMedia
       component="img"
@@ -30,18 +31,21 @@ const StudentCard = ({ student }) => (
         variant="contained"
         sx={{ bgcolor: "black", color: "white", mt: 2, textTransform: "none" }}
       >
-        Message {student.username.split(" ")[0]}
+        {lang == "en"
+          ? "Message " + student.username.split(" ")[0]
+          : student.username.split(" ")[0] + " راسل"}
       </Button>
     </CardContent>
   </Card>
 );
 
 const Students = ({ selectedCourse, adminId }) => {
+  const lang = useSelector((state) => state.languageReducer);
   const [students, setStudents] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (isFetching) return; // Prevent multiple fetches
+    if (isFetching) return;
     setIsFetching(true);
 
     const fetchStudents = async () => {
@@ -49,7 +53,6 @@ const Students = ({ selectedCourse, adminId }) => {
         const db = getFirestore();
 
         if (selectedCourse) {
-          // Fetch students enrolled in the selected course
           const courseRef = doc(db, "Courses", selectedCourse);
           const courseSnap = await getDoc(courseRef);
           if (!courseSnap.exists()) {
@@ -84,10 +87,11 @@ const Students = ({ selectedCourse, adminId }) => {
             })
           );
 
-          const validStudents = studentsData.filter((student) => student !== null);
+          const validStudents = studentsData.filter(
+            (student) => student !== null
+          );
           setStudents(validStudents);
         } else {
-          // Fetch all students associated with the admin
           const adminRef = doc(db, "admins", adminId);
           const adminSnap = await getDoc(adminRef);
           if (!adminSnap.exists()) {
@@ -110,7 +114,9 @@ const Students = ({ selectedCourse, adminId }) => {
             })
           );
 
-          const validStudents = studentsData.filter((student) => student !== null);
+          const validStudents = studentsData.filter(
+            (student) => student !== null
+          );
           setStudents(validStudents);
         }
       } catch (error) {
@@ -127,11 +133,13 @@ const Students = ({ selectedCourse, adminId }) => {
     <Box sx={{ p: 3, minHeight: "100vh" }}>
       <Grid container spacing={3}>
         {students.length === 0 ? (
-          <Typography>No students found.</Typography>
+          <Typography>
+            {lang == "en" ? "No students found." : "لم يتم العثور على أي طالب."}
+          </Typography>
         ) : (
           students.map((student) => (
             <Grid item xs={12} sm={6} md={4} lg={6} key={student.id}>
-              <StudentCard student={student} />
+              <StudentCard student={student} lang={lang} />
             </Grid>
           ))
         )}

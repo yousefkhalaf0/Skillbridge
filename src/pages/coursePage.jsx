@@ -18,6 +18,7 @@ import "./pagesStyle/coursePage.css";
 
 export default function CoursePage() {
   const showScroll = useSelector((state) => state.scrollReducer.showScroll);
+  const lang = useSelector((state) => state.languageReducer);
   const { courses, loading, error } = useSelector(
     (state) => state.courseReducer
   );
@@ -49,8 +50,11 @@ export default function CoursePage() {
 
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
-      course.course_name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ??
-      false;
+      lang == "en"
+        ? course.course_name?.toLowerCase()?.includes(searchTerm.toLowerCase())
+        : course.course_nameAR
+            ?.toLowerCase()
+            ?.includes(searchTerm.toLowerCase()) ?? false;
 
     const matchesFilter = filter
       ? course.level?.toLowerCase() === filter.toLowerCase()
@@ -63,6 +67,11 @@ export default function CoursePage() {
     { value: "beginner", label: "Beginner" },
     { value: "intermediate", label: "Intermediate" },
     { value: "advanced", label: "Advanced" },
+  ];
+  const filterOptionsAR = [
+    { value: "beginner", label: "مبتدئ" },
+    { value: "intermediate", label: "متوسط" },
+    { value: "advanced", label: "متقدم" },
   ];
 
   if (loading) {
@@ -89,7 +98,7 @@ export default function CoursePage() {
       <SearchComponent
         onSearch={setSearchTerm}
         onFilter={setFilter}
-        filterOptions={filterOptions}
+        filterOptions={lang === "en" ? filterOptions : filterOptionsAR}
       />
       <LargeCourseCard courses={filteredCourses} />
 

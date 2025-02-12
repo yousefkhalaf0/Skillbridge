@@ -11,7 +11,6 @@ import {
 import CourseModule from "./AddingModule";
 import ImageUploader from "./courseImageUpload";
 
-
 const CourseForm = ({ navHeight, userId }) => {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseLevel, setCourseLevel] = useState("");
@@ -28,7 +27,7 @@ const CourseForm = ({ navHeight, userId }) => {
       subject: courseSubject,
       modules: modules,
     };
-  
+
     // Example API call using fetch
     try {
       const response = await fetch("/api/courses", {
@@ -38,11 +37,11 @@ const CourseForm = ({ navHeight, userId }) => {
         },
         body: JSON.stringify(courseData),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to upload course data");
       }
-  
+
       const result = await response.json();
       console.log("Course uploaded successfully:", result);
     } catch (error) {
@@ -50,68 +49,91 @@ const CourseForm = ({ navHeight, userId }) => {
     }
   };
   return (
- 
-      <Box  sx={{ flexGrow: 1, p: 3 }}>
-        <Grid container  mt={3}>
-          <Grid item lg={8} xs={12} md={12}>
-            <Box sx={{ maxWidth: "70%", width: "100%", margin: "auto", padding: 3 }}>
-              <Typography variant="p" gutterBottom>Course Title</Typography>
-              <TextField
-                fullWidth
-                label="Course Title"
-                value={courseTitle}
-                onChange={(e) => setCourseTitle(e.target.value)}
-                sx={{ mb: 2, bgcolor: "#F0F0F0", borderRadius: 3, border: "none" }}
-              />
+    <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Grid container mt={3}>
+        <Grid item lg={8} xs={12} md={12}>
+          <Box
+            sx={{ maxWidth: "70%", width: "100%", margin: "auto", padding: 3 }}
+          >
+            <Typography variant="p" gutterBottom>
+              Course Title
+            </Typography>
+            <TextField
+              fullWidth
+              label="Course Title"
+              value={courseTitle}
+              onChange={(e) => setCourseTitle(e.target.value)}
+              sx={{
+                mb: 2,
+                bgcolor: "#F0F0F0",
+                borderRadius: 3,
+                border: "none",
+              }}
+            />
 
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                
-                  <TextField
-                    fullWidth
-                    label="Level"
-                    value={courseLevel}
-                    onChange={(e) => setCourseLevel(e.target.value)}
-                    sx={{ mb: 2, bgcolor: "#F0F0F0", borderRadius: 3, border: "none" }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-               
-                  <TextField
-                    fullWidth
-                    label="Subject"
-                    value={courseSubject}
-                    onChange={(e) => setCourseSubject(e.target.value)}
-                    sx={{ mb: 2, bgcolor: "#F0F0F0", borderRadius: 3, border: "none" }}
-                  />
-                </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Level"
+                  value={courseLevel}
+                  onChange={(e) => setCourseLevel(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    bgcolor: "#F0F0F0",
+                    borderRadius: 3,
+                    border: "none",
+                  }}
+                />
               </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Subject"
+                  value={courseSubject}
+                  onChange={(e) => setCourseSubject(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    bgcolor: "#F0F0F0",
+                    borderRadius: 3,
+                    border: "none",
+                  }}
+                />
+              </Grid>
+            </Grid>
 
-              <TextField
-                fullWidth
-                label="Description"
-                variant="outlined"
-                multiline
-                rows={3}
-                value={courseDescription}
-                onChange={(e) => setCourseDescription(e.target.value)}
-                sx={{ mb: 2, bgcolor: "#F0F0F0", borderRadius: 3, border: "none" }}
-              />
+            <TextField
+              fullWidth
+              label="Description"
+              variant="outlined"
+              multiline
+              rows={3}
+              value={courseDescription}
+              onChange={(e) => setCourseDescription(e.target.value)}
+              sx={{
+                mb: 2,
+                bgcolor: "#F0F0F0",
+                borderRadius: 3,
+                border: "none",
+              }}
+            />
 
-              <CourseModule modules={modules || []} setModules={setModules} />
+            <CourseModule modules={modules || []} setModules={setModules} />
 
-              <Button variant="contained" onClick={handleSubmit} sx={{ mt: 2, bgcolor: "#000000", color: "#ffffff" }}>
-                Submit Course
-              </Button>
-            </Box>
-          </Grid>
- <Grid ><ImageUploader/></Grid>
-
-
-         
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              sx={{ mt: 2, bgcolor: "#000000", color: "#ffffff" }}
+            >
+              Submit Course
+            </Button>
+          </Box>
         </Grid>
-      </Box>
- 
+        <Grid>
+          <ImageUploader />
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
