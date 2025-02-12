@@ -54,7 +54,6 @@ The project was built using **React.js** for the frontend and **Firebase** for b
 - **Firebase**: Used for authentication, Firestore database, and hosting.
   - **Firestore**: NoSQL database for storing course and user data.
   - **Firebase Auth**: For user authentication.
-- **Firebase Hosting**: For deploying the application.
 
 ### Tools
 - **VS Code**: Primary code editor.
