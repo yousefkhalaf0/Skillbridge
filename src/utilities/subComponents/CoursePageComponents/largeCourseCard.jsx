@@ -1,13 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography, Button, Alert } from "../../muiComponents.js";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./componentsStyle/largeCourseCard.css";
+import { db } from "../../firebase.js"; // Import Firebase Firestore
+import {
+  doc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 export default function LargeCourseCard({ courses }) {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
+
+  const [adminNames, setAdminNames] = useState({}); // Store all admin names
+
+  useEffect(() => {
+    const fetchAdminNames = async () => {
+      const names = {};
+      for (const course of courses) {
+        if (course?.course_creator_id) {
+          names[course.course_creator_id] = await fetchAdminName(
+            course.course_creator_id
+          );
+        }
+      }
+      setAdminNames(names);
+    };
+    fetchAdminNames();
+  }, [courses]);
+
+  const fetchAdminName = async (adminId) => {
+    try {
+      const adminRef = doc(db, "admins", adminId);
+      const adminSnap = await getDoc(adminRef);
+      if (adminSnap.exists()) {
+        return adminSnap.data().username;
+      }
+      return lang === "en" ? "Unknown Admin" : "مسؤول غير معروف";
+    } catch (error) {
+      console.error("Error fetching admin data:", error);
+      return lang === "en" ? "Unknown Admin" : "مسؤول غير معروف";
+    }
+  };
 
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
@@ -17,7 +53,7 @@ export default function LargeCourseCard({ courses }) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 20, mb: 40 }}>
         <Alert severity="info">
-          {lang == "en" ? "No courses available." : "لا توجد دورات متاحة."}
+          {lang === "en" ? "No courses available." : "لا توجد دورات متاحة."}
         </Alert>
       </Box>
     );
@@ -42,15 +78,31 @@ export default function LargeCourseCard({ courses }) {
           <Grid mb={4} container spacing={2}>
             <Grid className={`courseDiscreption`} item sm={9} xs={12}>
               {lang == "en"
-                ? course.course_description
-                : course.course_descriptionAR}
+                ? course.course_description.slice(0, 200)
+                : course.course_descriptionAR.slice(0, 200)}
             </Grid>
             <Grid item sm={3} xs={12}>
-              <Box sx={{ textAlign: { xs: "left", sm: "right" } }}>
+              <Box
+                sx={{
+                  textAlign: { xs: "left", sm: "right" },
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  justifyItems: "center",
+                }}
+              >
                 <Button
                   className={`viewCourseBtn`}
                   variant="contained"
-                  sx={{ textTransform: "none" }}
+                  sx={{ textTransform: "none", maxWidth: 150 }}
+                  onClick={() => handleCourseClick(course.id)}
+                >
+                  {lang == "en" ? "watch Later" : "عرض الدورة"}
+                </Button>
+                <Button
+                  className={`viewCourseBtn`}
+                  variant="contained"
+                  sx={{ textTransform: "none", maxWidth: 150 }}
                   onClick={() => handleCourseClick(course.id)}
                 >
                   {lang == "en" ? "View Course" : "عرض الدورة"}
@@ -119,9 +171,14 @@ export default function LargeCourseCard({ courses }) {
                       className={`${theme}LargeVendor`}
                       variant="body2"
                     >
-                      {lang == "en"
-                        ? "By " + course.course_creator_id
-                        : course.course_creator_id + " بواسطة"}
+                      {lang === "en"
+                        ? `By ${
+                            adminNames[course.course_creator_id] || "Loading..."
+                          }`
+                        : `بواسطة ${
+                            adminNames[course.course_creator_id] ||
+                            "جاري التحميل..."
+                          }`}
                     </Typography>
                   </Grid>
                 </Grid>

@@ -26,6 +26,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { checkIfAdmin } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../redux/store";
 const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -35,6 +36,7 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const auth = getAuth(); // Firebase Authentication
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState(null);
+  const userInfo = useSelector((state) => state.userReducer.userInfo);
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -87,7 +89,7 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
           src={navLogo}
         />
         <Typography variant="h6" fontWeight="bold">
-          Omni.
+          {userInfo?.username}
         </Typography>
       </Box>
       <Box>
@@ -100,12 +102,11 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
           >
             {[
               {
-                textAR: "الدروس",
+                textAR: "الدورات",
                 text: "Courses",
                 icon: <MenuBook />,
                 section: "Courses",
               },
-
               isAdmin && {
                 textAR: "الطلاب",
                 text: "Students",

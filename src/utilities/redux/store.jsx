@@ -100,7 +100,6 @@ const courseSlice = createSlice({
     },
   },
 });
-
 const userSlice = createSlice({
   name: "user",
   initialState: {

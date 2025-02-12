@@ -15,19 +15,16 @@ import {
   Visibility,
   ArrowOutwardIcon,
 } from "../../muiComponents.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./componentsStyle/signInForm.css";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import { auth } from "../../firebase.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { auth, checkIfAdmin, fetchUserData } from "../../firebase.js";
 import en from "../../localization/en.js";
 import ar from "../../localization/ar.js";
-
+import { setUser } from "../../redux/store.jsx";
 export default function SignInForm() {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
@@ -40,7 +37,9 @@ export default function SignInForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   console.log("Email:", email);
@@ -58,6 +57,11 @@ export default function SignInForm() {
       setSnackbarMessage(
         lang == "en" ? en.signIn.loginSuccess : ar.signIn.loginSuccess
       );
+      const user = userCredential.user;
+      const isAdmin = await checkIfAdmin(user.uid);
+      const userData = await fetchUserData(user.uid, isAdmin);
+      console.log(userData);
+      dispatch(setUser(userData));
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
       setTimeout(() => navigate("/"), 1500);

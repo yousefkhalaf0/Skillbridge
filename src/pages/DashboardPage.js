@@ -37,6 +37,7 @@ const Dashboard = ({ navHeight }) => {
   const [userId, setUserId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const lang = useSelector((state) => state.languageReducer);
+  const userInfo = useSelector((state) => state.userReducer.userInfo);
   useEffect(() => {
     const initializeDashboard = async () => {
       try {

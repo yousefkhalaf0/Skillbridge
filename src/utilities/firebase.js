@@ -41,7 +41,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+export const db = getFirestore(app);
 export const auth = getAuth();
 
 export const loginAdmin = async (email, password) => {
@@ -331,4 +331,19 @@ export const checkUserAuthorization = () => {
       }
     });
   });
+};
+export const fetchUserData = async (userId, isAdmin) => {
+  try {
+    const userRef = doc(db, isAdmin ? "admins" : "users", userId);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      return userSnap.data();
+    } else {
+      throw new Error("User data not found");
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
 };

@@ -51,7 +51,6 @@ const Students = ({ selectedCourse, adminId }) => {
     const fetchStudents = async () => {
       try {
         const db = getFirestore();
-
         if (selectedCourse) {
           const courseRef = doc(db, "Courses", selectedCourse);
           const courseSnap = await getDoc(courseRef);
