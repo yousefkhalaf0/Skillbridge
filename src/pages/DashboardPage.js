@@ -6,12 +6,12 @@ import Sidebar from "../utilities/subComponents/AdminPageComponents/SideBarCompo
 import CourseCard from "../utilities/subComponents/AdminPageComponents/CourseInAdminPage";
 import Students from "../utilities/subComponents/AdminPageComponents/StudentComponent";
 import Settings from "../utilities/subComponents/AdminPageComponents/settingComponent";
-import { fetchUserCourses, checkIfAdmin } from "../../src/utilities/firebase";
+import { fetchUserCourses, checkIfAdmin, checkUserAuthorization } from "../../src/utilities/firebase";
 import InboxMessages from "../utilities/subComponents/AdminPageComponents/inboxComponent";
 import WatchLater from "../utilities/subComponents/AdminPageComponents/WhatchLaterComponent";
 import CoursesProgress from "../utilities/subComponents/AdminPageComponents/progressComponent";
 import AddIcon from "@mui/icons-material/Add";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
 
@@ -20,24 +20,38 @@ const stats = [
   { count: 5, label: "Courses in progress" },
 ];
 
-const Dashboard = ({ navHeight, userId }) => {
+const Dashboard = ({ navHeight }) => {
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.userCourseReducer?.userCourses || []);
+  const courses = useSelector((state) => state.userCourseReducer?.userCourses);
   const auth = getAuth();
   const [selectedSection, setSelectedSection] = useState("Courses");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [showCourseForm, setShowCourseForm] = useState(false);
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
- 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
+    const initializeDashboard = async () => {
+      try {
+        const uid = await checkUserAuthorization();
+        setUserId(uid);
+  
+        const adminStatus = await checkIfAdmin(uid);
+        console.log("User ID:", uid, "Is Admin:", adminStatus);
+        setIsAdmin(adminStatus);
+  
+        dispatch(fetchUserCourses(uid, adminStatus));
+      } catch (error) {
+        console.error("Authorization error:", error);
+        navigate("/signIn");
       }
-    });
-    return () => unsubscribe();
-  }, [dispatch, auth]);
+    };
+  
+    initializeDashboard();
+  }, [dispatch, navigate]);
+  
+console.log(courses)
   return (
     <Box display="flex" sx={{ fontFamily: "inherit" }}>
       <Box sx={{ flexGrow: 1, p: 3 }}>
@@ -68,7 +82,7 @@ const Dashboard = ({ navHeight, userId }) => {
                     textTransform: "none",
                     borderRadius: 2,
                   }}
-                  onClick={() =>navigate("/addCourse")}
+                  onClick={() => navigate("/addCourse")}
                 >
                   Add Course <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
                 </Button>
@@ -112,7 +126,9 @@ const Dashboard = ({ navHeight, userId }) => {
                     ))}
                   </Select>
                 ) : (
-                  <Typography>No courses available.</Typography>
+                  <Box display={"flex"} sx={{ justifyContent: "center", justifyItems: "center" }}>
+                    <Typography>No courses available.</Typography>
+                  </Box>
                 ))
               )}
             </Box>
@@ -131,7 +147,7 @@ const Dashboard = ({ navHeight, userId }) => {
             ) : selectedSection === "Settings" ? (
               <Settings />
             ) : (
-              <Students selectedCourse={selectedCourse} adminId="XiXJ0oesnkwweeAUscnq" />
+              <Students selectedCourse={selectedCourse} adminId={userId} />
             )}
           </Grid>
           <Grid item xs={12} md={4}>

@@ -101,7 +101,6 @@ const courseSlice = createSlice({
   },
 });
 
-
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -137,6 +136,7 @@ const userCourseSlice = createSlice({
     loading: false,
     error: null,
   },
+
   reducers: {
     setUserCourses: (state, action) => {
       state.userCourses = action.payload;
@@ -206,7 +206,7 @@ const store = configureStore({
     courseReducer: courseSlice.reducer,
     userCourseReducer: userCourseSlice.reducer,
     adminWatchLaterReducer: adminWatchLaterSlice.reducer,
-    userReducer: userSlice.reducer, 
+    userReducer: userSlice.reducer,
   },
 });
 

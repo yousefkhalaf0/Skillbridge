@@ -2,11 +2,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebas
 import {
   getFirestore,
   collection,
-  getDocs,
+  getDoc,
   doc,
   setDoc,
-  getDoc,
   deleteDoc,
+  query,
+  where,
+  getDocs,
+  documentId,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import {
   setCourses,
@@ -186,34 +189,61 @@ export const fetchData = () => async (dispatch) => {
 };
 
 export const checkIfAdmin = async (userId) => {
-  const adminRef = doc(db, "admins", userId);
-  const adminSnap = await getDoc(adminRef);
-
-  return adminSnap.exists();
+  const userDoc = await getDoc(doc(db, "users", userId));
+  return userDoc.exists() && userDoc.data().role === "admin";
 };
 
 export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
   dispatch(setUserCoursesLoading(true));
+
   try {
-    const coursesQuerySnapshot = await getDocs(collection(db, "Courses"));
-    const userCourses = [];
+    console.log("Fetching courses for user:", userId, "Admin:", isAdmin);
 
-    coursesQuerySnapshot.forEach((courseDoc) => {
-      const courseData = { id: courseDoc.id, ...courseDoc.data() };
+    let userCourses = [];
 
-      if (isAdmin) {
-        if (courseData.course_creator_id === userId) {
-          userCourses.push(courseData);
+    if (isAdmin) {
+      // If user is an admin, fetch courses they created
+      const coursesQuery = query(
+        collection(db, "Courses"),
+        where("course_creator_id", "==", userId)
+      );
+      const coursesQuerySnapshot = await getDocs(coursesQuery);
+      userCourses = coursesQuerySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    } else {
+      // Fetch the user's document to get enrolled courses
+      const userDocRef = doc(db, "users", userId);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const enrolledCourseIds = userData.courses || [];
+
+        console.log("User's enrolled courses:", enrolledCourseIds);
+
+        if (enrolledCourseIds.length > 0) {
+          // Fetch courses where the ID matches enrolled courses
+          const coursesQuery = query(
+            collection(db, "Courses"),
+            where(documentId(), "in", enrolledCourseIds)
+          );
+          const coursesQuerySnapshot = await getDocs(coursesQuery);
+          userCourses = coursesQuerySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
         }
       } else {
-        if (courseData.enrolled_users?.includes(userId)) {
-          userCourses.push(courseData);
-        }
+        console.error("User document not found");
       }
-    });
+    }
 
+    console.log("Fetched courses:", userCourses);
     dispatch(setUserCourses(userCourses));
   } catch (error) {
+    console.error("Error fetching courses:", error.message);
     dispatch(setUserCoursesError(error.message));
   }
 };
@@ -229,9 +259,9 @@ export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
       return;
     }
     // Extract course IDs and adding time
-    const watchLaterData = snapshot.docs.map(doc => ({
+    const watchLaterData = snapshot.docs.map((doc) => ({
       courseId: doc.data().courseId,
-      addingTime: doc.data().addingTime?.toDate?.() || new Date()
+      addingTime: doc.data().addingTime?.toDate?.() || new Date(),
     }));
     // Fetch actual course details
     const courses = await Promise.all(
@@ -242,12 +272,12 @@ export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
         return {
           id: courseId,
           addingTime,
-          ...courseSnap.data()
+          ...courseSnap.data(),
         };
       })
     );
     // Remove null values (courses that no longer exist)
-    const validCourses = courses.filter(course => course !== null);
+    const validCourses = courses.filter((course) => course !== null);
     dispatch(setAdminWatchLaterCourses(validCourses));
   } catch (error) {
     dispatch(setAdminWatchLaterError(error.message));
@@ -256,14 +286,15 @@ export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
   }
 };
 // Remove a course from the Watch Later list
-export const removeWatchLaterCourse = (adminId, courseId) => async (dispatch) => {
-  try {
-    await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
-    dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
-  } catch (error) {
-    console.error("Error removing course:", error);
-  }
-};
+export const removeWatchLaterCourse =
+  (adminId, courseId) => async (dispatch) => {
+    try {
+      await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
+      dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
+    } catch (error) {
+      console.error("Error removing course:", error);
+    }
+  };
 
 export const checkUserAuthorization = () => {
   return new Promise((resolve, reject) => {
