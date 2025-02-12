@@ -6,6 +6,7 @@ import "./componentsStyle/largeCourseCard.css";
 
 export default function LargeCourseCard({ courses }) {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
 
   const handleCourseClick = (courseId) => {
@@ -15,7 +16,9 @@ export default function LargeCourseCard({ courses }) {
   if (!Array.isArray(courses) || courses.length === 0) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 20, mb: 40 }}>
-        <Alert severity="info">No courses available.</Alert>
+        <Alert severity="info">
+          {lang == "en" ? "No courses available." : "لا توجد دورات متاحة."}
+        </Alert>
       </Box>
     );
   }
@@ -33,12 +36,14 @@ export default function LargeCourseCard({ courses }) {
             variant="h6"
             gutterBottom
           >
-            {course.course_name}
+            {lang == "en" ? course.course_name : course.course_nameAR}
           </Typography>
 
           <Grid mb={4} container spacing={2}>
             <Grid className={`courseDiscreption`} item sm={9} xs={12}>
-              {course.course_description}
+              {lang == "en"
+                ? course.course_description
+                : course.course_descriptionAR}
             </Grid>
             <Grid item sm={3} xs={12}>
               <Box sx={{ textAlign: { xs: "left", sm: "right" } }}>
@@ -48,7 +53,7 @@ export default function LargeCourseCard({ courses }) {
                   sx={{ textTransform: "none" }}
                   onClick={() => handleCourseClick(course.id)}
                 >
-                  View Course
+                  {lang == "en" ? "View Course" : "عرض الدورة"}
                 </Button>
               </Box>
             </Grid>
@@ -95,13 +100,13 @@ export default function LargeCourseCard({ courses }) {
                       variant="caption"
                       sx={{ mr: 1 }}
                     >
-                      {course.duration}
+                      {lang == "en" ? course.duration : course.durationAR}
                     </Typography>
                     <Typography
                       className={`${theme}LargeWeeksLevelBox`}
                       variant="caption"
                     >
-                      {course.level}
+                      {lang == "en" ? course.level : course.levelAR}
                     </Typography>
                   </Grid>
                   <Grid
@@ -114,7 +119,9 @@ export default function LargeCourseCard({ courses }) {
                       className={`${theme}LargeVendor`}
                       variant="body2"
                     >
-                      By {course.course_creator_id}
+                      {lang == "en"
+                        ? "By " + course.course_creator_id
+                        : course.course_creator_id + " بواسطة"}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -138,7 +145,7 @@ export default function LargeCourseCard({ courses }) {
                         variant="subtitle1"
                         sx={{ flexGrow: 1 }}
                       >
-                        Curriculum
+                        {lang == "en" ? "Curriculum" : "المنهج"}
                       </Typography>
                       <Grid className={`${theme}ModulesContainer`} container>
                         {Array.isArray(course.modules) &&
@@ -171,7 +178,9 @@ export default function LargeCourseCard({ courses }) {
                                   className={`modulesName`}
                                   variant="body1"
                                 >
-                                  {module.title || "Untitled Module"}
+                                  {lang == "en"
+                                    ? module.title || "Untitled Module"
+                                    : module.titleAR || "موديول غير مسمى"}
                                 </Typography>
 
                                 {index !== modulesArray.length - 1 && (
@@ -209,7 +218,9 @@ export default function LargeCourseCard({ courses }) {
                             ))
                         ) : (
                           <Typography variant="body2" color="textSecondary">
-                            No modules available for this course.
+                            {lang == "en"
+                              ? "No modules available."
+                              : "لا توجد وحدات متاحة."}
                           </Typography>
                         )}
                       </Grid>

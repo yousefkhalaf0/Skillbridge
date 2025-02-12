@@ -22,6 +22,7 @@ export default function CoursePage() {
     (state) => state.courseReducer
   );
   const dispatch = useDispatch();
+  const lang = useSelector((state) => state.languageReducer);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("");
 
@@ -64,6 +65,11 @@ export default function CoursePage() {
     { value: "intermediate", label: "Intermediate" },
     { value: "advanced", label: "Advanced" },
   ];
+  const filterOptionsAR = [
+    { value: "beginner", label: "مبتدئ" },
+    { value: "intermediate", label: "متوسط" },
+    { value: "advanced", label: "متقدم" },
+  ];
 
   if (loading) {
     return (
@@ -89,7 +95,7 @@ export default function CoursePage() {
       <SearchComponent
         onSearch={setSearchTerm}
         onFilter={setFilter}
-        filterOptions={filterOptions}
+        filterOptions={lang === "en" ? filterOptions : filterOptionsAR}
       />
       <LargeCourseCard courses={filteredCourses} />
 

@@ -23,11 +23,14 @@ import {
 } from "../../utilities/subComponentsLinks.js";
 import { testimonials } from "../../utilities/testimonialsData.js";
 import "../homePage/homePage.css";
+import en from "../../utilities/localization/en.js";
+import ar from "../../utilities/localization/ar.js";
 import linesIcon from "../../assets/icons/abstractLines.svg";
 import homeHeaderImg from "../../assets/images/homeHeaderImg.svg";
 
 export default function HomePage() {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const showScroll = useSelector((state) => state.scrollReducer.showScroll);
   const showAllBenefits = useSelector((state) => state.showAllBenefitsReducer);
   const showAllTestimonials = useSelector(
@@ -74,7 +77,7 @@ export default function HomePage() {
           component="span"
           sx={{ color: "#E8A710" }}
         >
-          Unlock
+          {lang === "en" ? en.unlock : ar.unlock}
         </Box>
         <Box
           className="headerBoxText disableSelecting"
@@ -82,7 +85,7 @@ export default function HomePage() {
           sx={{ color: "black" }}
         >
           {" "}
-          Your Creative Potential
+          {lang === "en" ? en.yourCreativePotential : ar.yourCreativePotential}
         </Box>
         <Box
           className={`linesIcon ${theme}LinesIcon`}
@@ -96,13 +99,17 @@ export default function HomePage() {
         variant="h5"
         gutterBottom
       >
-        with Online Design and Development Courses.
+        {lang === "en"
+          ? en.withOnlineDesignAndDevelopmentCourses
+          : ar.withOnlineDesignAndDevelopmentCourses}
       </Typography>
       <Typography
         className={`${theme}HeaderSubSubText disableSelecting`}
         variant="subtitle1"
       >
-        Learn from Industry Experts and Enhance Your Skills.
+        {lang === "en"
+          ? en.learnFromIndustryExpertsAndEnhanceYourSkills
+          : ar.learnFromIndustryExpertsAndEnhanceYourSkills}
       </Typography>
       <Button
         className={`${theme}ExploreCoursesBtn`}
@@ -113,7 +120,7 @@ export default function HomePage() {
           navigate("/courses");
         }}
       >
-        Explore Courses
+        {lang === "en" ? en.exploreCourses : ar.exploreCourses}
       </Button>
       <ComercialBox />
       <Box
@@ -137,17 +144,13 @@ export default function HomePage() {
             variant="h4"
             gutterBottom
           >
-            Benefits
+            {lang === "en" ? en.benefits : ar.benefits}
           </Typography>
           <Grid mb={6} container spacing={2}>
             <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
-              Skillbridge is an innovative e-learning platform that provides
-              flexible, interactive, and expert-designed courses, allowing
-              learners to study at their own pace anytime, anywhere. With a
-              diverse course library, personalized learning paths, and
-              industry-recognized certifications, Skillbridge empowers students
-              and professionals to enhance their skills, advance their careers,
-              and enjoy a seamless, engaging learning experience.
+              {lang === "en"
+                ? en.skillbridgeDescription
+                : ar.skillbridgeDescription}
             </Grid>
             <Grid item sm={3} xs={12}>
               <Box sx={{ textAlign: { xs: "left", sm: "right" } }}>
@@ -157,7 +160,13 @@ export default function HomePage() {
                   sx={{ textTransform: "none" }}
                   onClick={() => dispatch(toggleShowAllBenefits())}
                 >
-                  {showAllBenefits ? "Collapse" : "View All"}
+                  {showAllBenefits
+                    ? lang === "en"
+                      ? en.collapse
+                      : ar.collapse
+                    : lang === "en"
+                    ? en.viewAll
+                    : ar.viewAll}
                 </Button>
               </Box>
             </Grid>
@@ -178,17 +187,13 @@ export default function HomePage() {
             variant="h4"
             gutterBottom
           >
-            Our Courses
+            {lang === "en" ? en.ourCourses : ar.ourCourses}
           </Typography>
           <Grid mb={6} container spacing={2}>
             <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
-              Our courses at Skillbridge are designed to provide a comprehensive
-              and engaging learning experience across various subjects. Whether
-              you're looking to build new skills, advance your career, or
-              explore a new field, our expert-led courses feature interactive
-              content, real-world applications, and certifications to help you
-              achieve your goals. Learn at your own pace with high-quality
-              resources tailored to your success.
+              {lang === "en"
+                ? en.ourCoursesDescription
+                : ar.ourCoursesDescription}
             </Grid>
           </Grid>
           <SmallCourseCard />
@@ -206,16 +211,13 @@ export default function HomePage() {
             variant="h4"
             gutterBottom
           >
-            Our Testimonials
+            {lang === "en" ? en.ourTestimonials : ar.ourTestimonials}
           </Typography>
           <Grid mb={6} container spacing={2}>
             <Grid className={`${theme}SectionsSubTitle`} item sm={9} xs={12}>
-              Hear from our learners! At Skillbridge, we take pride in
-              delivering a top-notch learning experience that truly makes a
-              difference. Read testimonials from students and professionals who
-              have gained valuable skills, advanced their careers, and achieved
-              their goals with our expert-led courses. Your success story could
-              be next!
+              {lang === "en"
+                ? en.ourTestimonialsDescription
+                : ar.ourTestimonialsDescription}
             </Grid>
             <Grid item sm={3} xs={12}>
               <Box sx={{ textAlign: { xs: "left", sm: "right" } }}>
@@ -225,7 +227,13 @@ export default function HomePage() {
                   sx={{ textTransform: "none" }}
                   onClick={() => dispatch(toggleShowAllTestimonials())}
                 >
-                  {showAllTestimonials ? "Collapse" : "View All"}
+                  {showAllTestimonials
+                    ? lang === "en"
+                      ? en.collapse
+                      : ar.collapse
+                    : lang === "en"
+                    ? en.viewAll
+                    : ar.viewAll}
                 </Button>
               </Box>
             </Grid>

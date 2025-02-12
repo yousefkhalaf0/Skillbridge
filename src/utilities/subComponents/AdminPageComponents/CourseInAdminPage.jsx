@@ -24,12 +24,13 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const CourseCard = ({ course }) => {
+  const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
 
-  const theme = useSelector((state) => state.themeReducer);
   return (
     <Box
       p={2}
@@ -80,7 +81,7 @@ const CourseCard = ({ course }) => {
               fontFamily: "inherit",
             }}
           >
-            {course.course_name}
+            {lang == "en" ? course.course_name : course.course_nameAR}
           </Typography>
           <Box mt={4} display="flex" flexDirection="column" gap={1}>
             <Button
@@ -97,7 +98,7 @@ const CourseCard = ({ course }) => {
               }}
               onClick={() => handleCourseClick(course.id)}
             >
-              Go to the course
+              {lang == "en" ? "Go to the course" : "انتقل إلى الدورة"}
             </Button>
             <Button
               variant="contained"
@@ -111,7 +112,7 @@ const CourseCard = ({ course }) => {
                 textTransform: "none",
               }}
             >
-              edit the course
+              {lang == "en" ? "edit the course" : "تعديل الدورة"}
             </Button>
             <Button
               variant="contained"
@@ -125,7 +126,7 @@ const CourseCard = ({ course }) => {
                 textTransform: "none",
               }}
             >
-              Remove the course
+              {lang == "en" ? "Remove the course" : "إزالة الدورة"}
             </Button>
           </Box>
         </CardContent>

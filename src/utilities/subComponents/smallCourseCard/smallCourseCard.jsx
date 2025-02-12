@@ -14,6 +14,7 @@ import "../smallCourseCard/smallCourseCard.css";
 
 export default function SmallCourseCard() {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const { courses, loading, error } = useSelector(
     (state) => state.courseReducer
   );
@@ -84,13 +85,13 @@ export default function SmallCourseCard() {
                     variant="caption"
                     sx={{ marginRight: 1 }}
                   >
-                    {course.duration}
+                    {lang == "en" ? course.duration : course.durationAR}
                   </Typography>
                   <Typography
                     className={`${theme}WeeksLevelBox`}
                     variant="caption"
                   >
-                    {course.level}
+                    {lang == "en" ? course.level : course.levelAR}
                   </Typography>
                 </Grid>
                 <Grid
@@ -100,19 +101,24 @@ export default function SmallCourseCard() {
                   sx={{ textAlign: { xs: "left", sm: "right" } }}
                 >
                   <Typography className={`${theme}Vendor`} variant="subtitle1">
-                    {`By ${course.course_creator_id}`}
+                    {lang == "en"
+                      ? "By " + course.course_creator_id
+                      : course.course_creator_id + " بواسطة"}
                   </Typography>
                 </Grid>
               </Grid>
               <Typography className="courseTitle" variant="h5" gutterBottom>
-                {course.course_name}
+                {lang == "en" ? course.course_name : course.course_nameAR}
               </Typography>
               <Typography
                 className="courseDescription"
                 variant="body1"
                 sx={{ flexGrow: 1 }}
               >
-                {course.course_description.slice(0, 170)} ...
+                {lang == "en"
+                  ? course.course_description.slice(0, 170)
+                  : course.course_descriptionAR.slice(0, 170)}{" "}
+                ...
               </Typography>
               <Button
                 className={`${theme}ExploreCourseBtn`}
@@ -120,7 +126,7 @@ export default function SmallCourseCard() {
                 sx={{ textTransform: "none" }}
                 onClick={() => handleCourseClick(course.id)}
               >
-                Get it Now
+                {lang == "en" ? "Get it Now" : "احصل عليه الآن"}
               </Button>
             </Box>
           </Grid>
@@ -143,7 +149,7 @@ export default function SmallCourseCard() {
               },
             }}
           >
-            Previous
+            {lang == "en" ? "Previous" : "السابق"}
           </Button>
         )}
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(
@@ -189,7 +195,7 @@ export default function SmallCourseCard() {
               },
             }}
           >
-            Next
+            {lang == "en" ? "Next" : "التالي"}
           </Button>
         )}
       </Box>

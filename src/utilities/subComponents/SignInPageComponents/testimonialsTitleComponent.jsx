@@ -2,21 +2,20 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Typography } from "../../muiComponents.js";
 import "./componentsStyle/testimonialsTitleComponent.css";
+import en from "../../localization/en.js";
+import ar from "../../localization/ar.js";
 
 export default function TestimonialsTitleComponent() {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
 
   return (
     <>
       <Typography className={`${theme}Title`} variant="h4" gutterBottom>
-        Students Testimonials
+        {lang == "en" ? en.testimonials.title : ar.testimonials.title}
       </Typography>
       <Typography className={`${theme}SubTitle`} variant="body1">
-        Hear from our learners! At Skillbridge, we take pride in delivering a
-        top-notch learning experience that truly makes a difference. Read
-        testimonials from students and professionals who have gained valuable
-        skills, advanced their careers, and achieved their goals with our
-        expert-led courses. Your success story could be next!
+        {lang == "en" ? en.testimonials.subtitle : ar.testimonials.subtitle}
       </Typography>
     </>
   );

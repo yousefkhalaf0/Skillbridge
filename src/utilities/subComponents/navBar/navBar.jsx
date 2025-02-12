@@ -1,7 +1,7 @@
-import React ,{useState,useEffect} from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import NotificationBar from "./NotificationBarComponent"
+import NotificationBar from "./NotificationBarComponent";
 
 import {
   setActiveButton,
@@ -26,8 +26,10 @@ import {
 import "../../subComponents/navBar/navBar.css";
 import appIcon from "../../../assets/icons/siteLogo.svg";
 import languageIconlight from "../../../assets/icons/language-svgrepo-comlight.png";
-import languageIcondark from "../../../assets/icons/language-svgrepo-comdark.png"
+import languageIcondark from "../../../assets/icons/language-svgrepo-comdark.png";
 import { auth } from "../../firebase.js";
+import en from "../../localization/en.js";
+import ar from "../../localization/ar.js";
 // import animatedIcon from '../../../assets/animations/wired-lineal-237-star-rating-hover-pinch.gif'
 
 export default function NavBar() {
@@ -45,17 +47,16 @@ export default function NavBar() {
 
   const [user, setUser] = useState(null);
 
-   // Listen for authentication state changes
-   useEffect(() => {
+  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUser(user); // User is logged in
+        setUser(user);
       } else {
-        setUser(null); // User is logged out
+        setUser(null);
       }
     });
 
-    return () => unsubscribe(); // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, [setUser]);
   useEffect(() => {
     const path = location.pathname;
@@ -66,13 +67,11 @@ export default function NavBar() {
       case "/courses":
         dispatch(setActiveButton("Courses"));
         break;
-      // Add more cases for other routes if needed
       default:
-        dispatch(setActiveButton("")); // Reset if no match
+        dispatch(setActiveButton(""));
     }
   }, [location, dispatch]);
   const handleButtonClick = (buttonName, path) => {
-  
     dispatch(setActiveButton(buttonName));
     dispatch(setAnchorEl(null));
     navigate(path);
@@ -88,7 +87,7 @@ export default function NavBar() {
   return (
     <Box align="center" sx={{ mt: 2 }}>
       <Box
-         onClick={() => navigate("/courses")}
+        onClick={() => navigate("/courses")}
         className={`${theme}NavBarPanner`}
         sx={{
           width: "95%",
@@ -97,7 +96,7 @@ export default function NavBar() {
           cursor: "pointer",
         }}
       >
-        Free Courses 🌟 Sale Ends Soon, Get It Now
+        {lang == "en" ? en.navbar.bannerText : ar.navbar.bannerText}
         <ArrowForwardIcon sx={{ verticalAlign: "middle", ml: 2 }} />
       </Box>
 
@@ -141,12 +140,12 @@ export default function NavBar() {
                   onClose={handleMenuClose}
                 >
                   <MenuItem onClick={() => handleButtonClick("Home", "/")}>
-                    Home
+                    {lang == "en" ? en.navbar.home : ar.navbar.home}
                   </MenuItem>
                   <MenuItem
                     onClick={() => handleButtonClick("Courses", "/courses")}
                   >
-                    Courses
+                    {lang == "en" ? en.navbar.courses : ar.navbar.courses}
                   </MenuItem>
                   {/* <MenuItem
                     onClick={() => handleButtonClick("About Us", "/about")}
@@ -163,7 +162,6 @@ export default function NavBar() {
             )}
             {!isSmallScreen && (
               <>
-              
                 <Button
                   color="inherit"
                   variant={activeButton === "Home" ? "contained" : "text"}
@@ -176,7 +174,7 @@ export default function NavBar() {
                   }}
                   onClick={() => handleButtonClick("Home", "/")}
                 >
-                  Home
+                  {lang == "en" ? en.navbar.home : ar.navbar.home}
                 </Button>
                 <Button
                   color="inherit"
@@ -190,7 +188,7 @@ export default function NavBar() {
                   }}
                   onClick={() => handleButtonClick("Courses", "/courses")}
                 >
-                  Courses
+                  {lang == "en" ? en.navbar.courses : ar.navbar.courses}
                 </Button>
                 {/* <Button
                                     color="inherit"
@@ -243,13 +241,12 @@ export default function NavBar() {
                 },
               }}
             >
-          <Box
-            component="img"
-            src= { theme === "dark"?languageIcondark:languageIconlight}
-            alt="appIcon"
-            sx={{ width: "2rem", cursor: "pointer" }}
-          
-          />
+              <Box
+                component="img"
+                src={theme === "dark" ? languageIcondark : languageIconlight}
+                alt="appIcon"
+                sx={{ width: "2rem", cursor: "pointer" }}
+              />
             </IconButton>
           </Box>
 
@@ -272,7 +269,7 @@ export default function NavBar() {
                   },
                 }}
               >
-                Sign Up
+                {lang == "en" ? en.navbar.signUp : ar.navbar.signUp}
               </Button>
               <Button
                 onClick={() => navigate("/signIn")}
@@ -284,7 +281,7 @@ export default function NavBar() {
                   backgroundColor: "#E8A710",
                 }}
               >
-                Login
+                {lang == "en" ? en.navbar.login : ar.navbar.login}
               </Button>
             </>
           )}

@@ -25,9 +25,12 @@ import {
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { auth } from "../../firebase.js";
+import en from "../../localization/en.js";
+import ar from "../../localization/ar.js";
 
 export default function SignInForm() {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,12 +55,16 @@ export default function SignInForm() {
         email,
         password
       );
-      setSnackbarMessage("Login successful!");
+      setSnackbarMessage(
+        lang == "en" ? en.signIn.loginSuccess : ar.signIn.loginSuccess
+      );
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
       setTimeout(() => navigate("/"), 1500);
     } catch (error) {
-      setSnackbarMessage("Invalid email or password.");
+      setSnackbarMessage(
+        lang == "en" ? en.signIn.loginError : en.signIn.loginError
+      );
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
@@ -82,19 +89,19 @@ export default function SignInForm() {
       }}
     >
       <Typography variant="h4" className="signInFormTitle" gutterBottom>
-        Login
+        {lang == "en" ? en.signIn.login : ar.signIn.login}
       </Typography>
       <Typography variant="body1" className="signInFormSubTitle" gutterBottom>
-        Welcome back! Please log in to access your account.
+        {lang == "en" ? en.signIn.welcomeBack : ar.signIn.welcomeBack}
       </Typography>
 
       {/* Email Field */}
       <Typography variant="body1" className="fieldText" gutterBottom>
-        Email
+        {lang == "en" ? en.signIn.email : ar.signIn.email}
       </Typography>
       <TextField
         fullWidth
-        label="Enter Your Email"
+        label={lang == "en" ? en.signIn.enterEmail : ar.signIn.enterEmail}
         variant="outlined"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -108,10 +115,12 @@ export default function SignInForm() {
 
       {/* Password Field */}
       <Typography variant="body1" className="fieldText" gutterBottom>
-        Password
+        {lang == "en" ? en.signIn.password : ar.signIn.password}
       </Typography>
       <FormControl fullWidth variant="outlined" sx={{ mb: 3 }}>
-        <InputLabel htmlFor="password">Enter your Password</InputLabel>
+        <InputLabel htmlFor="password">
+          {lang == "en" ? en.signIn.enterPassword : ar.signIn.enterPassword}
+        </InputLabel>
         <OutlinedInput
           id="password"
           type={showPassword ? "text" : "password"}
@@ -128,7 +137,9 @@ export default function SignInForm() {
               </IconButton>
             </InputAdornment>
           }
-          label="Enter your Password"
+          label={
+            lang == "en" ? en.signIn.enterPassword : ar.signIn.enterPassword
+          }
           error={!!passwordError}
           sx={{
             borderRadius: "8px",
@@ -155,7 +166,7 @@ export default function SignInForm() {
             }}
           />
         }
-        label="Remember me"
+        label={lang == "en" ? en.signIn.rememberMe : ar.signIn.rememberMe}
         sx={{ mb: 3, alignSelf: "flex-start", color: "#656567" }}
       />
 
@@ -166,12 +177,12 @@ export default function SignInForm() {
         onClick={handleLogin}
         sx={{ mb: 2 }}
       >
-        Login
+        {lang == "en" ? en.signIn.login : ar.signIn.login}
       </Button>
 
       {/* "Don’t have an account? Sign Up" Section */}
       <Typography align="center" variant="body2" sx={{ mt: 2 }}>
-        Don’t have an account?{" "}
+        {lang == "en" ? en.signIn.dontHaveAccount : ar.signIn.dontHaveAccount}{" "}
         <Typography
           component="span"
           onClick={handleSignUpClick}
@@ -181,7 +192,8 @@ export default function SignInForm() {
             textDecoration: "underline",
           }}
         >
-          Sign Up <ArrowOutwardIcon fontSize="small" />
+          {lang == "en" ? en.signIn.signUp : ar.signIn.signUp}{" "}
+          <ArrowOutwardIcon fontSize="small" />
         </Typography>
       </Typography>
       <Snackbar

@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 const WatchLater = () => {
   const dispatch = useDispatch();
+  const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
   const auth = getAuth();
   const user = auth.currentUser;
@@ -41,7 +42,6 @@ const WatchLater = () => {
       dispatch(fetchAdminWatchLaterCourses("XiXJ0oesnkwweeAUscnq"));
     }
   }, [dispatch, user]);
-  // Remove course from Firestore
   const handleRemove = async (courseId) => {
     if (user) {
       await dispatch(removeWatchLaterCourse(user.uid, courseId));
@@ -61,7 +61,7 @@ const WatchLater = () => {
         mb={2}
       >
         <Typography variant="h6" fontWeight="bold">
-          Watch Later
+          {lang == "en" ? "Watch Later" : "شاهد لاحقا"}
         </Typography>
         <Select
           defaultValue="week"
@@ -76,7 +76,7 @@ const WatchLater = () => {
         >
           <MenuItem value="week" sx={{ pr: 0 }}>
             <Box display="flex" alignItems="center">
-              Week{" "}
+              {lang == "en" ? "Week" : "اسبوع"}{" "}
               <ExpandMoreIcon
                 sx={{
                   color: "white",
@@ -91,7 +91,7 @@ const WatchLater = () => {
           </MenuItem>
           <MenuItem value="month" sx={{ pr: 0 }}>
             <Box display="flex" alignItems="center">
-              Month{" "}
+              {lang == "en" ? "Month" : "شهر"}{" "}
               <ExpandMoreIcon
                 sx={{ color: "white", ml: 1 }}
                 IconComponent={() => null}
@@ -102,7 +102,7 @@ const WatchLater = () => {
       </Box>
 
       {loading ? (
-        <Typography>Loading...</Typography>
+        <Typography>{lang == "en" ? "Loading..." : "...تحميل"}</Typography>
       ) : watchLaterCourses.length > 0 ? (
         watchLaterCourses.map((course, index) => (
           <Card
@@ -119,22 +119,25 @@ const WatchLater = () => {
             <CardMedia
               component="img"
               image={course.course_images[0]}
-              alt={course.course_name}
+              alt={lang == "en" ? course.course_name : course.course_nameAR}
               sx={{ width: 60, height: 60, ml: 2, mb: 2, borderRadius: 1 }}
             />
             <CardContent sx={{ flexGrow: 1, pt: 3 }}>
               <Typography variant="body1" fontWeight="bold"></Typography>
               <Typography variant="body1" fontWeight="bold">
-                {course.course_name}
+                {lang == "en" ? course.course_name : course.course_nameAR}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {new Date(course.addingTime).toLocaleString("en-US", {
-                  month: "long", // "December"
-                  day: "2-digit", // "14"
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: true, // 12-hour format with AM/PM
-                })}
+                {new Date(course.addingTime).toLocaleString(
+                  lang == "en" ? "en-US" : "ar-EG",
+                  {
+                    month: "long", // "December"
+                    day: "2-digit", // "14"
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true, // 12-hour format with AM/PM
+                  }
+                )}
               </Typography>
               <Typography
                 variant="body2"
@@ -144,14 +147,18 @@ const WatchLater = () => {
                 onClick={() => handleCourseClick(course.id)}
                 sx={{ cursor: "pointer", mt: 1 }}
               >
-                Go to the course{" "}
+                {lang == "en" ? "Go to the course" : "اذهب إلى الدورة"}{" "}
                 <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5 }} />
               </Typography>
             </CardContent>
           </Card>
         ))
       ) : (
-        <Typography>No courses in Watch Later.</Typography>
+        <Typography>
+          {lang == "en"
+            ? "No courses in Watch Later."
+            : "لا توجد دورات في شاهد لاحقًا."}
+        </Typography>
       )}
     </Box>
   );

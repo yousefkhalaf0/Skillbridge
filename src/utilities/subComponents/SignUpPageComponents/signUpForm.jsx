@@ -21,9 +21,12 @@ import Snackbar from "@mui/material/Snackbar";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./componentsStyle/signUpForm.css";
+import en from "../../localization/en.js";
+import ar from "../../localization/ar.js";
 
 export default function SignUpForm() {
   const theme = useSelector((state) => state.themeReducer);
+  const lang = useSelector((state) => state.languageReducer);
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,16 +39,14 @@ export default function SignUpForm() {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
-  // Validate form inputs
   const validateForm = () => {
     let isValid = true;
 
     if (!validateFullName(fullName)) {
       setFullNameError(
-        "Invalid full name. Use 3-15 characters (a-z, 0-9, _, -)."
+        lang == "en" ? en.signUp.invalidFullName : ar.signUp.invalidFullName
       );
       isValid = false;
     } else {
@@ -53,7 +54,9 @@ export default function SignUpForm() {
     }
 
     if (!validateEmail(email)) {
-      setEmailError("Invalid email address.");
+      setEmailError(
+        lang == "en" ? en.signUp.invalidEmail : ar.signUp.invalidEmail
+      );
       isValid = false;
     } else {
       setEmailError("");
@@ -61,7 +64,7 @@ export default function SignUpForm() {
 
     if (!validatePassword(password)) {
       setPasswordError(
-        "Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one number, and one special character."
+        lang == "en" ? en.signUp.invalidPassword : ar.signUp.invalidPassword
       );
       isValid = false;
     } else {
@@ -129,19 +132,19 @@ export default function SignUpForm() {
       }}
     >
       <Typography variant="h4" className="signUpFormTitle" gutterBottom>
-        Sign Up
+        {lang == "en" ? en.signUp.signUpTitle : ar.signUp.signUpTitle}
       </Typography>
       <Typography variant="body1" className="signUpFormSubTitle" gutterBottom>
-        Create an account to unlock exclusive features.
+        {lang == "en" ? en.signUp.signUpSubtitle : ar.signUp.signUpSubtitle}
       </Typography>
 
       {/* Full Name Field */}
       <Typography variant="body1" className="fieldText" gutterBottom>
-        Full Name
+        {lang == "en" ? en.signUp.fullName : ar.signUp.fullName}
       </Typography>
       <TextField
         fullWidth
-        label="Enter your Name"
+        label={lang == "en" ? en.signUp.enterFullName : ar.signUp.enterFullName}
         variant="outlined"
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
@@ -155,11 +158,11 @@ export default function SignUpForm() {
 
       {/* Email Field */}
       <Typography variant="body1" className="fieldText" gutterBottom>
-        Email
+        {lang == "en" ? en.signUp.email : ar.signUp.email}
       </Typography>
       <TextField
         fullWidth
-        label="Enter your Email"
+        label={lang == "en" ? en.signUp.enterEmail : ar.signUp.enterEmail}
         variant="outlined"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -173,10 +176,13 @@ export default function SignUpForm() {
 
       {/* Password Field */}
       <Typography variant="body1" className="fieldText" gutterBottom>
-        Password
+        {lang == "en" ? en.signUp.password : ar.signUp.password}
       </Typography>
       <FormControl fullWidth variant="outlined" sx={{ mb: 3 }}>
-        <InputLabel htmlFor="password">Enter your Password</InputLabel>
+        <InputLabel htmlFor="password">
+          {" "}
+          {lang == "en" ? en.signUp.enterPassword : ar.signUp.enterPassword}
+        </InputLabel>
         <OutlinedInput
           id="password"
           type={showPassword ? "text" : "password"}
@@ -193,7 +199,9 @@ export default function SignUpForm() {
               </IconButton>
             </InputAdornment>
           }
-          label="Enter your Password"
+          label={
+            lang == "en" ? en.signUp.enterPassword : ar.signUp.enterPassword
+          }
           error={!!passwordError}
           sx={{
             borderRadius: "8px",
@@ -220,7 +228,11 @@ export default function SignUpForm() {
             }}
           />
         }
-        label="I agree with Terms of Use and Privacy Policy"
+        label={
+          lang == "en"
+            ? en.signUp.termsAndConditions
+            : ar.signUp.termsAndConditions
+        }
         sx={{ mb: 3, alignSelf: "flex-start", color: "#656567" }}
       />
 
@@ -231,7 +243,7 @@ export default function SignUpForm() {
         onClick={handleSignUp}
         sx={{ textTransform: "none" }}
       >
-        Sign Up
+        {lang == "en" ? en.signUp.signUpButton : ar.signUp.signUpButton}
       </Button>
 
       {/* Separator with "OR" */}
@@ -245,7 +257,7 @@ export default function SignUpForm() {
       >
         <Box sx={{ flexGrow: 1, height: "1px", backgroundColor: "gray" }} />
         <Typography variant="body2" sx={{ mx: 2, color: "#656567" }}>
-          OR
+          {lang == "en" ? en.signUp.or : ar.signUp.or}
         </Typography>
         <Box sx={{ flexGrow: 1, height: "1px", backgroundColor: "gray" }} />
       </Box>
@@ -257,12 +269,14 @@ export default function SignUpForm() {
         onClick={handleAdminSignUp}
         sx={{ mb: 2, textTransform: "none" }}
       >
-        Sign Up as an Admin
+        {lang == "en" ? en.signUp.signUpAsAdmin : ar.signUp.signUpAsAdmin}
       </Button>
 
       {/* "Already have an account? Login" Section */}
       <Typography align="center" variant="body2" sx={{ mt: 2 }}>
-        Already have an account?{" "}
+        {lang == "en"
+          ? en.signUp.alreadyHaveAccount
+          : ar.signUp.alreadyHaveAccount}{" "}
         <Typography
           component="span"
           onClick={handleSignInClick}
@@ -272,7 +286,8 @@ export default function SignUpForm() {
             textDecoration: "underline",
           }}
         >
-          Login <ArrowOutwardIcon fontSize="small" />
+          {lang == "en" ? en.signUp.login : ar.signUp.login}{" "}
+          <ArrowOutwardIcon fontSize="small" />
         </Typography>
       </Typography>
 
@@ -283,7 +298,7 @@ export default function SignUpForm() {
         onClose={() => setSuccess(false)}
       >
         <Alert severity="success">
-          Registration successful! Redirecting...
+          {lang == "en" ? en.signUp.successMessage : ar.signUp.successMessage}
         </Alert>
       </Snackbar>
 
