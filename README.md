@@ -132,4 +132,3 @@ This project was developed as part of the React.js course at **ITI (Information 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-```
