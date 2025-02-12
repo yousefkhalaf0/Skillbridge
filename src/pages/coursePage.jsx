@@ -18,11 +18,11 @@ import "./pagesStyle/coursePage.css";
 
 export default function CoursePage() {
   const showScroll = useSelector((state) => state.scrollReducer.showScroll);
+  const lang = useSelector((state) => state.languageReducer);
   const { courses, loading, error } = useSelector(
     (state) => state.courseReducer
   );
   const dispatch = useDispatch();
-  const lang = useSelector((state) => state.languageReducer);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("");
 
@@ -50,8 +50,11 @@ export default function CoursePage() {
 
   const filteredCourses = courses.filter((course) => {
     const matchesSearch =
-      course.course_name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ??
-      false;
+      lang == "en"
+        ? course.course_name?.toLowerCase()?.includes(searchTerm.toLowerCase())
+        : course.course_nameAR
+            ?.toLowerCase()
+            ?.includes(searchTerm.toLowerCase()) ?? false;
 
     const matchesFilter = filter
       ? course.level?.toLowerCase() === filter.toLowerCase()
