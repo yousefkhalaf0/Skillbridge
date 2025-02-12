@@ -35,7 +35,6 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const auth = getAuth(); // Firebase Authentication
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState(null);
-
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -101,12 +100,13 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
           >
             {[
               {
-                textAR: "الدورات",
+                textAR: "الدروس",
                 text: "Courses",
                 icon: <MenuBook />,
                 section: "Courses",
               },
-              {
+
+              isAdmin && {
                 textAR: "الطلاب",
                 text: "Students",
                 icon: <People />,

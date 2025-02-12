@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -10,9 +10,11 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  fetchUserCourses,
+  checkIfAdmin,
   fetchAdminWatchLaterCourses,
   removeWatchLaterCourse,
-  fetchUserCourses,
+  checkUserAuthorization,
 } from "../../../utilities/firebase";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -23,28 +25,44 @@ import { useNavigate } from "react-router-dom";
 const WatchLater = () => {
   const dispatch = useDispatch();
   const lang = useSelector((state) => state.languageReducer);
-  const navigate = useNavigate();
   const auth = getAuth();
-  const user = auth.currentUser;
+  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userId, setUserId] = useState(null);
   const watchLaterCourses = useSelector(
     (state) => state.adminWatchLaterReducer.watchLaterCourses
   );
   const loading = useSelector((state) => state.adminWatchLaterReducer.loading);
-  console.log(watchLaterCourses);
+
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      dispatch(fetchUserCourses("XiXJ0oesnkwweeAUscnq", true));
-    });
-    return () => unsubscribe();
-  }, [dispatch]);
+    const initializeDashboard = async () => {
+      try {
+        const uid = await checkUserAuthorization();
+        setUserId(uid);
+
+        const adminStatus = await checkIfAdmin(uid);
+        console.log("User ID:", uid, "Is Admin:", adminStatus);
+        setIsAdmin(adminStatus);
+
+        dispatch(fetchUserCourses(uid, adminStatus));
+      } catch (error) {
+        console.error("Authorization error:", error);
+        navigate("/signIn");
+      }
+    };
+
+    initializeDashboard();
+  }, [dispatch, navigate]);
+
   useEffect(() => {
-    if (!user) {
-      dispatch(fetchAdminWatchLaterCourses("XiXJ0oesnkwweeAUscnq"));
+    if (userId) {
+      dispatch(fetchAdminWatchLaterCourses(userId, isAdmin));
     }
-  }, [dispatch, user]);
+  }, [dispatch, userId, isAdmin]);
+
   const handleRemove = async (courseId) => {
-    if (user) {
-      await dispatch(removeWatchLaterCourse(user.uid, courseId));
+    if (userId) {
+      await dispatch(removeWatchLaterCourse(userId, courseId));
     }
   };
 

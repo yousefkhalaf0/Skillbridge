@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardMedia,
@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import courseImage from "../../../assets/dashboard_assets/images/course_image.png";
 import "./components_style/CourseInAdminPage.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -22,15 +22,32 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { useNavigate } from "react-router-dom";
+import { checkIfAdmin } from "../../firebase";
 
 const CourseCard = ({ course }) => {
+  const dispatch = useDispatch();
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
+  const auth = getAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
-
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setUserId(user.uid);
+        const adminStatus = await checkIfAdmin(user.uid);
+        setIsAdmin(adminStatus);
+      } else {
+        setUserId(null);
+        setIsAdmin(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch, auth]);
   return (
     <Box
       p={2}
@@ -100,20 +117,23 @@ const CourseCard = ({ course }) => {
             >
               {lang == "en" ? "Go to the course" : "انتقل إلى الدورة"}
             </Button>
-            <Button
-              variant="contained"
-              color="black"
-              fullWidth
-              sx={{
-                bgcolor: theme == "light" ? "#D0D0D0" : "#fff",
-                "&:hover": { bgcolor: "#B8B8B8" },
-                fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
+            {isAdmin && (
+              <Button
+                variant="contained"
+                color="black"
+                fullWidth
+                sx={{
+                  bgcolor: theme == "light" ? "#D0D0D0" : "#fff",
+                  "&:hover": { bgcolor: "#B8B8B8" },
+                  fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
 
-                textTransform: "none",
-              }}
-            >
-              {lang == "en" ? "edit the course" : "تعديل الدورة"}
-            </Button>
+                  textTransform: "none",
+                }}
+              >
+                {lang == "en" ? "edit the course" : "تعديل الدورة"}
+              </Button>
+            )}
+
             <Button
               variant="contained"
               color="error"

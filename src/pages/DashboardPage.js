@@ -23,7 +23,7 @@ import ar from "../utilities/localization/ar.js";
 
 const stats = [
   { count: 11, label: "Courses completed", labelAR: "الدورات المكتملة" },
-  { count: 5, label: "Courses in progress", labelAR: "الدورات قيد التنفيذ" },
+  { count: 4, label: "Courses in progress", labelAR: "الدورات قيد التنفيذ" },
 ];
 
 const Dashboard = ({ navHeight }) => {
@@ -36,7 +36,7 @@ const Dashboard = ({ navHeight }) => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const lang = useSelector((state) => state.languageReducer);
   useEffect(() => {
     const initializeDashboard = async () => {
       try {

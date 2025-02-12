@@ -127,6 +127,8 @@ export const registerUser = async (
       username: fullName,
       email: email,
       user_image_URL: "https://example.com/default-avatar.jpg",
+      courses_completed: 0,
+      courses_in_progress: 0,
     };
     if (isAdmin) {
       userData.students = [];
@@ -248,43 +250,65 @@ export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
   }
 };
 
-export const fetchAdminWatchLaterCourses = (adminId) => async (dispatch) => {
-  dispatch(setAdminWatchLaterLoading(true));
-  try {
-    const watchLaterRef = collection(db, "admins", adminId, "whatchLaterList");
-    const snapshot = await getDocs(watchLaterRef);
-    if (snapshot.empty) {
-      console.error("No watch later courses found for admin:", adminId);
-      dispatch(setAdminWatchLaterError("No courses found."));
-      return;
+export const fetchAdminWatchLaterCourses =
+  (adminId, IsAdmin) => async (dispatch) => {
+    dispatch(setAdminWatchLaterLoading(true));
+
+    try {
+      // Determine the correct collection path based on user role
+      const watchLaterRef = IsAdmin
+        ? collection(db, "admins", adminId, "watchLaterList")
+        : collection(db, "users", adminId, "watchLaterList");
+
+      console.log("Fetching watch later list from:", watchLaterRef.path);
+
+      const snapshot = await getDocs(watchLaterRef);
+      if (snapshot.empty) {
+        console.error("No watch later courses found for user:", adminId);
+        dispatch(setAdminWatchLaterError("No courses found."));
+        return;
+      }
+
+      // Log the fetched documents
+      console.log("Fetched watch later documents:", snapshot.docs);
+
+      // Extract course IDs and adding time
+      const watchLaterData = snapshot.docs.map((doc) => ({
+        courseId: doc.data().courseId,
+        addingTime: doc.data().addingTime?.toDate?.() || new Date(),
+      }));
+
+      console.log("Watch later data:", watchLaterData);
+
+      // Fetch actual course details
+      const courses = await Promise.all(
+        watchLaterData.map(async ({ courseId, addingTime }) => {
+          const courseRef = doc(db, "Courses", courseId);
+          const courseSnap = await getDoc(courseRef);
+          if (!courseSnap.exists()) {
+            console.error("Course not found:", courseId);
+            return null;
+          }
+          return {
+            id: courseId,
+            addingTime,
+            ...courseSnap.data(),
+          };
+        })
+      );
+
+      // Remove null values (courses that no longer exist)
+      const validCourses = courses.filter((course) => course !== null);
+      console.log("Valid courses:", validCourses);
+
+      dispatch(setAdminWatchLaterCourses(validCourses));
+    } catch (error) {
+      console.error("Error fetching watch later courses:", error);
+      dispatch(setAdminWatchLaterError(error.message));
+    } finally {
+      dispatch(setAdminWatchLaterLoading(false));
     }
-    // Extract course IDs and adding time
-    const watchLaterData = snapshot.docs.map((doc) => ({
-      courseId: doc.data().courseId,
-      addingTime: doc.data().addingTime?.toDate?.() || new Date(),
-    }));
-    // Fetch actual course details
-    const courses = await Promise.all(
-      watchLaterData.map(async ({ courseId, addingTime }) => {
-        const courseRef = doc(db, "Courses", courseId);
-        const courseSnap = await getDoc(courseRef);
-        if (!courseSnap.exists()) return null; // Explicitly return null if course doesn't exist
-        return {
-          id: courseId,
-          addingTime,
-          ...courseSnap.data(),
-        };
-      })
-    );
-    // Remove null values (courses that no longer exist)
-    const validCourses = courses.filter((course) => course !== null);
-    dispatch(setAdminWatchLaterCourses(validCourses));
-  } catch (error) {
-    dispatch(setAdminWatchLaterError(error.message));
-  } finally {
-    dispatch(setAdminWatchLaterLoading(false));
-  }
-};
+  };
 // Remove a course from the Watch Later list
 export const removeWatchLaterCourse =
   (adminId, courseId) => async (dispatch) => {
@@ -308,12 +332,3 @@ export const checkUserAuthorization = () => {
     });
   });
 };
-
-//to check the user :
-// checkUserAuthorization()
-//   .then((uid) => {
-//     console.log("User is authorized. UID:", uid);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });

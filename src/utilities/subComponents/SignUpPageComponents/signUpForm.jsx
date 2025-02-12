@@ -92,7 +92,7 @@ export default function SignUpForm() {
     const result = await registerUser(email, password, fullName, true);
     if (result.success) {
       setSuccess(true);
-      setTimeout(() => navigate("/adminDashboard"), 1500);
+      setTimeout(() => navigate("/"), 1500);
     } else {
       setError(result.error);
     }
