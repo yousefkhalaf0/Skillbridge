@@ -1,53 +1,83 @@
-import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, TextField, Button, Typography, Grid } from "@mui/material";
 import CourseModule from "./AddingModule";
 import ImageUploader from "./courseImageUpload";
+import { db, auth } from "../../firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import {
+  collection,
+  addDoc,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-const CourseForm = ({ navHeight, userId }) => {
+const CourseForm = ({ navHeight }) => {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseLevel, setCourseLevel] = useState("");
   const [courseSubject, setCourseSubject] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
+  const [courseDescriptionAR, setCourseDescriptionAR] = useState("");
+  const [courseImages, setCourseImages] = useState(["", "", ""]);
   const [modules, setModules] = useState([]);
+  const [userId, setUserId] = useState(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, set the userId
+        setUserId(user.uid);
+      } else {
+        // User is signed out, set userId to null
+        setUserId(null);
+      }
+    });
+    // Cleanup the listener on unmount
+    return () => unsubscribe();
+  }, []);
 
   const handleSubmit = async () => {
+    // Check if userId is available
+    if (!userId) {
+      console.error("Error: User is not authenticated.");
+      return;
+    }
+
     const courseData = {
       course_creator_id: userId,
-      course_name: courseTitle,
-      course_description: courseDescription,
-      level: courseLevel,
-      subject: courseSubject,
-      modules: modules,
+      course_name: courseTitle || "Untitled Course",
+      course_description: courseDescription || "",
+      course_descriptionAR: courseDescriptionAR || "",
+      level: courseLevel || "Not Specified",
+      subject: courseSubject || "Not Specified",
+      course_images: courseImages.filter((url) => url !== ""),
     };
 
-    // Example API call using fetch
     try {
-      const response = await fetch("/api/courses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(courseData),
-      });
+      // Add the course document to the 'courses' collection
+      const courseRef = await addDoc(collection(db, "Courses"), courseData);
 
-      if (!response.ok) {
-        throw new Error("Failed to upload course data");
+      // Add modules and lessons as sub-collections
+      for (const module of modules) {
+        const moduleData = {
+          title: module.title || "Untitled Module",
+        };
+        const moduleRef = await addDoc(
+          collection(courseRef, "modules"),
+          moduleData
+        );
+
+        for (const lesson of module.lessons) {
+          const lessonData = {
+            title: lesson.title || "Untitled Lesson",
+            duration: lesson.duration || "Not Specified",
+          };
+          await addDoc(collection(moduleRef, "lessons"), lessonData);
+        }
       }
 
-      const result = await response.json();
-      console.log("Course uploaded successfully:", result);
+      console.log("Course uploaded successfully with ID: ", courseRef.id);
     } catch (error) {
       console.error("Error uploading course data:", error);
     }
   };
+
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
       <Grid container mt={3}>
@@ -55,9 +85,13 @@ const CourseForm = ({ navHeight, userId }) => {
           <Box
             sx={{ maxWidth: "70%", width: "100%", margin: "auto", padding: 3 }}
           >
-            <Typography variant="p" gutterBottom>
-              Course Title
-            </Typography>
+            <Box sx={{ mb: 1 }}>
+              {" "}
+              <Typography variant="p" gutterBottom>
+                Course Title
+              </Typography>
+            </Box>
+
             <TextField
               fullWidth
               label="Course Title"
@@ -73,6 +107,9 @@ const CourseForm = ({ navHeight, userId }) => {
 
             <Grid container spacing={2}>
               <Grid item xs={6}>
+                <Typography variant="p" gutterBottom>
+                  Level
+                </Typography>
                 <TextField
                   fullWidth
                   label="Level"
@@ -87,6 +124,9 @@ const CourseForm = ({ navHeight, userId }) => {
                 />
               </Grid>
               <Grid item xs={6}>
+                <Typography variant="p" gutterBottom>
+                  Subject
+                </Typography>
                 <TextField
                   fullWidth
                   label="Subject"
@@ -102,6 +142,9 @@ const CourseForm = ({ navHeight, userId }) => {
               </Grid>
             </Grid>
 
+            <Typography variant="p" gutterBottom>
+              Description
+            </Typography>
             <TextField
               fullWidth
               label="Description"
@@ -118,7 +161,26 @@ const CourseForm = ({ navHeight, userId }) => {
               }}
             />
 
-            <CourseModule modules={modules || []} setModules={setModules} />
+            <Typography variant="p" gutterBottom>
+              Description (Arabic)
+            </Typography>
+            <TextField
+              fullWidth
+              label="Description (Arabic)"
+              variant="outlined"
+              multiline
+              rows={3}
+              value={courseDescriptionAR}
+              onChange={(e) => setCourseDescriptionAR(e.target.value)}
+              sx={{
+                mb: 2,
+                bgcolor: "#F0F0F0",
+                borderRadius: 3,
+                border: "none",
+              }}
+            />
+
+            <CourseModule modules={modules} setModules={setModules} />
 
             <Button
               variant="contained"
@@ -130,7 +192,10 @@ const CourseForm = ({ navHeight, userId }) => {
           </Box>
         </Grid>
         <Grid>
-          <ImageUploader />
+          <ImageUploader
+            courseImages={courseImages}
+            setCourseImages={setCourseImages}
+          />
         </Grid>
       </Grid>
     </Box>
