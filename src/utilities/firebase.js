@@ -84,7 +84,7 @@ export const loginUser = async (email, password) => {
   }
 };
 
-const createUserDocument = async (userId, userData, isAdmin = false) => {
+const createUserDocument = async (userId, userData, isAdmin) => {
   const userCollection = isAdmin ? "admins" : "users";
   const userRef = doc(db, userCollection, userId);
 
@@ -191,8 +191,8 @@ export const fetchData = () => async (dispatch) => {
 };
 
 export const checkIfAdmin = async (userId) => {
-  const userDoc = await getDoc(doc(db, "users", userId));
-  return userDoc.exists() && userDoc.data().role === "admin";
+  const userDoc = await getDoc(doc(db, "admins", userId));
+  return userDoc.exists();
 };
 
 export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
