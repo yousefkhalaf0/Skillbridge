@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Typography, Button, Alert } from "../../muiComponents.js";
+import { Box, Grid, Typography, Button } from "../../muiComponents.js";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./componentsStyle/largeCourseCard.css";
-import { db } from "../../firebase.js"; // Import Firebase Firestore
+import { db, auth } from "../../firebase.js"; // Import Firebase Firestore
 import {
   doc,
   getDoc,
+  setDoc,
+  collection,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import { Snackbar, Alert } from "@mui/material";
 
 export default function LargeCourseCard({ courses }) {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
-
+  const [watchLaterStatus, setWatchLaterStatus] = useState({});
   const [adminNames, setAdminNames] = useState({}); // Store all admin names
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   useEffect(() => {
     const fetchAdminNames = async () => {
       const names = {};
@@ -58,7 +66,58 @@ export default function LargeCourseCard({ courses }) {
       </Box>
     );
   }
+  const handleWatchLater = async (courseId) => {
+    const user = auth.currentUser;
+    if (!user) {
+      setSnackbar({
+        open: true,
+        message:
+          lang === "en"
+            ? "Please sign in to use Watch Later."
+            : "يرجى تسجيل الدخول لاستخدام المشاهدة لاحقًا.",
+        severity: "error",
+      });
+      return;
+    }
 
+    try {
+      const userRef = doc(db, "users", user.uid); // Reference to the user's document
+      const watchLaterRef = collection(userRef, "watchLaterList"); // Reference to the WatchLater sub-collection
+      const courseDocRef = doc(watchLaterRef, courseId); // Reference to the specific course document
+
+      // Add the course to the Watch Later sub-collection
+      await setDoc(courseDocRef, {
+        courseId: courseId,
+        timestamp: serverTimestamp(), // Add the current timestamp
+      });
+
+      // Update the button state
+      setWatchLaterStatus((prev) => ({ ...prev, [courseId]: true }));
+
+      // Show success message
+      setSnackbar({
+        open: true,
+        message:
+          lang === "en"
+            ? "Course added to Watch Later!"
+            : "تمت إضافة الدورة إلى المشاهدة لاحقًا!",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error adding to Watch Later:", error);
+      setSnackbar({
+        open: true,
+        message:
+          lang === "en"
+            ? "Error adding to Watch Later."
+            : "حدث خطأ أثناء إضافة الدورة إلى المشاهدة لاحقًا.",
+        severity: "error",
+      });
+    }
+  };
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
       {courses.map((course) => (
@@ -100,9 +159,16 @@ export default function LargeCourseCard({ courses }) {
                     backgroundColor: "#E8A710",
                     "&:hover": { backgroundColor: "#D18F0C" },
                   }}
-                  onClick={() => handleCourseClick(course.id)}
+                  onClick={() => handleWatchLater(course.id)}
+                  disabled={watchLaterStatus[course.id]} // Disable button if already added
                 >
-                  {lang === "en" ? "Watch Later" : "المشاهدة لاحقا"}
+                  {watchLaterStatus[course.id]
+                    ? lang === "en"
+                      ? "Added to Watch Later"
+                      : "تمت الإضافة إلى المشاهدة لاحقًا"
+                    : lang === "en"
+                    ? "Watch Later"
+                    : "المشاهدة لاحقا"}
                 </Button>
 
                 <Button
@@ -299,6 +365,19 @@ export default function LargeCourseCard({ courses }) {
           </Grid>
         </Box>
       ))}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          severity={snackbar.severity}
+          onClose={handleCloseSnackbar}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
