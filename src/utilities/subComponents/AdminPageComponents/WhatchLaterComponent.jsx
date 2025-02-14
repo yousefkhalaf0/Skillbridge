@@ -81,42 +81,6 @@ const WatchLater = () => {
         <Typography variant="h6" fontWeight="bold">
           {lang == "en" ? "Watch Later" : "شاهد لاحقا"}
         </Typography>
-        <Select
-          defaultValue="week"
-          size="small"
-          sx={{
-            bgcolor: "black",
-            color: "white",
-            borderRadius: 3,
-            textAlign: "center",
-            paddingRight: "0px",
-          }}
-        >
-          <MenuItem value="week" sx={{ pr: 0 }}>
-            <Box display="flex" alignItems="center">
-              {lang == "en" ? "Week" : "اسبوع"}{" "}
-              <ExpandMoreIcon
-                sx={{
-                  color: "white",
-                  ml: 1,
-                  paddingRight: "0px",
-                  width: "20px ",
-                  marginRight: "0px",
-                }}
-                IconComponent={() => null}
-              />
-            </Box>
-          </MenuItem>
-          <MenuItem value="month" sx={{ pr: 0 }}>
-            <Box display="flex" alignItems="center">
-              {lang == "en" ? "Month" : "شهر"}{" "}
-              <ExpandMoreIcon
-                sx={{ color: "white", ml: 1 }}
-                IconComponent={() => null}
-              />
-            </Box>
-          </MenuItem>
-        </Select>
       </Box>
 
       {loading ? (
