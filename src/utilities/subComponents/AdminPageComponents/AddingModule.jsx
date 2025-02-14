@@ -9,41 +9,70 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import { Add, AccessTime } from "@mui/icons-material";
+import { Add, Edit, AccessTime, Delete } from "@mui/icons-material";
 
-const CourseModule = ({ modules = [], setModules }) => {
-  const addLesson = (moduleIndex) => {
+const CourseModule = ({ modules = { title: "", lessons: [] }, setModules }) => {
+  const [editingLesson, setEditingLesson] = useState({
+    moduleIndex: null,
+    lessonIndex: null,
+  });
+  const [newLesson, setNewLesson] = useState({ title: "", duration: "" });
+
+  // Add a new lesson or update an existing one
+  const handleAddOrUpdateLesson = (moduleIndex) => {
+    if (!newLesson.title.trim() || !newLesson.duration.trim()) {
+      return; // Prevent adding/updating if fields are empty
+    }
+
     const updatedModules = [...modules];
-    updatedModules[moduleIndex].lessons.push({
-      title: "New Lesson",
-      duration: "00:00",
-    });
+    if (
+      editingLesson.moduleIndex !== null &&
+      editingLesson.lessonIndex !== null
+    ) {
+      // Update existing lesson
+      updatedModules[editingLesson.moduleIndex].lessons[
+        editingLesson.lessonIndex
+      ] = { ...newLesson };
+    } else {
+      // Add new lesson
+      updatedModules[moduleIndex].lessons.push({ ...newLesson });
+    }
+
+    setModules(updatedModules);
+    setNewLesson({ title: "", duration: "" });
+    setEditingLesson({ moduleIndex: null, lessonIndex: null });
+  };
+
+  // Delete a lesson
+  const deleteLesson = (moduleIndex, lessonIndex) => {
+    const updatedModules = [...modules];
+    updatedModules[moduleIndex].lessons.splice(lessonIndex, 1);
     setModules(updatedModules);
   };
 
+  // Add a new module
   const addModule = () => {
     setModules([...modules, { title: "", lessons: [] }]);
   };
 
+  // Delete a module
+  const deleteModule = (moduleIndex) => {
+    const updatedModules = modules.filter((_, index) => index !== moduleIndex);
+    setModules(updatedModules);
+  };
+
+  // Handle module title change
   const handleModuleTitleChange = (moduleIndex, value) => {
     const updatedModules = [...modules];
     updatedModules[moduleIndex].title = value;
     setModules(updatedModules);
   };
 
-  const handleLessonChange = (moduleIndex, lessonIndex, field, value) => {
-    const updatedModules = [...modules];
-
-    // Ensure lessons array exists
-    if (!updatedModules[moduleIndex].lessons[lessonIndex]) {
-      updatedModules[moduleIndex].lessons[lessonIndex] = {
-        title: "",
-        duration: "",
-      };
-    }
-
-    updatedModules[moduleIndex].lessons[lessonIndex][field] = value;
-    setModules(updatedModules);
+  // Handle clicking on a lesson to edit it
+  const handleLessonClick = (moduleIndex, lessonIndex) => {
+    const lesson = modules[moduleIndex].lessons[lessonIndex];
+    setNewLesson({ title: lesson.title, duration: lesson.duration });
+    setEditingLesson({ moduleIndex, lessonIndex });
   };
 
   return (
@@ -58,24 +87,35 @@ const CourseModule = ({ modules = [], setModules }) => {
     >
       {modules.map((module, moduleIndex) => (
         <Box key={moduleIndex} sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Module title
-          </Typography>
-          <TextField
-            placeholder="Enter module title"
-            variant="outlined"
-            sx={{
-              mb: 2,
-              bgcolor: "#F0F0F0",
-              borderRadius: 3,
-              border: "none",
-              width: "460px",
-            }}
-            value={module.title}
-            onChange={(e) =>
-              handleModuleTitleChange(moduleIndex, e.target.value)
-            }
-          />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <TextField
+              placeholder="Enter module title"
+              variant="outlined"
+              sx={{
+                mb: 2,
+                bgcolor: "#F0F0F0",
+                borderRadius: 3,
+                border: "none",
+                width: "460px",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 3,
+                  "& fieldset": { border: "none" },
+                  "&:hover fieldset": { border: "none" },
+                  "&.Mui-focused fieldset": { border: "2px solid #000" },
+                },
+              }}
+              value={module.title}
+              onChange={(e) =>
+                handleModuleTitleChange(moduleIndex, e.target.value)
+              }
+            />
+            <IconButton
+              onClick={() => deleteModule(moduleIndex)}
+              sx={{ color: "#E8A710" }}
+            >
+              <Delete />
+            </IconButton>
+          </Box>
 
           <Stack direction="row" spacing={2} alignItems="center">
             <TextField
@@ -86,44 +126,71 @@ const CourseModule = ({ modules = [], setModules }) => {
                 mb: 2,
                 bgcolor: "#F0F0F0",
                 borderRadius: 3,
-                border: "none",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 3,
+                  "& fieldset": { border: "none" },
+                  "&:hover fieldset": { border: "none" },
+                  "&.Mui-focused fieldset": { border: "2px solid #000" },
+                },
               }}
-              onChange={(e) => {
-                if (module.lessons.length > 0) {
-                  handleLessonChange(
-                    moduleIndex,
-                    module.lessons.length - 1,
-                    "title",
-                    e.target.value
-                  );
-                }
-              }}
+              value={newLesson.title}
+              onChange={(e) =>
+                setNewLesson({ ...newLesson, title: e.target.value })
+              }
             />
             <TextField
               placeholder="Duration"
               variant="outlined"
-              sx={{ width: "250px" }}
+              sx={{
+                mb: 2,
+                bgcolor: "#F0F0F0",
+                borderRadius: 3,
+                width: "250px",
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 3,
+                  "& fieldset": { border: "none" },
+                  "&:hover fieldset": { border: "none" },
+                  "&.Mui-focused fieldset": { border: "2px solid #000" },
+                },
+              }}
+              value={newLesson.duration}
               onChange={(e) =>
-                handleLessonChange(
-                  moduleIndex,
-                  module.lessons.length - 1,
-                  "duration",
-                  e.target.value
-                )
+                setNewLesson({ ...newLesson, duration: e.target.value })
               }
             />
             <Button
               variant="contained"
-              sx={{ width: "250px", height: "40px", bgcolor: "#000000" }}
-              onClick={() => addLesson(moduleIndex)}
-              startIcon={<Add />}
+              sx={{
+                width: "260px",
+                height: "40px",
+                bgcolor: "#000000",
+                borderRadius: 2,
+                fontSize: 10,
+                textTransform: "none",
+              }}
+              onClick={() => handleAddOrUpdateLesson(moduleIndex)}
+              endIcon={
+                editingLesson.moduleIndex === moduleIndex &&
+                editingLesson.lessonIndex !== null ? (
+                  <Edit sx={{ height: "15px" }} />
+                ) : (
+                  <Add />
+                )
+              }
             >
-              Add lesson
+              {editingLesson.moduleIndex === moduleIndex &&
+              editingLesson.lessonIndex !== null
+                ? "Update Lesson"
+                : "Add lesson"}
             </Button>
           </Stack>
 
           {module.lessons.map((lesson, lessonIndex) => (
-            <Card key={lessonIndex} sx={{ mt: 2, bgcolor: "#e0e0e0" }}>
+            <Card
+              key={lessonIndex}
+              sx={{ mt: 2, bgcolor: "#e0e0e0", cursor: "pointer" }}
+              onClick={() => handleLessonClick(moduleIndex, lessonIndex)}
+            >
               <CardContent
                 sx={{
                   display: "flex",
@@ -142,6 +209,15 @@ const CourseModule = ({ modules = [], setModules }) => {
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <AccessTime fontSize="small" />
                   <Typography>{lesson.duration}</Typography>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click event
+                      deleteLesson(moduleIndex, lessonIndex);
+                    }}
+                    sx={{ color: "#E8A710" }}
+                  >
+                    <Delete />
+                  </IconButton>
                 </Stack>
               </CardContent>
             </Card>
@@ -152,7 +228,14 @@ const CourseModule = ({ modules = [], setModules }) => {
       <Button
         variant="contained"
         onClick={addModule}
-        sx={{ mt: 2, width: "190px", height: "50px", bgcolor: "#000000" }}
+        sx={{
+          mt: 2,
+          width: "150px",
+          height: "45px",
+          bgcolor: "#000000",
+          borderRadius: 2,
+          textTransform: "none",
+        }}
       >
         Add module
       </Button>

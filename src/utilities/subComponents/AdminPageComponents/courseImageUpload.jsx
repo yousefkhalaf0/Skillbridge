@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
-const ImageUploader = ({ navHeight }) => {
-  const [imageUrls, setImageUrls] = useState(["", "", ""]); // Always 3 slots
+const ImageUploader = ({ courseImages, setCourseImages }) => {
+  const [imageUrls, setImageUrls] = useState(courseImages); // Initialize with courseImages
   const [currentUrl, setCurrentUrl] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -15,6 +15,7 @@ const ImageUploader = ({ navHeight }) => {
       if (selectedIndex !== null) {
         updatedUrls[selectedIndex] = currentUrl;
       }
+      setCourseImages(updatedUrls); // Update parent state
       return updatedUrls;
     });
 
@@ -103,22 +104,51 @@ const ImageUploader = ({ navHeight }) => {
         </Box>
 
         {/* URL Input and Add/Update Button */}
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
           <TextField
-            fullWidth
             variant="outlined"
             placeholder="Enter image URL"
             value={currentUrl}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 1,
+                "& fieldset": { border: "2px solid #F1F1F3", height: "50px" },
+                "&:hover fieldset": { border: "1px solid #000" },
+                "&.Mui-focused fieldset": { border: "1px solid #000" },
+              },
+            }}
             size="small"
             onChange={(e) => setCurrentUrl(e.target.value)}
           />
-          <Button
-            variant="contained"
-            onClick={handleAddOrUpdateImage}
-            disabled={!currentUrl || selectedIndex === null}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "end",
+              justifyContent: "end",
+              paddingTop: 1,
+            }}
           >
-            {imageUrls[selectedIndex] ? "Update" : "Add"}
-          </Button>
+            <Button
+              variant="contained"
+              onClick={handleAddOrUpdateImage}
+              disabled={!currentUrl}
+              sx={{
+                bgcolor: "#000",
+                height: "40px",
+                width: "40%",
+              }}
+            >
+              {selectedIndex !== null && imageUrls[selectedIndex]
+                ? "Update"
+                : "Add"}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>
