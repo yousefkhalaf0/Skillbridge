@@ -86,26 +86,36 @@ export default function LargeCourseCard({ courses }) {
                 sx={{
                   textAlign: { xs: "left", sm: "right" },
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   justifyContent: "center",
-                  justifyItems: "center",
+                  gap: 2, // ✅ Adds space between buttons
                 }}
               >
                 <Button
-                  className={`viewCourseBtn`}
+                  className="viewCourseBtn"
                   variant="contained"
-                  sx={{ textTransform: "none", maxWidth: 150 }}
+                  sx={{
+                    textTransform: "none",
+                    maxWidth: 160,
+                    backgroundColor: "#E8A710",
+                    "&:hover": { backgroundColor: "#D18F0C" },
+                  }}
                   onClick={() => handleCourseClick(course.id)}
                 >
-                  {lang == "en" ? "watch Later" : "عرض الدورة"}
+                  {lang === "en" ? "Watch Later" : "المشاهدة لاحقا"}
                 </Button>
+
                 <Button
-                  className={`viewCourseBtn`}
+                  className="viewCourseBtn"
                   variant="contained"
-                  sx={{ textTransform: "none", maxWidth: 150 }}
+                  sx={{
+                    textTransform: "none",
+                    maxWidth: 160,
+                    backgroundColor: "#1976D2",
+                  }}
                   onClick={() => handleCourseClick(course.id)}
                 >
-                  {lang == "en" ? "View Course" : "عرض الدورة"}
+                  {lang === "en" ? "View Course" : "عرض الدورة"}
                 </Button>
               </Box>
             </Grid>

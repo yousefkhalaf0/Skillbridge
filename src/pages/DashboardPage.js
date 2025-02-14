@@ -87,74 +87,74 @@ const Dashboard = ({ navHeight }) => {
                   ? en.adminDashboard.students
                   : ar.adminDashboard.students}
               </Typography>
-              {selectedSection === "Courses" ? (
-                <Button
-                  variant="body2"
-                  sx={{
-                    backgroundColor: "#E8A710",
-                    textTransform: "none",
-                    borderRadius: 2,
-                  }}
-                  onClick={() => navigate("/addCourse")}
-                >
-                  {lang == "en"
-                    ? en.adminDashboard.addCourse
-                    : ar.adminDashboard.addCourse}{" "}
-                  <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
-                </Button>
-              ) : (
-                selectedSection === "Students" &&
-                (courses.length > 0 ? (
-                  <Select
-                    value={selectedCourse}
-                    onChange={(e) => setSelectedCourse(e.target.value)}
-                    displayEmpty
-                    size="small"
-                    sx={{
-                      bgcolor: "black",
-                      color: "white",
-                      borderRadius: 3,
-                      textAlign: "center",
-                      paddingRight: "0px",
-                    }}
-                  >
-                    <MenuItem value="" disabled sx={{ pr: 0 }}>
-                      <Box display="flex" alignItems="center">
-                        {lang == "en"
-                          ? en.adminDashboard.chooseCourse
-                          : ar.adminDashboard.chooseCourse}{" "}
-                        <ExpandMoreIcon
-                          sx={{
-                            color: "white",
-                            ml: 1,
-                            paddingRight: "0px",
-                            width: "20px",
-                            marginRight: "0px",
-                          }}
-                        />
-                      </Box>
-                    </MenuItem>
-                    {courses.map((course) => (
-                      <MenuItem
-                        key={course.id}
-                        value={course.id}
-                        sx={{ pr: 0 }}
-                      >
+              {selectedSection === "Courses"
+                ? isAdmin && (
+                    <Button
+                      variant="body2"
+                      sx={{
+                        backgroundColor: "#E8A710",
+                        textTransform: "none",
+                        borderRadius: 2,
+                      }}
+                      onClick={() => navigate("/addCourse")}
+                    >
+                      {lang == "en"
+                        ? en.adminDashboard.addCourse
+                        : ar.adminDashboard.addCourse}{" "}
+                      <AddIcon sx={{ width: "20px", paddingLeft: 1 }} />
+                    </Button>
+                  )
+                : selectedSection === "Students" &&
+                  (courses.length > 0 ? (
+                    <Select
+                      value={selectedCourse}
+                      onChange={(e) => setSelectedCourse(e.target.value)}
+                      displayEmpty
+                      size="small"
+                      sx={{
+                        bgcolor: "black",
+                        color: "white",
+                        borderRadius: 3,
+                        textAlign: "center",
+                        paddingRight: "0px",
+                      }}
+                    >
+                      <MenuItem value="" disabled sx={{ pr: 0 }}>
                         <Box display="flex" alignItems="center">
-                          {course.course_name}{" "}
-                          <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
+                          {lang == "en"
+                            ? en.adminDashboard.chooseCourse
+                            : ar.adminDashboard.chooseCourse}{" "}
+                          <ExpandMoreIcon
+                            sx={{
+                              color: "white",
+                              ml: 1,
+                              paddingRight: "0px",
+                              width: "20px",
+                              marginRight: "0px",
+                            }}
+                          />
                         </Box>
                       </MenuItem>
-                    ))}
-                  </Select>
-                ) : (
-                  <Typography>
-                    {lang == "en"
-                      ? en.adminDashboard.noCoursesAvailable
-                      : ar.adminDashboard.noCoursesAvailable}
-                  </Typography>
-                ))
-              )}
+                      {courses.map((course) => (
+                        <MenuItem
+                          key={course.id}
+                          value={course.id}
+                          sx={{ pr: 0 }}
+                        >
+                          <Box display="flex" alignItems="center">
+                            {course.course_name}{" "}
+                            <ExpandMoreIcon sx={{ color: "white", ml: 1 }} />
+                          </Box>
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  ) : (
+                    <Typography>
+                      {lang == "en"
+                        ? en.adminDashboard.noCoursesAvailable
+                        : ar.adminDashboard.noCoursesAvailable}
+                    </Typography>
+                  ))}
             </Box>
             {selectedSection === "Courses" ? (
               <Box>

@@ -79,6 +79,8 @@ const en = {
   adminDashboard: {
     myCourses: "My Courses",
     students: "Students",
+    setting: "Setting",
+    Message: "Message",
     addCourse: "Add Course",
     chooseCourse: "Choose the course",
     noCoursesAvailable: "No courses available.",
