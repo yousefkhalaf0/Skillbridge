@@ -26,7 +26,7 @@ const CourseCard = ({ course }) => {
   };
 
   const handleEditClick = (courseId) => {
-    navigate(`/edit-course/${courseId}`);
+    navigate(`/editCourse/${courseId}`);
   };
 
   useEffect(() => {

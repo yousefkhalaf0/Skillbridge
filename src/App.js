@@ -13,6 +13,7 @@ import CourseOpenPage from "../src/pages/courseOpenPage.jsx";
 import SignInPage from "../src/pages/signInPage.jsx";
 import SignUpPage from "../src/pages/signUpPage.jsx";
 import CourseForm from "./utilities/subComponents/AdminPageComponents/AddingCourseComponent";
+import EditCourse from "./utilities/subComponents/AdminPageComponents/editCourseComponent.jsx"; // Adjust the path as needed
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -45,6 +46,7 @@ function App() {
           <Route path="/signIn" element={<SignInPage />} />
           <Route path="/signUp" element={<SignUpPage />} />
           <Route path="/addCourse" element={<CourseForm />} />
+          <Route path="/editCourse/:courseId" element={<EditCourse />} />
           <Route
             path="/dashboard"
             element={<Dashboard navHeight={navHeight} />}
