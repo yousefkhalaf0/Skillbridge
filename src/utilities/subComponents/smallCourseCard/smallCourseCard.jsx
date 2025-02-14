@@ -11,10 +11,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchData } from "../../firebase.js";
 import { useNavigate } from "react-router-dom";
 import "../smallCourseCard/smallCourseCard.css";
+import { db } from "../../firebase.js";
+import {
+  doc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 export default function SmallCourseCard() {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
+
   const { courses, loading, error } = useSelector(
     (state) => state.courseReducer
   );
@@ -22,6 +28,36 @@ export default function SmallCourseCard() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const itemsPerPage = 2;
+  const [adminNames, setAdminNames] = useState({}); // Store all admin names
+
+  useEffect(() => {
+    const fetchAdminNames = async () => {
+      const names = {};
+      for (const course of courses) {
+        if (course?.course_creator_id) {
+          names[course.course_creator_id] = await fetchAdminName(
+            course.course_creator_id
+          );
+        }
+      }
+      setAdminNames(names);
+    };
+    fetchAdminNames();
+  }, [courses]);
+
+  const fetchAdminName = async (adminId) => {
+    try {
+      const adminRef = doc(db, "admins", adminId);
+      const adminSnap = await getDoc(adminRef);
+      if (adminSnap.exists()) {
+        return adminSnap.data().username;
+      }
+      return lang === "en" ? "Unknown Admin" : "مسؤول غير معروف";
+    } catch (error) {
+      console.error("Error fetching admin data:", error);
+      return lang === "en" ? "Unknown Admin" : "مسؤول غير معروف";
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchData());
@@ -102,8 +138,8 @@ export default function SmallCourseCard() {
                 >
                   <Typography className={`${theme}Vendor`} variant="subtitle1">
                     {lang == "en"
-                      ? "By " + course.course_creator_id
-                      : course.course_creator_id + " بواسطة"}
+                      ? "By " + adminNames[course.course_creator_id]
+                      : adminNames[course.course_creator_id] + " بواسطة"}
                   </Typography>
                 </Grid>
               </Grid>

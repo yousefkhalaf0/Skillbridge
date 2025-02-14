@@ -7,14 +7,8 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import courseImage from "../../../assets/dashboard_assets/images/course_image.png";
-import "./components_style/CourseInAdminPage.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { useNavigate } from "react-router-dom";
 import { checkIfAdmin } from "../../firebase";
 
@@ -26,9 +20,15 @@ const CourseCard = ({ course }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
+
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
+
+  const handleEditClick = (courseId) => {
+    navigate(`/edit-course/${courseId}`);
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -42,6 +42,7 @@ const CourseCard = ({ course }) => {
     });
     return () => unsubscribe();
   }, [dispatch, auth]);
+
   return (
     <Box
       p={2}
@@ -103,7 +104,6 @@ const CourseCard = ({ course }) => {
                 bgcolor: theme == "light" ? "black" : "#1E1E1E",
                 "&:hover": { bgcolor: "#333" },
                 fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
-
                 fontWeight: "normal",
                 textTransform: "none",
               }}
@@ -120,14 +120,13 @@ const CourseCard = ({ course }) => {
                   bgcolor: theme == "light" ? "#D0D0D0" : "#fff",
                   "&:hover": { bgcolor: "#B8B8B8" },
                   fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
-
                   textTransform: "none",
                 }}
+                onClick={() => handleEditClick(course.id)}
               >
-                {lang == "en" ? "edit the course" : "تعديل الدورة"}
+                {lang == "en" ? "Edit the course" : "تعديل الدورة"}
               </Button>
             )}
-
             <Button
               variant="contained"
               color="error"
@@ -136,7 +135,6 @@ const CourseCard = ({ course }) => {
                 bgcolor: theme == "light" ? "#CA5541" : "#922F1E",
                 "&:hover": { bgcolor: "#B9361F" },
                 fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
-
                 textTransform: "none",
               }}
             >
