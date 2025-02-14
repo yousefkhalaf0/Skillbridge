@@ -6,11 +6,18 @@ import {
   Typography,
   Button,
   Box,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { useNavigate } from "react-router-dom";
 import { checkIfAdmin } from "../../firebase";
+import { db } from "../../firebase";
+import {
+  doc,
+  deleteDoc,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 const CourseCard = ({ course }) => {
   const dispatch = useDispatch();
@@ -20,6 +27,11 @@ const CourseCard = ({ course }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
@@ -27,6 +39,36 @@ const CourseCard = ({ course }) => {
 
   const handleEditClick = (courseId) => {
     navigate(`/editCourse/${courseId}`);
+  };
+
+  const handleRemoveCourse = async (courseId) => {
+    try {
+      const courseRef = doc(db, "Courses", courseId);
+      await deleteDoc(courseRef);
+
+      // Show success message
+      setSnackbar({
+        open: true,
+        message: "Course deleted successfully!",
+        severity: "success",
+      });
+
+      // Optionally, refresh the page or update the course list
+      setTimeout(() => {
+        window.location.reload(); // Refresh the page to reflect the deletion
+      }, 2000);
+    } catch (error) {
+      // Show error message
+      setSnackbar({
+        open: true,
+        message: "Error deleting course: " + error.message,
+        severity: "error",
+      });
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   useEffect(() => {
@@ -127,22 +169,40 @@ const CourseCard = ({ course }) => {
                 {lang == "en" ? "Edit the course" : "تعديل الدورة"}
               </Button>
             )}
-            <Button
-              variant="contained"
-              color="error"
-              fullWidth
-              sx={{
-                bgcolor: theme == "light" ? "#CA5541" : "#922F1E",
-                "&:hover": { bgcolor: "#B9361F" },
-                fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
-                textTransform: "none",
-              }}
-            >
-              {lang == "en" ? "Remove the course" : "إزالة الدورة"}
-            </Button>
+            {isAdmin && (
+              <Button
+                variant="contained"
+                color="error"
+                fullWidth
+                sx={{
+                  bgcolor: theme == "light" ? "#CA5541" : "#922F1E",
+                  "&:hover": { bgcolor: "#B9361F" },
+                  fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
+                  textTransform: "none",
+                }}
+                onClick={() => handleRemoveCourse(course.id)}
+              >
+                {lang == "en" ? "Remove the course" : "إزالة الدورة"}
+              </Button>
+            )}
           </Box>
         </CardContent>
       </Card>
+
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          severity={snackbar.severity}
+          onClose={handleCloseSnackbar}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
