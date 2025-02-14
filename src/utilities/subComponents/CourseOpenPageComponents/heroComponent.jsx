@@ -97,6 +97,7 @@ export default function HeroComponent({ course }) {
           className={`${theme}EnrollBtn`}
           variant="contained"
           sx={{ textTransform: "none" }}
+          onClick={handleEnroll}
         >
           {lang == "en"
             ? en.courseOpenPageHero.enrollButton
