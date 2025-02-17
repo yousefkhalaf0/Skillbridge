@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationBar from "./NotificationBarComponent";
-
 import {
   setActiveButton,
   setAnchorEl,
@@ -30,7 +29,6 @@ import languageIcondark from "../../../assets/icons/language-svgrepo-comdark.png
 import { auth } from "../../firebase.js";
 import en from "../../localization/en.js";
 import ar from "../../localization/ar.js";
-// import animatedIcon from '../../../assets/animations/wired-lineal-237-star-rating-hover-pinch.gif'
 
 export default function NavBar() {
   const theme = useSelector((state) => state.themeReducer);
@@ -58,6 +56,7 @@ export default function NavBar() {
 
     return () => unsubscribe();
   }, [setUser]);
+
   useEffect(() => {
     const path = location.pathname;
     switch (path) {
@@ -67,10 +66,17 @@ export default function NavBar() {
       case "/courses":
         dispatch(setActiveButton("Courses"));
         break;
+      case "/signIn":
+        dispatch(setActiveButton("SignIn")); // Set active button for Sign In
+        break;
+      case "/signUp":
+        dispatch(setActiveButton("SignUp")); // Set active button for Sign Up
+        break;
       default:
         dispatch(setActiveButton(""));
     }
   }, [location, dispatch]);
+
   const handleButtonClick = (buttonName, path) => {
     dispatch(setActiveButton(buttonName));
     dispatch(setAnchorEl(null));
@@ -147,16 +153,6 @@ export default function NavBar() {
                   >
                     {lang == "en" ? en.navbar.courses : ar.navbar.courses}
                   </MenuItem>
-                  {/* <MenuItem
-                    onClick={() => handleButtonClick("About Us", "/about")}
-                  >
-                    About Us
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => handleButtonClick("Pricing", "/pricing")}
-                  >
-                    Pricing
-                  </MenuItem> */}
                 </Menu>
               </>
             )}
@@ -190,28 +186,6 @@ export default function NavBar() {
                 >
                   {lang == "en" ? en.navbar.courses : ar.navbar.courses}
                 </Button>
-                {/* <Button
-                                    color="inherit"
-                                    variant={activeButton === 'About Us' ? 'contained' : 'text'}
-                                    className={`${theme}Button ${activeButton === 'About Us' ? 'active' : ''}`}
-                                    sx={{
-                                        textTransform: 'none',
-                                        mx: 1,
-                                    }}
-                                    onClick={() => handleButtonClick('About Us', '/about')}>
-                                    About Us
-                                </Button>
-                                <Button
-                                    color="inherit"
-                                    variant={activeButton === 'Pricing' ? 'contained' : 'text'}
-                                    className={`${theme}Button ${activeButton === 'Pricing' ? 'active' : ''}`}
-                                    sx={{
-                                        textTransform: 'none',
-                                        mx: 1,
-                                    }}
-                                    onClick={() => handleButtonClick('Pricing', '/pricing')}>
-                                    Pricing
-                                </Button> */}
               </>
             )}
             <IconButton
@@ -257,7 +231,7 @@ export default function NavBar() {
               <Button
                 onClick={() => navigate("/signUp")}
                 color="inherit"
-                variant="text"
+                variant={activeButton === "SignUp" ? "contained" : "text"} // Apply active styles
                 sx={{
                   textTransform: "none",
                   mx: 1,
@@ -267,18 +241,21 @@ export default function NavBar() {
                         ? "rgba(255, 255, 255, 0.1)"
                         : "rgba(0, 0, 0, 0.1)",
                   },
+                  backgroundColor:
+                    activeButton === "SignUp" ? "#E8A710" : "transparent",
                 }}
               >
                 {lang == "en" ? en.navbar.signUp : ar.navbar.signUp}
               </Button>
               <Button
                 onClick={() => navigate("/signIn")}
-                variant="contained"
+                variant={activeButton === "SignIn" ? "contained" : "text"} // Apply active styles
                 sx={{
                   color: "black",
                   textTransform: "none",
                   mx: 1,
-                  backgroundColor: "#E8A710",
+                  backgroundColor:
+                    activeButton === "SignIn" ? "#E8A710" : "transparent",
                 }}
               >
                 {lang == "en" ? en.navbar.login : ar.navbar.login}

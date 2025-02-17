@@ -53,12 +53,10 @@ const CourseCard = ({ course }) => {
         severity: "success",
       });
 
-      // Optionally, refresh the page or update the course list
       setTimeout(() => {
-        window.location.reload(); // Refresh the page to reflect the deletion
+        window.location.reload();
       }, 2000);
     } catch (error) {
-      // Show error message
       setSnackbar({
         open: true,
         message: "Error deleting course: " + error.message,

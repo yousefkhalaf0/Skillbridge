@@ -57,11 +57,15 @@ export default function SignInForm() {
       setSnackbarMessage(
         lang == "en" ? en.signIn.loginSuccess : ar.signIn.loginSuccess
       );
+
       const user = userCredential.user;
       const isAdmin = await checkIfAdmin(user.uid);
       const userData = await fetchUserData(user.uid, isAdmin);
-      console.log(userData);
-      dispatch(setUser(userData));
+
+      // Store user data in local storage
+      localStorage.setItem("userData", JSON.stringify(userData));
+
+      dispatch(setUser(userData)); // Update Redux store
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
       setTimeout(() => navigate("/"), 1500);

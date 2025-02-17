@@ -36,7 +36,7 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const auth = getAuth(); // Firebase Authentication
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState(null);
-  const userInfo = useSelector((state) => state.userReducer.userInfo);
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
   const handleSignOut = async () => {
     try {
       await signOut(auth);
