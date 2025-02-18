@@ -10,20 +10,23 @@ import {
   setDoc,
   collection,
   serverTimestamp,
+  getDocs,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { Snackbar, Alert } from "@mui/material";
-
+import { checkIfAdmin } from "../../firebase.js";
 export default function LargeCourseCard({ courses }) {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
   const [watchLaterStatus, setWatchLaterStatus] = useState({});
-  const [adminNames, setAdminNames] = useState({}); // Store all admin names
+  const [adminNames, setAdminNames] = useState({});
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
+
+  // Fetch admin names
   useEffect(() => {
     const fetchAdminNames = async () => {
       const names = {};
@@ -38,6 +41,36 @@ export default function LargeCourseCard({ courses }) {
     };
     fetchAdminNames();
   }, [courses]);
+
+  // Fetch user's Watch Later list
+  useEffect(() => {
+    const fetchWatchLaterList = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      try {
+        const isAdmin = await checkIfAdmin(user.uid);
+        const userRef = isAdmin
+          ? doc(db, "admins", user.uid)
+          : doc(db, "users", user.uid);
+        const watchLaterRef = collection(userRef, "watchLaterList");
+        const snapshot = await getDocs(watchLaterRef);
+
+        const watchLaterList = snapshot.docs.map((doc) => doc.id);
+        setWatchLaterStatus((prev) => ({
+          ...prev,
+          ...watchLaterList.reduce((acc, courseId) => {
+            acc[courseId] = true;
+            return acc;
+          }, {}),
+        }));
+      } catch (error) {
+        console.error("Error fetching Watch Later list:", error);
+      }
+    };
+
+    fetchWatchLaterList();
+  }, []);
 
   const fetchAdminName = async (adminId) => {
     try {
@@ -57,15 +90,6 @@ export default function LargeCourseCard({ courses }) {
     navigate(`/course/${courseId}`);
   };
 
-  if (!Array.isArray(courses) || courses.length === 0) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 20, mb: 40 }}>
-        <Alert severity="info">
-          {lang === "en" ? "No courses available." : "لا توجد دورات متاحة."}
-        </Alert>
-      </Box>
-    );
-  }
   const handleWatchLater = async (courseId) => {
     const user = auth.currentUser;
     if (!user) {
@@ -81,20 +105,20 @@ export default function LargeCourseCard({ courses }) {
     }
 
     try {
-      const userRef = doc(db, "users", user.uid); // Reference to the user's document
-      const watchLaterRef = collection(userRef, "watchLaterList"); // Reference to the WatchLater sub-collection
-      const courseDocRef = doc(watchLaterRef, courseId); // Reference to the specific course document
+      const isAdmin = await checkIfAdmin(user.uid);
+      const userRef = isAdmin
+        ? doc(db, "admins", user.uid)
+        : doc(db, "users", user.uid);
+      const watchLaterRef = collection(userRef, "watchLaterList");
+      const courseDocRef = doc(watchLaterRef, courseId);
 
-      // Add the course to the Watch Later sub-collection
       await setDoc(courseDocRef, {
         courseId: courseId,
-        timestamp: serverTimestamp(), // Add the current timestamp
+        timestamp: serverTimestamp(),
       });
 
-      // Update the button state
       setWatchLaterStatus((prev) => ({ ...prev, [courseId]: true }));
 
-      // Show success message
       setSnackbar({
         open: true,
         message:
@@ -115,9 +139,20 @@ export default function LargeCourseCard({ courses }) {
       });
     }
   };
+
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
+
+  if (!Array.isArray(courses) || courses.length === 0) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 20, mb: 40 }}>
+        <Alert severity="info">
+          {lang === "en" ? "No courses available." : "لا توجد دورات متاحة."}
+        </Alert>
+      </Box>
+    );
+  }
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
       {courses.map((course) => (

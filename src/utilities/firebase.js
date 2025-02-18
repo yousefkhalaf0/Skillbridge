@@ -251,12 +251,12 @@ export const fetchUserCourses = (userId, isAdmin) => async (dispatch) => {
 };
 
 export const fetchAdminWatchLaterCourses =
-  (adminId, IsAdmin) => async (dispatch) => {
+  (adminId, isAdmin) => async (dispatch) => {
     dispatch(setAdminWatchLaterLoading(true));
 
     try {
       // Determine the correct collection path based on user role
-      const watchLaterRef = IsAdmin
+      const watchLaterRef = isAdmin
         ? collection(db, "admins", adminId, "watchLaterList")
         : collection(db, "users", adminId, "watchLaterList");
 
@@ -275,7 +275,9 @@ export const fetchAdminWatchLaterCourses =
       // Extract course IDs and adding time
       const watchLaterData = snapshot.docs.map((doc) => ({
         courseId: doc.data().courseId,
-        addingTime: doc.data().addingTime?.toDate?.() || new Date(),
+        addingTime:
+          doc.data().addingTime?.toDate?.().toISOString() ||
+          new Date().toISOString(),
       }));
 
       console.log("Watch later data:", watchLaterData);
@@ -311,9 +313,13 @@ export const fetchAdminWatchLaterCourses =
   };
 // Remove a course from the Watch Later list
 export const removeWatchLaterCourse =
-  (adminId, courseId) => async (dispatch) => {
+  (adminId, courseId, isAdmin) => async (dispatch) => {
     try {
-      await deleteDoc(doc(db, "admins", adminId, "watchLater", courseId));
+      await deleteDoc(
+        isAdmin
+          ? doc(db, "admins", adminId, "watchLaterList", courseId)
+          : doc(db, "users", adminId, "watchLaterList", courseId)
+      );
       dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
     } catch (error) {
       console.error("Error removing course:", error);

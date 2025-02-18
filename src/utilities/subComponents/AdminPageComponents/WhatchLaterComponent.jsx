@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
-  Select,
-  MenuItem,
   Card,
   CardContent,
   CardMedia,
+  IconButton,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,8 +18,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useNavigate } from "react-router-dom";
+import ConfirmationDialog from "../ConfirmComponent"; // Import the ConfirmationDialog component
 
 const WatchLater = () => {
   const dispatch = useDispatch();
@@ -33,6 +32,8 @@ const WatchLater = () => {
     (state) => state.adminWatchLaterReducer.watchLaterCourses
   );
   const loading = useSelector((state) => state.adminWatchLaterReducer.loading);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState(null);
 
   useEffect(() => {
     const initializeDashboard = async () => {
@@ -62,12 +63,32 @@ const WatchLater = () => {
 
   const handleRemove = async (courseId) => {
     if (userId) {
-      await dispatch(removeWatchLaterCourse(userId, courseId));
+      console.log("Deleting course with ID:", courseId);
+      await dispatch(removeWatchLaterCourse(userId, courseId, isAdmin));
+      dispatch(fetchAdminWatchLaterCourses(userId, isAdmin));
     }
   };
 
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
+  };
+
+  const handleDeleteClick = (courseId) => {
+    setCourseToDelete(courseId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (courseToDelete) {
+      handleRemove(courseToDelete);
+    }
+    setDeleteDialogOpen(false);
+    setCourseToDelete(null);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setCourseToDelete(null);
   };
 
   return (
@@ -96,8 +117,22 @@ const WatchLater = () => {
               mb: 2,
               boxShadow: 1,
               borderRadius: 2,
+              position: "relative", // For positioning the delete icon
             }}
           >
+            {/* Delete Icon */}
+            <IconButton
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "error.main",
+              }}
+              onClick={() => handleDeleteClick(course.id)}
+            >
+              <CloseIcon />
+            </IconButton>
+
             <CardMedia
               component="img"
               image={course.course_images[0]}
@@ -142,6 +177,21 @@ const WatchLater = () => {
             : "لا توجد دورات في شاهد لاحقًا."}
         </Typography>
       )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        title={lang == "en" ? "Delete Course" : "حذف الدورة"}
+        message={
+          lang == "en"
+            ? "Are you sure you want to remove this course from Watch Later?"
+            : "هل أنت متأكد أنك تريد حذف هذه الدورة من قائمة المشاهدة لاحقًا؟"
+        }
+        confirmText={lang == "en" ? "Delete" : "حذف"}
+        cancelText={lang == "en" ? "Cancel" : "إلغاء"}
+      />
     </Box>
   );
 };
