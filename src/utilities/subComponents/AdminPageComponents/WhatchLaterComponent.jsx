@@ -15,6 +15,15 @@ import {
   removeWatchLaterCourse,
   checkUserAuthorization,
 } from "../../../utilities/firebase";
+import {
+  collection,
+  doc,
+  getDocs,
+  deleteDoc,
+  onSnapshot,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import { db } from "../../../utilities/firebase";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
@@ -25,59 +34,111 @@ const WatchLater = () => {
   const dispatch = useDispatch();
   const lang = useSelector((state) => state.languageReducer);
   const auth = getAuth();
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState(null);
-  const watchLaterCourses = useSelector(
-    (state) => state.adminWatchLaterReducer.watchLaterCourses
-  );
-  const loading = useSelector((state) => state.adminWatchLaterReducer.loading);
+  const [watchLaterCourses, setWatchLaterCourses] = useState([]);
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState(null);
-
   useEffect(() => {
     const initializeDashboard = async () => {
       try {
-        const uid = await checkUserAuthorization();
-        setUserId(uid);
+        const user = auth.currentUser;
+        if (!user) {
+          navigate("/signIn");
+          return;
+        }
 
-        const adminStatus = await checkIfAdmin(uid);
-        console.log("User ID:", uid, "Is Admin:", adminStatus);
-        setIsAdmin(adminStatus);
+        setUserId(user.uid);
 
-        dispatch(fetchUserCourses(uid, adminStatus));
+        // Check if the user is an admin
+        const adminRef = doc(db, "admins", user.uid);
+        const adminSnap = await getDoc(adminRef);
+        setIsAdmin(adminSnap.exists());
+
+        // Fetch the Watch Later list
+        fetchWatchLaterCourses(user.uid, adminSnap.exists());
       } catch (error) {
         console.error("Authorization error:", error);
-        navigate("/signIn");
       }
     };
 
     initializeDashboard();
-  }, [dispatch, navigate]);
+  }, [auth, navigate]);
 
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchAdminWatchLaterCourses(userId, isAdmin));
-    }
-  }, [dispatch, userId, isAdmin]);
+  // Fetch Watch Later courses from Firestore
+  const fetchWatchLaterCourses = async (userId, isAdmin) => {
+    try {
+      setLoading(true);
 
-  const handleRemove = async (courseId) => {
-    if (userId) {
-      console.log("Deleting course with ID:", courseId);
-      await dispatch(removeWatchLaterCourse(userId, courseId, isAdmin));
-      dispatch(fetchAdminWatchLaterCourses(userId, isAdmin));
+      const watchLaterRef = isAdmin
+        ? collection(db, "admins", userId, "watchLaterList")
+        : collection(db, "users", userId, "watchLaterList");
+
+      const snapshot = await getDocs(watchLaterRef);
+      const watchLaterData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      // Fetch course details for each item in the Watch Later list
+      const courses = await Promise.all(
+        watchLaterData.map(async (item) => {
+          const courseRef = doc(db, "Courses", item.courseId);
+          const courseSnap = await getDoc(courseRef);
+          if (courseSnap.exists()) {
+            return {
+              id: item.courseId,
+              addingTime: item.timestamp?.toDate?.() || new Date(),
+              ...courseSnap.data(),
+            };
+          }
+          return null;
+        })
+      );
+
+      const validCourses = courses.filter((course) => course !== null);
+      setWatchLaterCourses(validCourses);
+    } catch (error) {
+      console.error("Error fetching Watch Later courses:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Delete a course from the Watch Later list
+  const handleRemove = async (courseId) => {
+    if (userId) {
+      try {
+        const watchLaterRef = isAdmin
+          ? doc(db, "admins", userId, "watchLaterList", courseId)
+          : doc(db, "users", userId, "watchLaterList", courseId);
+
+        await deleteDoc(watchLaterRef);
+        console.log("Course deleted from Watch Later:", courseId);
+
+        // Refresh the Watch Later list
+        fetchWatchLaterCourses(userId, isAdmin);
+      } catch (error) {
+        console.error("Error removing course:", error);
+      }
+    }
+  };
+
+  // Handle course click
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
 
+  // Handle delete icon click
   const handleDeleteClick = (courseId) => {
     setCourseToDelete(courseId);
     setDeleteDialogOpen(true);
   };
 
+  // Confirm deletion
   const handleConfirmDelete = () => {
     if (courseToDelete) {
       handleRemove(courseToDelete);
@@ -86,6 +147,7 @@ const WatchLater = () => {
     setCourseToDelete(null);
   };
 
+  // Close the delete confirmation dialog
   const handleCloseDeleteDialog = () => {
     setDeleteDialogOpen(false);
     setCourseToDelete(null);
