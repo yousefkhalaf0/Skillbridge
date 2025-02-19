@@ -92,11 +92,8 @@ const createUserDocument = async (userId, userData, isAdmin) => {
   if (!userSnapshot.exists()) {
     await setDoc(userRef, userData);
 
-    await setDoc(doc(db, userCollection, userId, "watchLaterList", "init"), {});
-    await setDoc(
-      doc(db, userCollection, userId, "coursesProgress", "init"),
-      {}
-    );
+    await setDoc(doc(db, userCollection, userId, "watchLaterList"));
+    await setDoc(doc(db, userCollection, userId, "coursesProgress"), {});
   } else {
     console.log("User already exists:", userRef.path);
   }
