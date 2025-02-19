@@ -24,12 +24,12 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { db } from "../../../utilities/firebase";
-import CloseIcon from "@mui/icons-material/Close";
+import { Delete } from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../ConfirmComponent"; // Import the ConfirmationDialog component
-
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 const WatchLater = () => {
   const dispatch = useDispatch();
   const lang = useSelector((state) => state.languageReducer);
@@ -39,33 +39,27 @@ const WatchLater = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState(null);
   const [watchLaterCourses, setWatchLaterCourses] = useState([]);
-
+  const theme = useSelector((state) => state.themeReducer);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState(null);
-  useEffect(() => {
-    const initializeDashboard = async () => {
-      try {
-        const user = auth.currentUser;
-        if (!user) {
-          navigate("/signIn");
-          return;
-        }
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
         setUserId(user.uid);
 
         // Check if the user is an admin
         const adminRef = doc(db, "admins", user.uid);
-        const adminSnap = await getDoc(adminRef);
-        setIsAdmin(adminSnap.exists());
-
-        // Fetch the Watch Later list
-        fetchWatchLaterCourses(user.uid, adminSnap.exists());
-      } catch (error) {
-        console.error("Authorization error:", error);
+        getDoc(adminRef).then((adminSnap) => {
+          setIsAdmin(adminSnap.exists());
+          fetchWatchLaterCourses(user.uid, adminSnap.exists());
+        });
+      } else {
+        navigate("/signIn");
       }
-    };
+    });
 
-    initializeDashboard();
+    return () => unsubscribe(); // Cleanup the listener on component unmount
   }, [auth, navigate]);
 
   // Fetch Watch Later courses from Firestore
@@ -161,13 +155,19 @@ const WatchLater = () => {
         alignItems="center"
         mb={2}
       >
-        <Typography variant="h6" fontWeight="bold">
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ color: theme == "light" ? "black" : "white" }}
+        >
           {lang == "en" ? "Watch Later" : "شاهد لاحقا"}
         </Typography>
       </Box>
 
       {loading ? (
-        <Typography>{lang == "en" ? "Loading..." : "...تحميل"}</Typography>
+        <Typography sx={{ color: theme == "light" ? "black" : "white" }}>
+          {lang == "en" ? "Loading..." : "...تحميل"}
+        </Typography>
       ) : watchLaterCourses.length > 0 ? (
         watchLaterCourses.map((course, index) => (
           <Card
@@ -178,23 +178,25 @@ const WatchLater = () => {
               justifyContent: "start",
               mb: 2,
               boxShadow: 1,
+              bgcolor: theme == "light" ? "#FFFFFF" : "#D0D0D0",
               borderRadius: 2,
               position: "relative", // For positioning the delete icon
             }}
           >
             {/* Delete Icon */}
+
             <IconButton
+              onClick={() => handleDeleteClick(course.id)}
               sx={{
+                color: "#E8A710",
                 position: "absolute",
                 top: 8,
                 right: 8,
                 color: "error.main",
               }}
-              onClick={() => handleDeleteClick(course.id)}
             >
-              <CloseIcon />
+              <Delete />
             </IconButton>
-
             <CardMedia
               component="img"
               image={course.course_images[0]}
@@ -224,7 +226,11 @@ const WatchLater = () => {
                 display="flex"
                 alignItems="center"
                 onClick={() => handleCourseClick(course.id)}
-                sx={{ cursor: "pointer", mt: 1 }}
+                sx={{
+                  cursor: "pointer",
+                  mt: 1,
+                  color: theme == "light" ? "#E8A710" : "#0A0A0A",
+                }}
               >
                 {lang == "en" ? "Go to the course" : "اذهب إلى الدورة"}{" "}
                 <ArrowForwardIcon fontSize="small" sx={{ ml: 0.5 }} />
@@ -233,7 +239,7 @@ const WatchLater = () => {
           </Card>
         ))
       ) : (
-        <Typography>
+        <Typography sx={{ color: theme == "light" ? "black" : "gray" }}>
           {lang == "en"
             ? "No courses in Watch Later."
             : "لا توجد دورات في شاهد لاحقًا."}

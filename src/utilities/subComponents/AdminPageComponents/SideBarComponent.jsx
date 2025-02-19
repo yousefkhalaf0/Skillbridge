@@ -17,8 +17,8 @@ import {
   Settings,
   ExitToApp,
 } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles";
 import navLogo from "../../../assets/dashboard_assets/icons/dot_sidebar_icon.png";
+import navlogoDark from "../../../assets/dashboard_assets/icons/dot_sidebar_icon_dark.png";
 import { useNavigate } from "react-router-dom";
 import {
   getAuth,
@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../redux/store";
 const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
   const navHeightWithmargin = navHeight + 16;
   const navigate = useNavigate(); // Initialize navigation
@@ -86,14 +86,22 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
             maxWidth: { xs: 200, md: 300 },
           }}
           alt="Descriptive Alt Text"
-          src={navLogo}
+          src={theme == "light" ? navLogo : navlogoDark}
         />
-        <Typography variant="h6" fontWeight="bold">
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          sx={{ color: theme == "light" ? "black" : "white" }}
+        >
           {userInfo?.username}
         </Typography>
       </Box>
       <Box>
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography
+          variant="subtitle1"
+          gutterBottom
+          sx={{ color: theme == "light" ? "black" : "white" }}
+        >
           {lang == "en" ? "Menu" : "القائمة"}
         </Typography>
         <Box>
@@ -126,14 +134,23 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
                         ? "#E8A710"
                         : "transparent",
                     boxShadow: selectedSection === item.section ? 2 : 0,
-                    color: selectedSection === item.section ? "white" : "gray",
+                    color:
+                      selectedSection === item.section
+                        ? theme == "light"
+                          ? "white"
+                          : "black"
+                        : "gray",
                     borderRadius: 2,
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       color:
-                        selectedSection === item.section ? "white" : "gray",
+                        selectedSection === item.section
+                          ? theme == "light"
+                            ? "white"
+                            : "black"
+                          : "gray",
                     }}
                   >
                     {item.icon}
@@ -150,7 +167,11 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
 
       <Box />
       <Box>
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography
+          variant="subtitle1"
+          gutterBottom
+          sx={{ color: theme == "light" ? "black" : "white" }}
+        >
           {lang == "en" ? "Account" : "الحساب"}
         </Typography>
         <List
@@ -197,14 +218,24 @@ const Sidebar = ({ navHeight, setSelectedSection, selectedSection }) => {
                     selectedSection === item.section
                       ? "#fcb900"
                       : "transparent",
-                  color: selectedSection === item.section ? "white" : "gray",
+                  color:
+                    selectedSection === item.section
+                      ? theme == "light"
+                        ? "white"
+                        : "black"
+                      : "gray",
                   boxShadow: selectedSection === item.section ? 2 : 0,
                   borderRadius: 3,
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    color: selectedSection === item.section ? "white" : "gray",
+                    color:
+                      selectedSection === item.section
+                        ? theme == "light"
+                          ? "white"
+                          : "black"
+                        : "gray",
                   }}
                 >
                   {item.icon}

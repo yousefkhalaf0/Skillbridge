@@ -43,7 +43,7 @@ const Students = ({ selectedCourse, adminId }) => {
   const lang = useSelector((state) => state.languageReducer);
   const [students, setStudents] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-
+  const theme = useSelector((state) => state.themeReducer);
   useEffect(() => {
     if (isFetching) return;
     setIsFetching(true);
@@ -132,7 +132,7 @@ const Students = ({ selectedCourse, adminId }) => {
     <Box sx={{ p: 3, minHeight: "100vh" }}>
       <Grid container spacing={3}>
         {students.length === 0 ? (
-          <Typography>
+          <Typography sx={{ color: theme == "light" ? "black" : "gray" }}>
             {lang == "en" ? "No students found." : "لم يتم العثور على أي طالب."}
           </Typography>
         ) : (

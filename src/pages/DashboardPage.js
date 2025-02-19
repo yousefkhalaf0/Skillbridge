@@ -38,6 +38,7 @@ const Dashboard = ({ navHeight }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const lang = useSelector((state) => state.languageReducer);
   const userInfo = JSON.parse(localStorage.getItem("userData"));
+  const theme = useSelector((state) => state.themeReducer);
   useEffect(() => {
     const initializeDashboard = async () => {
       try {
@@ -78,7 +79,13 @@ const Dashboard = ({ navHeight }) => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: "bold",
+                  color: theme == "light" ? "black" : "white",
+                }}
+              >
                 {selectedSection === "Courses"
                   ? lang == "en"
                     ? en.adminDashboard.myCourses
@@ -105,7 +112,7 @@ const Dashboard = ({ navHeight }) => {
                     </Button>
                   )
                 : selectedSection === "Students" &&
-                  (courses.length > 0 ? (
+                  courses.length > 0 && (
                     <Select
                       value={selectedCourse}
                       onChange={(e) => setSelectedCourse(e.target.value)}
@@ -148,13 +155,7 @@ const Dashboard = ({ navHeight }) => {
                         </MenuItem>
                       ))}
                     </Select>
-                  ) : (
-                    <Typography>
-                      {lang == "en"
-                        ? en.adminDashboard.noCoursesAvailable
-                        : ar.adminDashboard.noCoursesAvailable}
-                    </Typography>
-                  ))}
+                  )}
             </Box>
             {selectedSection === "Courses" ? (
               <Box>
@@ -163,7 +164,9 @@ const Dashboard = ({ navHeight }) => {
                     <CourseCard key={course.id} course={course} />
                   ))
                 ) : (
-                  <Typography>
+                  <Typography
+                    sx={{ color: theme == "light" ? "black" : "gray" }}
+                  >
                     {lang == "en"
                       ? en.adminDashboard.noCoursesAvailable
                       : ar.adminDashboard.noCoursesAvailable}
@@ -193,7 +196,7 @@ const Dashboard = ({ navHeight }) => {
                   key={index}
                   sx={{
                     display: "flex",
-                    bgcolor: "#e0e0e0",
+                    bgcolor: theme == "light" ? "#FFFFFF" : "#D0D0D0",
                     p: 3,
                     borderRadius: 2,
                     textAlign: "center",

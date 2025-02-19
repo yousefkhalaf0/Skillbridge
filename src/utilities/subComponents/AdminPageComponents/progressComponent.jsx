@@ -21,16 +21,25 @@ const courses = [
 
 const CoursesProgress = () => {
   const lang = useSelector((state) => state.languageReducer);
-
+  const theme = useSelector((state) => state.themeReducer);
   return (
     <Box sx={{ maxWidth: 500, p: 2, borderRadius: 2 }}>
-      <Typography variant="h6" gutterBottom>
+      <Typography
+        variant="h6"
+        gutterBottom
+        sx={{ color: theme == "light" ? "black" : "white" }}
+      >
         {lang == "en" ? "Completed Course" : "دورة مكتملة"}
       </Typography>
       {courses.map((course) => (
         <Box
           key={course.name}
-          sx={{ mb: 2, background: "white", p: 2, borderRadius: 2 }}
+          sx={{
+            mb: 2,
+            bgcolor: theme == "light" ? "#FFFFFF" : "#D0D0D0",
+            p: 2,
+            borderRadius: 2,
+          }}
         >
           <Typography
             variant="body1"
