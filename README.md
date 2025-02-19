@@ -118,7 +118,7 @@ skillbridge/
 ## Contributors
 
 - **[Yousef Khalaf](https://github.com/yousefkhalaf0)**
-- **[Malak Haitham](https://github.com/MalakHaitham206)** - Contributor
+- **[Malak Haitham](https://github.com/MalakHaitham206)**
 
 ---
 
