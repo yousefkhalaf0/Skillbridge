@@ -13,11 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { useNavigate } from "react-router-dom";
 import { checkIfAdmin } from "../../firebase";
-import { db } from "../../firebase";
+import { db, getDoc, updateDoc } from "../../firebase";
 import {
   doc,
   deleteDoc,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import ConfirmationDialog from "../ConfirmComponent";
 
 const CourseCard = ({ course }) => {
   const dispatch = useDispatch();
@@ -33,6 +34,10 @@ const CourseCard = ({ course }) => {
     severity: "success",
   });
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [actionType, setActionType] = useState(null); // 'delete', 'remove', or 'edit'
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
+
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
   };
@@ -43,19 +48,34 @@ const CourseCard = ({ course }) => {
 
   const handleRemoveCourse = async (courseId) => {
     try {
-      const courseRef = doc(db, "Courses", courseId);
-      await deleteDoc(courseRef);
+      if (isAdmin) {
+        const courseRef = doc(db, "Courses", courseId);
+        await deleteDoc(courseRef);
 
-      // Show success message
-      setSnackbar({
-        open: true,
-        message: "Course deleted successfully!",
-        severity: "success",
-      });
+        setSnackbar({
+          open: true,
+          message: "Course deleted successfully!",
+          severity: "success",
+        });
+      } else {
+        const userRef = doc(db, "users", userId);
+        const usrData = await getDoc(userRef);
+        var userCourses = usrData.data().courses;
+        const index = userCourses.indexOf(courseId);
+        userCourses.splice(index, 1);
+
+        await updateDoc(userRef, { courses: userCourses });
+
+        setSnackbar({
+          open: true,
+          message: "Course removed successfully!",
+          severity: "success",
+        });
+      }
 
       setTimeout(() => {
         window.location.reload();
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setSnackbar({
         open: true,
@@ -65,8 +85,25 @@ const CourseCard = ({ course }) => {
     }
   };
 
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
+  const handleOpenDeleteDialog = (courseId, action) => {
+    setSelectedCourseId(courseId);
+    setActionType(action);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setSelectedCourseId(null);
+    setActionType(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (actionType === "delete" || actionType === "remove") {
+      handleRemoveCourse(selectedCourseId);
+    } else if (actionType === "edit") {
+      handleEditClick(selectedCourseId);
+    }
+    handleCloseDeleteDialog();
   };
 
   useEffect(() => {
@@ -75,13 +112,14 @@ const CourseCard = ({ course }) => {
         setUserId(user.uid);
         const adminStatus = await checkIfAdmin(user.uid);
         setIsAdmin(adminStatus);
-      } else {
-        setUserId(null);
-        setIsAdmin(false);
       }
     });
     return () => unsubscribe();
   }, [dispatch, auth]);
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   return (
     <Box
@@ -162,12 +200,12 @@ const CourseCard = ({ course }) => {
                   fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
                   textTransform: "none",
                 }}
-                onClick={() => handleEditClick(course.id)}
+                onClick={() => handleOpenDeleteDialog(course.id, "edit")}
               >
                 {lang == "en" ? "Edit the course" : "تعديل الدورة"}
               </Button>
             )}
-            {isAdmin && (
+            {isAdmin ? (
               <Button
                 variant="contained"
                 color="error"
@@ -178,7 +216,22 @@ const CourseCard = ({ course }) => {
                   fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
                   textTransform: "none",
                 }}
-                onClick={() => handleRemoveCourse(course.id)}
+                onClick={() => handleOpenDeleteDialog(course.id, "delete")}
+              >
+                {lang == "en" ? "Delete the course" : "حذف الدورة"}
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="error"
+                fullWidth
+                sx={{
+                  bgcolor: theme == "light" ? "#CA5541" : "#922F1E",
+                  "&:hover": { bgcolor: "#B9361F" },
+                  fontSize: { lg: "0.75rem", xs: "0.65rem", sm: "0.65rem" },
+                  textTransform: "none",
+                }}
+                onClick={() => handleOpenDeleteDialog(course.id, "remove")}
               >
                 {lang == "en" ? "Remove the course" : "إزالة الدورة"}
               </Button>
@@ -201,6 +254,41 @@ const CourseCard = ({ course }) => {
           {snackbar.message}
         </Alert>
       </Snackbar>
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        title={
+          actionType === "delete"
+            ? lang == "en"
+              ? "Delete Course"
+              : "حذف الدورة"
+            : actionType === "remove"
+            ? lang == "en"
+              ? "Remove Course"
+              : "إزالة الدورة"
+            : lang == "en"
+            ? "Edit Course"
+            : "تعديل الدورة"
+        }
+        message={
+          actionType === "delete"
+            ? lang == "en"
+              ? "Are you sure you want to delete this course?"
+              : "هل أنت متأكد أنك تريد حذف هذه الدورة؟"
+            : actionType === "remove"
+            ? lang == "en"
+              ? "Are you sure you want to remove this course from your list?"
+              : "هل أنت متأكد أنك تريد إزالة هذه الدورة من قائمتك؟"
+            : lang == "en"
+            ? "Are you sure you want to edit this course?"
+            : "هل أنت متأكد أنك تريد تعديل هذه الدورة؟"
+        }
+        confirmText={lang == "en" ? "Confirm" : "تأكيد"}
+        cancelText={lang == "en" ? "Cancel" : "إلغاء"}
+      />
     </Box>
   );
 };

@@ -39,6 +39,11 @@ const Dashboard = ({ navHeight }) => {
   const lang = useSelector((state) => state.languageReducer);
   const userInfo = JSON.parse(localStorage.getItem("userData"));
   const theme = useSelector((state) => state.themeReducer);
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const initializeDashboard = async () => {
       try {
