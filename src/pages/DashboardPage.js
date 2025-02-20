@@ -229,7 +229,7 @@ const Dashboard = ({ navHeight }) => {
                 </Box>
               ))}
             </Box>
-            <WatchLater courses={courses} />
+            {!isAdmin && <WatchLater courses={courses} />}
             <CoursesProgress />
           </Grid>
         </Grid>

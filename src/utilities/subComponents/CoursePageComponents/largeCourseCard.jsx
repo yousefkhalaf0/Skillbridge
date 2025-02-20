@@ -70,7 +70,7 @@ export default function LargeCourseCard({ courses }) {
     };
 
     fetchWatchLaterList();
-  }, []);
+  }, [isUser]);
 
   const fetchAdminName = async (adminId) => {
     try {
@@ -184,12 +184,33 @@ export default function LargeCourseCard({ courses }) {
                   gap: 2,
                 }}
               >
+                {isUser && (
+                  <Button
+                    className="viewCourseBtn"
+                    sx={{
+                      textTransform: "none",
+                      maxWidth: 200,
+                      backgroundColor: "#E8A710",
+                      "&:hover": { backgroundColor: "#D18F0C" },
+                    }}
+                    onClick={() => handleWatchLater(course.id)}
+                    disabled={watchLaterStatus[course.id]}
+                  >
+                    {watchLaterStatus[course.id]
+                      ? lang === "en"
+                        ? "Added to Watch Later"
+                        : "تمت الإضافة إلى المشاهدة لاحقًا"
+                      : lang === "en"
+                      ? "Watch Later"
+                      : "المشاهدة لاحقا"}
+                  </Button>
+                )}
                 <Button
                   className="viewCourseBtn"
                   variant="contained"
                   sx={{
                     textTransform: "none",
-                    maxWidth: 160,
+                    maxWidth: 200,
                     backgroundColor: "#1976D2",
                   }}
                   onClick={() => handleCourseClick(course.id)}

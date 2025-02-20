@@ -18,6 +18,10 @@ const EditCourse = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const fetchCourse = async () => {
       const courseRef = doc(db, "Courses", courseId);

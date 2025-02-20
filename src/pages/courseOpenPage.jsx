@@ -30,10 +30,13 @@ export default function CourseOpenPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const courseRef = doc(db, "Courses", courseId);
 
-    // Listen for real-time updates to the course
     const unsubscribeCourse = onSnapshot(
       courseRef,
       (courseDoc) => {
@@ -53,17 +56,14 @@ export default function CourseOpenPage() {
       }
     );
 
-    // Clean up the listener on unmount
     return () => unsubscribeCourse();
   }, [courseId]);
 
-  // Fetch modules and lessons in real-time
   useEffect(() => {
     if (!courseId) return;
 
     const modulesRef = collection(db, "Courses", courseId, "modules");
 
-    // Listen for real-time updates to modules
     const unsubscribeModules = onSnapshot(
       modulesRef,
       (modulesSnapshot) => {
@@ -71,7 +71,6 @@ export default function CourseOpenPage() {
         modulesSnapshot.forEach((moduleDoc) => {
           const moduleData = { id: moduleDoc.id, ...moduleDoc.data() };
 
-          // Listen for real-time updates to lessons
           const lessonsRef = collection(
             db,
             "Courses",
@@ -89,14 +88,13 @@ export default function CourseOpenPage() {
                 ...lessonDoc.data(),
               }));
 
-              // Update the course with the latest modules and lessons
               setselectedCourse((prevCourse) => ({
                 ...prevCourse,
                 modules: prevCourse.modules
                   ? prevCourse.modules.map((m) =>
                       m.id === moduleData.id ? moduleData : m
                     )
-                  : [moduleData], // Initialize modules if undefined
+                  : [moduleData],
               }));
             }
           );
@@ -104,7 +102,6 @@ export default function CourseOpenPage() {
           modules.push(moduleData);
         });
 
-        // Update the course with the latest modules
         setselectedCourse((prevCourse) => ({
           ...prevCourse,
           modules,
@@ -116,7 +113,6 @@ export default function CourseOpenPage() {
       }
     );
 
-    // Clean up the listener on unmount
     return () => unsubscribeModules();
   }, [courseId]);
 
@@ -169,7 +165,6 @@ export default function CourseOpenPage() {
     );
   }
 
-  // Add default values for undefined properties
   const courseWithDefaults = {
     ...selectedCourse,
     modules: selectedCourse.modules || [],

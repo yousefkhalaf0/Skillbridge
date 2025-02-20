@@ -44,6 +44,7 @@ const Students = ({ selectedCourse, adminId }) => {
   const [students, setStudents] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const theme = useSelector((state) => state.themeReducer);
+
   useEffect(() => {
     if (isFetching) return;
     setIsFetching(true);
@@ -125,7 +126,7 @@ const Students = ({ selectedCourse, adminId }) => {
     };
 
     fetchStudents();
-  }, [selectedCourse, adminId]);
+  }, [selectedCourse, adminId, students]);
 
   return (
     <Box sx={{ p: 3, minHeight: "100vh" }}>

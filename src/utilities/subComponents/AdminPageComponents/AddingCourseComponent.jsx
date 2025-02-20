@@ -34,6 +34,10 @@ const CourseForm = ({ course, onSubmit }) => {
     severity: "success",
   });
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
