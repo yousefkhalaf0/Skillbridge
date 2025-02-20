@@ -19,9 +19,9 @@ import "./pagesStyle/coursePage.css";
 export default function CoursePage() {
   const showScroll = useSelector((state) => state.scrollReducer.showScroll);
   const lang = useSelector((state) => state.languageReducer);
-  const { courses, loading, error } = useSelector(
-    (state) => state.courseReducer
-  );
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("");
@@ -29,7 +29,22 @@ export default function CoursePage() {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  // Fetch courses in real-time
+  useEffect(() => {
+    const unsubscribe = fetchData(
+      (updatedCourses) => {
+        setCourses(updatedCourses);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching courses:", error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
 
+    return () => unsubscribe(); // Cleanup Firestore listener on unmount
+  }, []);
   useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);

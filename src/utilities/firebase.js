@@ -7,6 +7,7 @@ import {
   updateDoc,
   setDoc,
   deleteDoc,
+  onSnapshot,
   query,
   where,
   getDocs,
@@ -142,52 +143,57 @@ export const registerUser = async (
   }
 };
 
-export const fetchData = () => async (dispatch) => {
-  dispatch(setLoading(true));
-  try {
-    const coursesQuerySnapshot = await getDocs(collection(db, "Courses"));
-    console.log("Fetched courses:", coursesQuerySnapshot.docs.length);
+export const fetchData = (callback) => {
+  return onSnapshot(collection(db, "Courses"), (coursesSnapshot) => {
+    console.log("Courses updated:", coursesSnapshot.docs.length);
 
     const courses = [];
-    for (const courseDoc of coursesQuerySnapshot.docs) {
+    coursesSnapshot.forEach((courseDoc) => {
       const courseData = { id: courseDoc.id, ...courseDoc.data() };
       console.log("Course data:", courseData);
 
-      const modulesQuerySnapshot = await getDocs(
-        collection(db, "Courses", courseDoc.id, "modules")
+      // Listen for real-time updates in modules
+      const modulesUnsub = onSnapshot(
+        collection(db, "Courses", courseDoc.id, "modules"),
+        (modulesSnapshot) => {
+          const modules = [];
+          modulesSnapshot.forEach((moduleDoc) => {
+            const moduleData = { id: moduleDoc.id, ...moduleDoc.data() };
+            console.log("Module data:", moduleData);
+
+            // Listen for real-time updates in lessons
+            const lessonsUnsub = onSnapshot(
+              collection(
+                db,
+                "Courses",
+                courseDoc.id,
+                "modules",
+                moduleDoc.id,
+                "lessons"
+              ),
+              (lessonsSnapshot) => {
+                moduleData.lessons = lessonsSnapshot.docs.map((lessonDoc) => ({
+                  id: lessonDoc.id,
+                  ...lessonDoc.data(),
+                }));
+                console.log("Updated module with lessons:", moduleData);
+              }
+            );
+
+            modules.push(moduleData);
+          });
+
+          courseData.modules = modules;
+          callback([...courses]); // Update UI with new data
+        }
       );
-      const modules = [];
-      for (const moduleDoc of modulesQuerySnapshot.docs) {
-        const moduleData = { id: moduleDoc.id, ...moduleDoc.data() };
-        console.log("Module data:", moduleData);
 
-        const lessonsQuerySnapshot = await getDocs(
-          collection(
-            db,
-            "Courses",
-            courseDoc.id,
-            "modules",
-            moduleDoc.id,
-            "lessons"
-          )
-        );
-        const lessons = lessonsQuerySnapshot.docs.map((lessonDoc) => ({
-          id: lessonDoc.id,
-          ...lessonDoc.data(),
-        }));
-        moduleData.lessons = lessons;
-        modules.push(moduleData);
-      }
-      courseData.modules = modules;
       courses.push(courseData);
-    }
-    dispatch(setCourses(courses));
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    dispatch(setError(error.message));
-  }
-};
+    });
 
+    callback(courses); // Initial callback update
+  });
+};
 export const checkIfAdmin = async (userId) => {
   const userDoc = await getDoc(doc(db, "admins", userId));
   return userDoc.exists();
@@ -352,4 +358,4 @@ export const fetchUserData = async (userId, isAdmin) => {
   }
 };
 
-export { getDoc, updateDoc };
+export { getDoc, updateDoc, doc };

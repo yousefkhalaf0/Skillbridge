@@ -10,13 +10,15 @@ export default function BodyComponent({ course }) {
   const [clickedLessons, setClickedLessons] = useState(new Set());
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex(
-        (prevIndex) => (prevIndex + 1) % course.course_images.length
-      );
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [course.course_images.length]);
+    if (course?.course_images?.length) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex(
+          (prevIndex) => (prevIndex + 1) % course.course_images.length
+        );
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [course?.course_images?.length]);
 
   if (!course) {
     return (
@@ -26,7 +28,8 @@ export default function BodyComponent({ course }) {
     );
   }
 
-  const sortedModules = course.modules
+  // Ensure modules is an array before calling slice
+  const sortedModules = (course.modules || [])
     .slice()
     .sort((a, b) => a.number - b.number);
 
@@ -49,13 +52,14 @@ export default function BodyComponent({ course }) {
       <Box
         className="bodyImg"
         component="img"
-        src={course.course_images[currentImageIndex]}
+        src={course.course_images?.[currentImageIndex]}
         alt="course header image"
       />
 
       <Grid container spacing={2}>
         {sortedModules.map((module) => {
-          const sortedLessons = module.lessons
+          // Ensure lessons is an array before calling slice
+          const sortedLessons = (module.lessons || [])
             .slice()
             .sort((a, b) => a.number - b.number);
 

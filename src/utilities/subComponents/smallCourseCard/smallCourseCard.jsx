@@ -7,29 +7,52 @@ import {
   CircularProgress,
   Alert,
 } from "../../muiComponents.js";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchData } from "../../firebase.js";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../smallCourseCard/smallCourseCard.css";
 import { db } from "../../firebase.js";
 import {
   doc,
   getDoc,
+  collection,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
 export default function SmallCourseCard() {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
-
-  const { courses, loading, error } = useSelector(
-    (state) => state.courseReducer
-  );
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 2;
   const [adminNames, setAdminNames] = useState({}); // Store all admin names
 
+  // Fetch courses directly from Firestore
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "Courses"),
+      (snapshot) => {
+        const coursesData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCourses(coursesData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching courses:", error);
+        setError(error.message);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe(); // Cleanup Firestore listener on unmount
+  }, []);
+
+  // Fetch admin names for each course
   useEffect(() => {
     const fetchAdminNames = async () => {
       const names = {};
@@ -42,7 +65,10 @@ export default function SmallCourseCard() {
       }
       setAdminNames(names);
     };
-    fetchAdminNames();
+
+    if (courses.length > 0) {
+      fetchAdminNames();
+    }
   }, [courses]);
 
   const fetchAdminName = async (adminId) => {
@@ -59,10 +85,6 @@ export default function SmallCourseCard() {
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchData());
-  }, [dispatch]);
-
   const totalPages = Math.ceil(courses.length / itemsPerPage);
   const currentCourses = courses.slice(
     (page - 1) * itemsPerPage,
@@ -74,6 +96,7 @@ export default function SmallCourseCard() {
       setPage(page + 1);
     }
   };
+
   const handlePrevious = () => {
     if (page > 1) {
       setPage(page - 1);
@@ -91,6 +114,7 @@ export default function SmallCourseCard() {
       </Box>
     );
   }
+
   if (error) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
@@ -169,7 +193,7 @@ export default function SmallCourseCard() {
         ))}
       </Grid>
 
-      {/* pagination */}
+      {/* Pagination */}
       <Box
         sx={{ display: "flex", justifyContent: "center", marginTop: 4, gap: 2 }}
       >
