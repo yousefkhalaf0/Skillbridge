@@ -17,6 +17,10 @@ export default function SignInPage() {
   const showScroll = useSelector((state) => state.scrollReducer.showScroll);
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const checkScrollTop = () => {
     const shouldShow = window.pageYOffset > 400;
     if (shouldShow !== showScroll) {

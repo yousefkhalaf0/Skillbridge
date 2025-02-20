@@ -5,6 +5,10 @@ import { useSelector } from "react-redux";
 export default function NotFoundPage() {
   const lang = useSelector((state) => state.languageReducer);
 
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Box align="center" sx={{ my: 40 }}>
       {lang == "en"

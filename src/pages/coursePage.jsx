@@ -29,7 +29,7 @@ export default function CoursePage() {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  // Fetch courses in real-time
+
   useEffect(() => {
     const unsubscribe = fetchData(
       (updatedCourses) => {
@@ -43,7 +43,7 @@ export default function CoursePage() {
       }
     );
 
-    return () => unsubscribe(); // Cleanup Firestore listener on unmount
+    return () => unsubscribe();
   }, []);
   useEffect(() => {
     dispatch(fetchData());
