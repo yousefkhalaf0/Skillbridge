@@ -69,11 +69,18 @@ const WatchLater = () => {
         ? collection(db, "admins", userId, "watchLaterList")
         : collection(db, "users", userId, "watchLaterList");
 
+      console.log(watchLaterRef);
       const snapshot = await getDocs(watchLaterRef);
-      const watchLaterData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+
+      // Filter out documents that don't have a `courseId` field
+      const watchLaterData = snapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((item) => item.courseId); // Only include items with a valid `courseId`
+
+      console.log("Filtered watchLaterData:", watchLaterData);
 
       const courses = await Promise.all(
         watchLaterData.map(async (item) => {
@@ -90,6 +97,7 @@ const WatchLater = () => {
         })
       );
 
+      // Remove null values (courses that no longer exist)
       const validCourses = courses.filter((course) => course !== null);
       setWatchLaterCourses(validCourses);
     } catch (error) {
@@ -98,7 +106,6 @@ const WatchLater = () => {
       setLoading(false);
     }
   };
-
   // Delete a course from the Watch Later list
   const handleRemove = async (courseId) => {
     if (userId) {
