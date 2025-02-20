@@ -6,17 +6,8 @@ import { useDispatch, useSelector } from "react-redux"; // Import useSelector
 import { setUser } from "../../redux/store";
 const NotificationBar = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.userReducer.userInfo);
-  console.log(
-    "Redux State:",
-    useSelector((state) => state)
-  );
-  console.log(
-    "Redux State:",
-    useSelector((state) => state)
-  );
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
-  const location = useLocation();
   return (
     <Box display="flex" alignItems="center" gap={1}>
       {/* Message Icon with Badge */}
@@ -46,7 +37,7 @@ const NotificationBar = () => {
               : "https://via.placeholder.com/80"
           }
           onError={(e) => {
-            e.target.src = "https://via.placeholder.com/80"; // Set a fallback image on error
+            e.target.src = "https://via.placeholder.com/80";
           }}
           sx={{ bgcolor: "#FFCC99", width: 40, height: 40 }}
         />
