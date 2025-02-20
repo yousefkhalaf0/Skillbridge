@@ -3,7 +3,7 @@ import { Box, Grid, Typography, Button } from "../../muiComponents.js";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./componentsStyle/largeCourseCard.css";
-import { db, auth } from "../../firebase.js"; // Import Firebase Firestore
+import { db, auth } from "../../firebase.js";
 import {
   doc,
   getDoc,
@@ -18,6 +18,7 @@ export default function LargeCourseCard({ courses }) {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
   const navigate = useNavigate();
+  const [isUser, setUser] = useState(false);
   const [watchLaterStatus, setWatchLaterStatus] = useState({});
   const [adminNames, setAdminNames] = useState({});
   const [snackbar, setSnackbar] = useState({
@@ -26,7 +27,6 @@ export default function LargeCourseCard({ courses }) {
     severity: "success",
   });
 
-  // Fetch admin names
   useEffect(() => {
     const fetchAdminNames = async () => {
       const names = {};
@@ -42,7 +42,6 @@ export default function LargeCourseCard({ courses }) {
     fetchAdminNames();
   }, [courses]);
 
-  // Fetch user's Watch Later list
   useEffect(() => {
     const fetchWatchLaterList = async () => {
       const user = auth.currentUser;
@@ -50,6 +49,7 @@ export default function LargeCourseCard({ courses }) {
 
       try {
         const isAdmin = await checkIfAdmin(user.uid);
+        isAdmin ? setUser(false) : setUser(true);
         const userRef = isAdmin
           ? doc(db, "admins", user.uid)
           : doc(db, "users", user.uid);
@@ -178,34 +178,12 @@ export default function LargeCourseCard({ courses }) {
             <Grid item sm={3} xs={12}>
               <Box
                 sx={{
-                  textAlign: { xs: "left", sm: "right" },
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "center",
-                  gap: 2, // ✅ Adds space between buttons
+                  justifyContent: "flex-end",
+                  gap: 2,
                 }}
               >
-                <Button
-                  className="viewCourseBtn"
-                  variant="contained"
-                  sx={{
-                    textTransform: "none",
-                    maxWidth: 160,
-                    backgroundColor: "#E8A710",
-                    "&:hover": { backgroundColor: "#D18F0C" },
-                  }}
-                  onClick={() => handleWatchLater(course.id)}
-                  disabled={watchLaterStatus[course.id]} // Disable button if already added
-                >
-                  {watchLaterStatus[course.id]
-                    ? lang === "en"
-                      ? "Added to Watch Later"
-                      : "تمت الإضافة إلى المشاهدة لاحقًا"
-                    : lang === "en"
-                    ? "Watch Later"
-                    : "المشاهدة لاحقا"}
-                </Button>
-
                 <Button
                   className="viewCourseBtn"
                   variant="contained"

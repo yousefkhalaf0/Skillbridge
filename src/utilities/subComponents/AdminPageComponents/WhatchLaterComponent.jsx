@@ -28,7 +28,7 @@ import { Delete } from "@mui/icons-material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 import { useNavigate } from "react-router-dom";
-import ConfirmationDialog from "../ConfirmComponent"; // Import the ConfirmationDialog component
+import ConfirmationDialog from "../ConfirmComponent";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 const WatchLater = () => {
   const dispatch = useDispatch();
@@ -48,7 +48,6 @@ const WatchLater = () => {
       if (user) {
         setUserId(user.uid);
 
-        // Check if the user is an admin
         const adminRef = doc(db, "admins", user.uid);
         getDoc(adminRef).then((adminSnap) => {
           setIsAdmin(adminSnap.exists());
@@ -59,10 +58,9 @@ const WatchLater = () => {
       }
     });
 
-    return () => unsubscribe(); // Cleanup the listener on component unmount
+    return () => unsubscribe();
   }, [auth, navigate]);
 
-  // Fetch Watch Later courses from Firestore
   const fetchWatchLaterCourses = async (userId, isAdmin) => {
     try {
       setLoading(true);
@@ -77,7 +75,6 @@ const WatchLater = () => {
         ...doc.data(),
       }));
 
-      // Fetch course details for each item in the Watch Later list
       const courses = await Promise.all(
         watchLaterData.map(async (item) => {
           const courseRef = doc(db, "Courses", item.courseId);
@@ -184,7 +181,6 @@ const WatchLater = () => {
             }}
           >
             {/* Delete Icon */}
-
             <IconButton
               onClick={() => handleDeleteClick(course.id)}
               sx={{

@@ -9,21 +9,48 @@ import {
   getDoc,
   updateDoc,
   arrayUnion,
+  collection,
+  setDoc,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-import { auth, db } from "../../firebase.js";
+import { auth, db, checkIfAdmin } from "../../firebase.js";
 import { Snackbar, Alert } from "@mui/material";
+
 export default function HeroComponent({ course }) {
   const theme = useSelector((state) => state.themeReducer);
   const lang = useSelector((state) => state.languageReducer);
-  const [isEnrolled, setIsEnrolled] = useState(false); // Track enrollment status
-  const [loading, setLoading] = useState(false); // Track loading state
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [watchLaterStatus, setWatchLaterStatus] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [isUser, setUser] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
 
-  // Check if the user is enrolled in the course
+  useEffect(() => {
+    const checkWatchLaterStatus = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const isAdmin = await checkIfAdmin(user.uid);
+        isAdmin ? setUser(false) : setUser(true);
+        const userRef = isAdmin
+          ? doc(db, "admins", user.uid)
+          : doc(db, "users", user.uid);
+        const watchLaterRef = collection(userRef, "watchLaterList");
+        const courseDocRef = doc(watchLaterRef, course.id);
+        const courseDoc = await getDoc(courseDocRef);
+
+        if (courseDoc.exists()) {
+          setWatchLaterStatus((prev) => ({ ...prev, [course.id]: true }));
+        }
+      }
+    };
+
+    checkWatchLaterStatus();
+  }, [course.id, isUser]);
+
   useEffect(() => {
     const checkEnrollment = async () => {
       const user = auth.currentUser;
@@ -32,14 +59,76 @@ export default function HeroComponent({ course }) {
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          setIsEnrolled(userData.courses?.includes(course.id)); // Update enrollment status
+          setIsEnrolled(userData.courses?.includes(course.id));
         }
       }
     };
     checkEnrollment();
   }, [course.id]);
 
-  // Handle enrollment
+  const handleWatchLater = async (courseId) => {
+    const user = auth.currentUser;
+    if (!user) {
+      setSnackbar({
+        open: true,
+        message:
+          lang === "en"
+            ? "Please sign in to use Watch Later."
+            : "يرجى تسجيل الدخول لاستخدام المشاهدة لاحقًا.",
+        severity: "error",
+      });
+      return;
+    }
+
+    try {
+      const isAdmin = await checkIfAdmin(user.uid);
+      const userRef = isAdmin
+        ? doc(db, "admins", user.uid)
+        : doc(db, "users", user.uid);
+      const watchLaterRef = collection(userRef, "watchLaterList");
+      const courseDocRef = doc(watchLaterRef, courseId);
+      const courseDoc = await getDoc(courseDocRef);
+
+      if (courseDoc.exists()) {
+        setSnackbar({
+          open: true,
+          message:
+            lang === "en"
+              ? "Course is already in Watch Later."
+              : "الدورة موجودة بالفعل في المشاهدة لاحقًا.",
+          severity: "error",
+        });
+        setWatchLaterStatus((prev) => ({ ...prev, [courseId]: true }));
+        return;
+      }
+
+      await setDoc(courseDocRef, {
+        courseId: courseId,
+        timestamp: serverTimestamp(),
+      });
+
+      setWatchLaterStatus((prev) => ({ ...prev, [courseId]: true }));
+      setSnackbar({
+        open: true,
+        message:
+          lang === "en"
+            ? "Course added to Watch Later!"
+            : "تمت إضافة الدورة إلى المشاهدة لاحقًا!",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error adding to Watch Later:", error);
+      setSnackbar({
+        open: true,
+        message:
+          lang === "en"
+            ? "Error adding to Watch Later."
+            : "حدث خطأ أثناء إضافة الدورة إلى المشاهدة لاحقًا.",
+        severity: "error",
+      });
+    }
+  };
+
   const handleEnroll = async () => {
     const user = auth.currentUser;
     if (!user) {
@@ -56,19 +145,17 @@ export default function HeroComponent({ course }) {
 
     setLoading(true);
     try {
-      // Step 1: Add the course to the user's document
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, {
-        courses: arrayUnion(course.id), // Add course ID to the array
+        courses: arrayUnion(course.id),
       });
 
-      // Step 2: Add the user's ID to the admin's students array
       const adminRef = doc(db, "admins", course.course_creator_id);
       await updateDoc(adminRef, {
-        students: arrayUnion(user.uid), // Add user ID to the admin's students array
+        students: arrayUnion(user.uid),
       });
 
-      setIsEnrolled(true); // Update enrollment status
+      setIsEnrolled(true);
       setSnackbar({
         open: true,
         message: lang === "en" ? "Enrolled successfully!" : "تم التسجيل بنجاح!",
@@ -88,7 +175,6 @@ export default function HeroComponent({ course }) {
     setLoading(false);
   };
 
-  // Close Snackbar
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
   };
@@ -119,26 +205,50 @@ export default function HeroComponent({ course }) {
         >
           {lang == "en" ? course.course_name : course.course_nameAR}
         </Typography>
-
-        <Button
-          className={`${theme}EnrollBtn`}
-          variant="contained"
-          sx={{ textTransform: "none" }}
-          onClick={handleEnroll}
-          disabled={isEnrolled || loading} // Disable button if enrolled or loading
-        >
-          {isEnrolled
-            ? lang === "en"
-              ? "Enrolled"
-              : "تم التسجيل"
-            : loading
-            ? lang === "en"
-              ? "Enrolling..."
-              : "جاري التسجيل..."
-            : lang === "en"
-            ? en.courseOpenPageHero.enrollButton
-            : ar.courseOpenPageHero.enrollButton}
-        </Button>
+        {isUser && (
+          <Button
+            className={`${theme}EnrollBtn`}
+            variant="contained"
+            sx={{ textTransform: "none" }}
+            onClick={handleEnroll}
+            disabled={isEnrolled || loading}
+          >
+            {isEnrolled
+              ? lang === "en"
+                ? "Enrolled"
+                : "تم التسجيل"
+              : loading
+              ? lang === "en"
+                ? "Enrolling..."
+                : "جاري التسجيل..."
+              : lang === "en"
+              ? en.courseOpenPageHero.enrollButton
+              : ar.courseOpenPageHero.enrollButton}
+          </Button>
+        )}
+        {isUser && (
+          <Button
+            className={`${theme}EnrollBtn`}
+            variant="contained"
+            sx={{
+              marginLeft: 2,
+              textTransform: "none",
+              maxWidth: 200,
+              backgroundColor: "#E8A710",
+              "&:hover": { backgroundColor: "#D18F0C" },
+            }}
+            onClick={() => handleWatchLater(course.id)}
+            disabled={watchLaterStatus[course.id]}
+          >
+            {watchLaterStatus[course.id]
+              ? lang === "en"
+                ? "Added to Watch Later"
+                : "تمت الإضافة إلى المشاهدة لاحقًا"
+              : lang === "en"
+              ? "Watch Later"
+              : "المشاهدة لاحقا"}
+          </Button>
+        )}
       </Grid>
 
       <Grid item md={7}>

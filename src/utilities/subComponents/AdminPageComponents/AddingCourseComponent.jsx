@@ -10,12 +10,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { Snackbar, Alert } from "@mui/material";
 import EditCourse from "./editCourseComponent.jsx";
+import { useNavigate } from "react-router-dom";
 
 const CourseForm = ({ course, onSubmit }) => {
   const [userId, setUserId] = useState(null);
   const [courseTitle, setCourseTitle] = useState(course?.course_name || "");
   const [courseLevel, setCourseLevel] = useState(course?.level || "");
   const [courseSubject, setCourseSubject] = useState(course?.duration || "");
+  const navigate = useNavigate();
   const [courseDescription, setCourseDescription] = useState(
     course?.course_description || ""
   );
@@ -42,6 +44,7 @@ const CourseForm = ({ course, onSubmit }) => {
     });
     return () => unsubscribe();
   }, []);
+
   const handleSubmit = async () => {
     if (!userId) {
       setSnackbar({
@@ -52,7 +55,6 @@ const CourseForm = ({ course, onSubmit }) => {
       return;
     }
 
-    // Define updatedCourse here
     const updatedCourse = {
       course_creator_id: userId,
       course_name: courseTitle,
@@ -68,9 +70,8 @@ const CourseForm = ({ course, onSubmit }) => {
     };
 
     if (typeof onSubmit === "function") {
-      onSubmit(updatedCourse); // Pass updatedCourse to onSubmit
+      onSubmit(updatedCourse);
     } else {
-      // Validate required fields
       if (!courseTitle || !courseLevel || !courseSubject) {
         setSnackbar({
           open: true,
@@ -80,7 +81,6 @@ const CourseForm = ({ course, onSubmit }) => {
         return;
       }
 
-      // Validate images
       const uploadedImages = courseImages.filter((url) => url !== "");
       if (uploadedImages.length === 0) {
         setSnackbar({
@@ -91,7 +91,6 @@ const CourseForm = ({ course, onSubmit }) => {
         return;
       }
 
-      // Validate modules
       if (modules.length === 0) {
         setSnackbar({
           open: true,
@@ -137,7 +136,6 @@ const CourseForm = ({ course, onSubmit }) => {
         }
       }
 
-      // Prepare course data
       const courseData = {
         course_creator_id: userId,
         course_name: courseTitle,
@@ -176,14 +174,12 @@ const CourseForm = ({ course, onSubmit }) => {
           }
         }
 
-        // Success message
         setSnackbar({
           open: true,
           message: "Course uploaded successfully!",
           severity: "success",
         });
 
-        // Reset form
         setCourseTitle("");
         setCourseLevel("");
         setCourseSubject("");
@@ -191,6 +187,7 @@ const CourseForm = ({ course, onSubmit }) => {
         setCourseDescriptionAR("");
         setCourseImages(["", "", ""]);
         setModules([]);
+        navigate(`/dashboard`);
       } catch (error) {
         setSnackbar({
           open: true,

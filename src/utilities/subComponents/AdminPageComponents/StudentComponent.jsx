@@ -70,12 +70,11 @@ const Students = ({ selectedCourse, adminId }) => {
           }
 
           const adminData = adminSnap.data();
-          const studentIds = adminData.Students || [];
+          const studentIds = adminData.students;
           const studentsData = await Promise.all(
             studentIds.map(async (studentId) => {
-              const studentRef = doc(db, "users ", studentId);
+              const studentRef = doc(db, "users", studentId);
               const studentSnap = await getDoc(studentRef);
-
               if (studentSnap.exists()) {
                 const studentData = studentSnap.data();
                 if (studentData.Courses?.includes(selectedCourse)) {
@@ -100,10 +99,10 @@ const Students = ({ selectedCourse, adminId }) => {
           }
 
           const adminData = adminSnap.data();
-          const studentIds = adminData.Students || [];
+          const studentIds = adminData.students || [];
           const studentsData = await Promise.all(
             studentIds.map(async (studentId) => {
-              const studentRef = doc(db, "users ", studentId);
+              const studentRef = doc(db, "users", studentId);
               const studentSnap = await getDoc(studentRef);
 
               if (studentSnap.exists()) {

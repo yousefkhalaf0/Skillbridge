@@ -4,6 +4,7 @@ import {
   collection,
   getDoc,
   doc,
+  updateDoc,
   setDoc,
   deleteDoc,
   query,
@@ -311,7 +312,7 @@ export const fetchAdminWatchLaterCourses =
       dispatch(setAdminWatchLaterLoading(false));
     }
   };
-// Remove a course from the Watch Later list
+
 export const removeWatchLaterCourse =
   (adminId, courseId, isAdmin) => async (dispatch) => {
     try {
@@ -320,7 +321,7 @@ export const removeWatchLaterCourse =
           ? doc(db, "admins", adminId, "watchLaterList", courseId)
           : doc(db, "users", adminId, "watchLaterList", courseId)
       );
-      dispatch(fetchAdminWatchLaterCourses(adminId)); // Refresh the UI after deletion
+      dispatch(fetchAdminWatchLaterCourses(adminId));
     } catch (error) {
       console.error("Error removing course:", error);
     }
@@ -353,3 +354,5 @@ export const fetchUserData = async (userId, isAdmin) => {
     throw error;
   }
 };
+
+export { getDoc, updateDoc };
